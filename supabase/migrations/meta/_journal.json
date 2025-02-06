@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1725272797989,
-      "tag": "0000_milky_adam_warlock",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1725274326222,
-      "tag": "0001_wandering_ricochet",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1725281903360,
-      "tag": "0002_tiresome_blackheart",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1725350017401,
-      "tag": "0003_left_sprite",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1725351781285,
-      "tag": "0004_clever_chameleon",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1725352199128,
-      "tag": "0005_hot_stephen_strange",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1731355399818,
-      "tag": "0006_deep_logan",
+      "when": 1738875703494,
+      "tag": "0000_even_puma",
       "breakpoints": true
     }
   ]

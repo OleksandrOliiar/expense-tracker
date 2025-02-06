@@ -1,55 +1,79 @@
-import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
-export const userTable = pgTable("user", {
+export const accounts = pgTable("accounts", {
   id: text("id").primaryKey(),
-  email: text("email").notNull().unique(),
-  hashedPassword: text("hashed_password"),
-  emailVerified: boolean("email_verified").notNull().default(false),
+  plaidId: text("plaid_id"),
+  name: text("name").notNull(),
+  userId: text("user_id").notNull(),
 });
 
-export const oauthAccountTable = pgTable("oauth_account_table", {
+export const accountsRelations = relations(accounts, ({ many }) => ({
+  transactions: many(transactions),
+  goals: many(goals),
+}));
+
+export const categories = pgTable("categories", {
   id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id),
-  provider: text("provider").notNull(),
-  providerUserId: text("provider_user_id").notNull(),
-  accessToken: text("access_token").notNull(),
-  refreshToken: text("refresh_token"),
-  expiresAt: timestamp("expires_at", {
-    withTimezone: true,
-    mode: "date",
-  }).notNull(),
+  plaidId: text("plaid_id"),
+  name: text("name").notNull(),
+  userId: text("user_id").notNull(),
 });
 
-export const emailVerificationTable = pgTable("email_verification", {
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  transactions: many(transactions),
+  goals: many(goals),
+}));
+
+export const transactions = pgTable("transactions", {
   id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id),
-  code: text("code").notNull(),
-  sentAt: timestamp("sent_at", {
-    withTimezone: true,
-    mode: "date",
-  }).notNull(),
+  amount: integer("amount").notNull(),
+  payee: text("payee").notNull(),
+  notes: text("notes"),
+  date: timestamp("date", { mode: "date" }).notNull(),
+  accountId: text("account_id")
+    .references(() => categories.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  categoryId: text("category_id").references(() => categories.id, {
+    onDelete: "set null",
+  }),
 });
 
-export const resetTokenTable = pgTable("reset_token", {
+export const transactionsRelations = relations(transactions, ({ one }) => ({
+  account: one(accounts, {
+    fields: [transactions.accountId],
+    references: [accounts.id],
+  }),
+  category: one(categories, {
+    fields: [transactions.categoryId],
+    references: [categories.id],
+  }),
+}));
+
+export const goals = pgTable("goals", {
   id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id),
-  code: text("code").notNull(),
-  sentAt: timestamp("sent_at", {
-    withTimezone: true,
-    mode: "date",
-  }).notNull(),
+  name: text("name").notNull(),
+  targetAmount: integer("target_amount").notNull(),
+  currentAmount: integer("current_amount").notNull().default(0),
+  deadline: timestamp("deadline", { mode: "date" }),
+  description: text("description"),
+  userId: text("user_id").notNull(),
+  categoryId: text("category_id").references(() => categories.id, {
+    onDelete: "set null",
+  }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-export const sessionTable = pgTable("session", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id),
-  expiresAt: text("expires_at").notNull(),
-});
+export const goalsRelations = relations(goals, ({ one }) => ({
+  category: one(categories, {
+    fields: [goals.categoryId],
+    references: [categories.id],
+  }),
+  account: one(accounts, {
+    fields: [goals.userId],
+    references: [accounts.id],
+  }),
+}));
