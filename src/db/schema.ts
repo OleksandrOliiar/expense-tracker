@@ -1,0 +1,55 @@
+import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+
+export const userTable = pgTable("user", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  hashedPassword: text("hashed_password"),
+  emailVerified: boolean("email_verified").notNull().default(false),
+});
+
+export const oauthAccountTable = pgTable("oauth_account_table", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  provider: text("provider").notNull(),
+  providerUserId: text("provider_user_id").notNull(),
+  accessToken: text("access_token").notNull(),
+  refreshToken: text("refresh_token"),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
+export const emailVerificationTable = pgTable("email_verification", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  code: text("code").notNull(),
+  sentAt: timestamp("sent_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
+export const resetTokenTable = pgTable("reset_token", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  code: text("code").notNull(),
+  sentAt: timestamp("sent_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
+export const sessionTable = pgTable("session", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  expiresAt: text("expires_at").notNull(),
+});
