@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 export const accounts = pgTable("accounts", {
   id: text("id").primaryKey(),
@@ -13,11 +13,21 @@ export const accountsRelations = relations(accounts, ({ many }) => ({
   goals: many(goals),
 }));
 
+export const types = pgEnum("type", ["income", "expense"]);
+
 export const categories = pgTable("categories", {
   id: text("id").primaryKey(),
   plaidId: text("plaid_id"),
   name: text("name").notNull(),
+  icon: text("icon"),
   userId: text("user_id").notNull(),
+  type: types("type").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull()
+    .notNull(),
 });
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
@@ -39,6 +49,13 @@ export const transactions = pgTable("transactions", {
   categoryId: text("category_id").references(() => categories.id, {
     onDelete: "set null",
   }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  type: types("type").notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull()
+    .notNull(),
 });
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({
@@ -64,7 +81,11 @@ export const goals = pgTable("goals", {
     onDelete: "set null",
   }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull()
+    .notNull(),
 });
 
 export const goalsRelations = relations(goals, ({ one }) => ({

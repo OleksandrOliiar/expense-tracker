@@ -1,5 +1,13 @@
+import CategoriesServer from "./components/CategoriesServer";
+import CreateCategoryDialog from "./components/CreateCategoryDialog";
+
 const Categories = () => {
-  return <div>Categories</div>;
+  return (
+    <>
+      <CreateCategoryDialog />
+      <CategoriesServer />
+    </>
+  );
 };
 
 export default Categories;
