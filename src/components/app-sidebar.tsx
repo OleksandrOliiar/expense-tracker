@@ -5,14 +5,12 @@ import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 
 const sidebarItems = [
@@ -54,9 +52,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <UserButton />
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

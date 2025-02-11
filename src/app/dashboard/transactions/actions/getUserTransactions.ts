@@ -2,21 +2,23 @@
 
 import { db } from "@/db";
 import { transactions } from "@/db/schema";
-import { auth } from "@clerk/nextjs/server";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { eq } from "drizzle-orm";
 
 export const getUserTransactions = async () => {
   try {
-    const { userId } = await auth();
+    const { isAuthenticated, getUser } = getKindeServerSession();
 
-    if (!userId) {
+    if (!(await isAuthenticated())) {
       throw new Error("Unauthorized");
     }
+
+    const user = await getUser();
 
     const userTransactions = db
       .select()
       .from(transactions)
-      .where(eq(transactions.userId, userId));
+      .where(eq(transactions.userId, user.id));
 
     return userTransactions;
   } catch (error) {

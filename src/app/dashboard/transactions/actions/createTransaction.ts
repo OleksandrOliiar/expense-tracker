@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import {
   createTransactionSchema,
   CreateTransactionSchema,
@@ -17,11 +17,13 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
   }
 
   try {
-    const { userId } = await auth();
+    const { isAuthenticated, getUser } = getKindeServerSession();
 
-    if (!userId) {
+    if (!(await isAuthenticated())) {
       throw new Error("Unauthorized");
     }
+
+    const user = await getUser();
 
     const transaction = await db
       .insert(transactions)
@@ -33,7 +35,7 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
         categoryId: result.data.categoryId,
         type: result.data.type,
         id: crypto.randomUUID(),
-        userId,
+        userId: user.id,
       })
       .returning();
 

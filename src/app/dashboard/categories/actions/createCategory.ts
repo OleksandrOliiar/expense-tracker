@@ -1,12 +1,12 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
 import {
   createCategorySchema,
   CreateCategorySchema,
 } from "../validations/createCategorySchema";
 import { db } from "@/db";
 import { categories } from "@/db/schema";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 export const createCategory = async (data: CreateCategorySchema) => {
   const result = createCategorySchema.safeParse(data);
@@ -16,15 +16,17 @@ export const createCategory = async (data: CreateCategorySchema) => {
   }
 
   try {
-    const { userId } = await auth();
+    const { isAuthenticated, getUser } = getKindeServerSession();
 
-    if (!userId) {
+    if (!(await isAuthenticated())) {
       throw new Error("Unauthorized");
     }
 
+    const user = await getUser();
+
     const category = await db.insert(categories).values({
       id: crypto.randomUUID(),
-       userId,
+      userId: user.id,
       ...result.data,
     });
 

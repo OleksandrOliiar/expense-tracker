@@ -1,5 +1,9 @@
 import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  RegisterLink,
+  LoginLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 
 import {
   Accordion,
@@ -87,7 +91,6 @@ const Navbar1 = () => {
                 alt="logo"
               />
               <span className="text-lg font-semibold">Shadcnblocks.com</span>
-
             </div>
             <div className="flex items-center">
               <a
@@ -194,10 +197,8 @@ const Navbar1 = () => {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
-              Log in
-            </Button>
-            <Button size="sm">Sign up</Button>
+            <LoginLink postLoginRedirectURL="/dashboard">Sign in</LoginLink>
+            <RegisterLink postLoginRedirectURL="/dashboard">Sign up</RegisterLink>
           </div>
         </nav>
         <div className="block lg:hidden">
@@ -210,7 +211,6 @@ const Navbar1 = () => {
                 alt="logo"
               />
               <span className="text-lg font-semibold">Shadcnblocks.com</span>
-
             </div>
             <Sheet>
               <SheetTrigger asChild>
@@ -229,7 +229,6 @@ const Navbar1 = () => {
                         alt="logo"
                       />
                       <span className="text-lg font-semibold">
-
                         Shadcnblocks.com
                       </span>
                     </div>

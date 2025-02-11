@@ -2,21 +2,23 @@
 
 import { db } from "@/db";
 import { categories } from "@/db/schema";
-import { auth } from "@clerk/nextjs/server";
-import { eq,  } from "drizzle-orm";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { eq } from "drizzle-orm";
 
 export const getUserCategories = async () => {
   try {
-    const { userId } = await auth();
+    const { isAuthenticated, getUser } = getKindeServerSession();
 
-    if (!userId) {
+    if (!(await isAuthenticated())) {
       throw new Error("Unauthorized");
     }
+
+    const user = await getUser();
 
     let userCategoriesQuery = db
       .select()
       .from(categories)
-      .where(eq(categories.userId, userId));
+      .where(eq(categories.userId, user.id));
 
     const userCategories = await userCategoriesQuery;
 
