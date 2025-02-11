@@ -41,11 +41,7 @@ export const transactions = pgTable("transactions", {
   payee: text("payee").notNull(),
   notes: text("notes"),
   date: timestamp("date", { mode: "date" }).notNull(),
-  accountId: text("account_id")
-    .references(() => categories.id, {
-      onDelete: "cascade",
-    })
-    .notNull(),
+  userId: text("user_id").notNull(),
   categoryId: text("category_id").references(() => categories.id, {
     onDelete: "set null",
   }),
@@ -59,10 +55,6 @@ export const transactions = pgTable("transactions", {
 });
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({
-  account: one(accounts, {
-    fields: [transactions.accountId],
-    references: [accounts.id],
-  }),
   category: one(categories, {
     fields: [transactions.categoryId],
     references: [categories.id],
@@ -92,9 +84,5 @@ export const goalsRelations = relations(goals, ({ one }) => ({
   category: one(categories, {
     fields: [goals.categoryId],
     references: [categories.id],
-  }),
-  account: one(accounts, {
-    fields: [goals.userId],
-    references: [accounts.id],
   }),
 }));

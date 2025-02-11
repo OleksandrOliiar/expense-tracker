@@ -1,3 +1,9 @@
+DO $$ BEGIN
+ CREATE TYPE "public"."type" AS ENUM('income', 'expense');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "accounts" (
 	"id" text PRIMARY KEY NOT NULL,
 	"plaid_id" text,
@@ -9,7 +15,11 @@ CREATE TABLE IF NOT EXISTS "categories" (
 	"id" text PRIMARY KEY NOT NULL,
 	"plaid_id" text,
 	"name" text NOT NULL,
-	"user_id" text NOT NULL
+	"icon" text,
+	"account_id" text NOT NULL,
+	"type" "type" NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "goals" (
@@ -32,7 +42,10 @@ CREATE TABLE IF NOT EXISTS "transactions" (
 	"notes" text,
 	"date" timestamp NOT NULL,
 	"account_id" text NOT NULL,
-	"category_id" text
+	"category_id" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"type" "type" NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN

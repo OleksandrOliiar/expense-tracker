@@ -24,7 +24,7 @@ export const createCategory = async (data: CreateCategorySchema) => {
 
     const category = await db.insert(categories).values({
       id: crypto.randomUUID(),
-      userId,
+       userId,
       ...result.data,
     });
 

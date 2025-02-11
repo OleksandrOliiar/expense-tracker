@@ -1,6 +1,6 @@
 {
-  "id": "27d0c71b-5505-4b28-92a6-ace71ee8d1d4",
-  "prevId": "b6fea8cb-ebe5-47a6-b485-6578cc3383cf",
+  "id": "bfb48b7c-95d6-4005-9074-1d4afbd1aa87",
+  "prevId": "d59e14b5-433d-48fb-b1ad-e1b6dfd7db56",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -66,9 +66,16 @@
           "primaryKey": false,
           "notNull": false
         },
-        "user_id": {
-          "name": "user_id",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -232,6 +239,13 @@
           "notNull": true,
           "default": "now()"
         },
+        "type": {
+          "name": "type",
+          "type": "type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
@@ -242,10 +256,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "transactions_account_id_categories_id_fk": {
-          "name": "transactions_account_id_categories_id_fk",
+        "transactions_account_id_accounts_id_fk": {
+          "name": "transactions_account_id_accounts_id_fk",
           "tableFrom": "transactions",
-          "tableTo": "categories",
+          "tableTo": "accounts",
           "columnsFrom": [
             "account_id"
           ],
@@ -273,7 +287,16 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "public.type": {
+      "name": "type",
+      "schema": "public",
+      "values": [
+        "income",
+        "expense"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "_meta": {

@@ -1,10 +1,9 @@
 "use server";
 
 import { db } from "@/db";
-import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { categories } from "@/db/schema";
+import { auth } from "@clerk/nextjs/server";
+import { eq,  } from "drizzle-orm";
 
 export const getUserCategories = async () => {
   try {
@@ -14,13 +13,16 @@ export const getUserCategories = async () => {
       throw new Error("Unauthorized");
     }
 
-    const userCategories = await db.query.categories.findMany({
-      where: eq(categories.userId, userId),
-    });
+    let userCategoriesQuery = db
+      .select()
+      .from(categories)
+      .where(eq(categories.userId, userId));
+
+    const userCategories = await userCategoriesQuery;
 
     return userCategories;
   } catch (error) {
-    console.log("Failed to get categories", error);
+    console.error("Failed to get categories", error);
     throw new Error("Failed to get categories");
   }
 };

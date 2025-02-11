@@ -1,6 +1,6 @@
 {
-  "id": "aeeb04f2-f579-48f8-aff5-feaea6066a8f",
-  "prevId": "27d0c71b-5505-4b28-92a6-ace71ee8d1d4",
+  "id": "3bf9a6cb-1e92-4271-aae6-168ef98bc2cf",
+  "prevId": "bfb48b7c-95d6-4005-9074-1d4afbd1aa87",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -220,8 +220,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "account_id": {
-          "name": "account_id",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -256,19 +256,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "transactions_account_id_categories_id_fk": {
-          "name": "transactions_account_id_categories_id_fk",
-          "tableFrom": "transactions",
-          "tableTo": "categories",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "transactions_category_id_categories_id_fk": {
           "name": "transactions_category_id_categories_id_fk",
           "tableFrom": "transactions",
