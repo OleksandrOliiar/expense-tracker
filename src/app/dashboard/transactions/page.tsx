@@ -1,7 +1,5 @@
-import { columns } from "./components/Columns";
-import { DataTable } from "./components/DataTable";
-import { payments } from "./data";
 import CreateTransactionSheet from "./components/CreateTransactionSheet";
+import TransactionsServer from "./components/TransactionsServer";
 
 const Transactions = () => {
   return (
@@ -10,7 +8,7 @@ const Transactions = () => {
         <CreateTransactionSheet type="income" />
         <CreateTransactionSheet type="expense" />
       </div>
-      <DataTable columns={columns} data={payments} />
+      <TransactionsServer />
     </div>
   );
 };
