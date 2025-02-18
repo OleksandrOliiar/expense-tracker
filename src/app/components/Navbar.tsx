@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import {
   RegisterLink,
   LoginLink,
+  LogoutLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 
 import {
@@ -29,6 +30,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Image from "next/image";
+import Authentication from "./Authentication";
 
 const subMenuItemsOne = [
   {
@@ -196,10 +198,7 @@ const Navbar1 = () => {
               </a>
             </div>
           </div>
-          <div className="flex gap-2">
-            <LoginLink postLoginRedirectURL="/dashboard">Sign in</LoginLink>
-            <RegisterLink postLoginRedirectURL="/dashboard">Sign up</RegisterLink>
-          </div>
+          <Authentication />
         </nav>
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">

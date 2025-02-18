@@ -1,20 +1,47 @@
 import { relations } from "drizzle-orm";
 import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
+// Enums
+export const types = pgEnum("type", ["income", "expense"]);
+export const subscriptionStatus = pgEnum("subscription_status", [
+  "active",
+  "canceled",
+  "past_due",
+  "unpaid",
+  "incomplete",
+  "incomplete_expired",
+  "paused",
+  "trialing",
+]);
+
+// Accounts Table
 export const accounts = pgTable("accounts", {
-  id: text("id").primaryKey(),
+  id: text("id").primaryKey().unique(),
   plaidId: text("plaid_id"),
-  name: text("name").notNull(),
-  userId: text("user_id").notNull(),
+  kindeId: text("kinde_id").notNull(),
+  stripeCustomerId: text("stripe_customer_id"),
 });
 
-export const accountsRelations = relations(accounts, ({ many }) => ({
+export const accountsRelations = relations(accounts, ({ many, one }) => ({
   transactions: many(transactions),
   goals: many(goals),
 }));
 
-export const types = pgEnum("type", ["income", "expense"]);
+// Subscriptions Table (Users can only have one subscription)
+export const subscriptions = pgTable("subscriptions", {
+  id: text("id").primaryKey(),
+  stripeSubscriptionId: text("stripe_subscription_id").notNull().unique(),
+  stripeProductId: text("stripe_product_id").notNull(),
+  stripeCustomerId: text("stripe_customer_id").notNull().unique(),
+  status: subscriptionStatus("status").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
 
+// Categories Table
 export const categories = pgTable("categories", {
   id: text("id").primaryKey(),
   plaidId: text("plaid_id"),
@@ -26,7 +53,6 @@ export const categories = pgTable("categories", {
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date())
-    .notNull()
     .notNull(),
 });
 
@@ -35,6 +61,7 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
   goals: many(goals),
 }));
 
+// Transactions Table
 export const transactions = pgTable("transactions", {
   id: text("id").primaryKey(),
   amount: integer("amount").notNull(),
@@ -50,7 +77,6 @@ export const transactions = pgTable("transactions", {
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date())
-    .notNull()
     .notNull(),
 });
 
@@ -61,6 +87,7 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   }),
 }));
 
+// Goals Table
 export const goals = pgTable("goals", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -76,7 +103,6 @@ export const goals = pgTable("goals", {
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date())
-    .notNull()
     .notNull(),
 });
 

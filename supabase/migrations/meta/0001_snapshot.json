@@ -1,6 +1,6 @@
 {
-  "id": "bfb48b7c-95d6-4005-9074-1d4afbd1aa87",
-  "prevId": "d59e14b5-433d-48fb-b1ad-e1b6dfd7db56",
+  "id": "ed113682-e632-4381-bb44-a9d8959589fc",
+  "prevId": "71c6f5ac-e5c7-4716-9d0f-eb07282a6ac2",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -20,23 +20,31 @@
           "primaryKey": false,
           "notNull": false
         },
-        "name": {
-          "name": "name",
+        "kinde_id": {
+          "name": "kinde_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
+        "stripe_customer_id": {
+          "name": "stripe_customer_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "accounts_id_unique": {
+          "name": "accounts_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
     },
     "public.categories": {
       "name": "categories",
@@ -66,8 +74,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "account_id": {
-          "name": "account_id",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -186,6 +194,90 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.subscriptions": {
+      "name": "subscriptions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "stripe_subscription_id": {
+          "name": "stripe_subscription_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stripe_product_id": {
+          "name": "stripe_product_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stripe_customer_id": {
+          "name": "stripe_customer_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "subscription_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "subscriptions_stripe_customer_id_accounts_id_fk": {
+          "name": "subscriptions_stripe_customer_id_accounts_id_fk",
+          "tableFrom": "subscriptions",
+          "tableTo": "accounts",
+          "columnsFrom": [
+            "stripe_customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "subscriptions_stripe_subscription_id_unique": {
+          "name": "subscriptions_stripe_subscription_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "stripe_subscription_id"
+          ]
+        },
+        "subscriptions_stripe_customer_id_unique": {
+          "name": "subscriptions_stripe_customer_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "stripe_customer_id"
+          ]
+        }
+      }
+    },
     "public.transactions": {
       "name": "transactions",
       "schema": "",
@@ -220,8 +312,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "account_id": {
-          "name": "account_id",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -256,19 +348,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "transactions_account_id_accounts_id_fk": {
-          "name": "transactions_account_id_accounts_id_fk",
-          "tableFrom": "transactions",
-          "tableTo": "accounts",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "transactions_category_id_categories_id_fk": {
           "name": "transactions_category_id_categories_id_fk",
           "tableFrom": "transactions",
@@ -288,6 +367,16 @@
     }
   },
   "enums": {
+    "public.subscription_status": {
+      "name": "subscription_status",
+      "schema": "public",
+      "values": [
+        "active",
+        "canceled",
+        "past_due",
+        "unpaid"
+      ]
+    },
     "public.type": {
       "name": "type",
       "schema": "public",
