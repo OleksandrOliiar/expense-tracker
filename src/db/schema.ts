@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 // Enums
 export const types = pgEnum("type", ["income", "expense"]);
@@ -14,7 +21,6 @@ export const subscriptionStatus = pgEnum("subscription_status", [
   "trialing",
 ]);
 
-// Accounts Table
 export const accounts = pgTable("accounts", {
   id: text("id").primaryKey().unique(),
   plaidId: text("plaid_id"),
@@ -22,12 +28,12 @@ export const accounts = pgTable("accounts", {
   stripeCustomerId: text("stripe_customer_id"),
 });
 
-export const accountsRelations = relations(accounts, ({ many, one }) => ({
+export const accountsRelations = relations(accounts, ({ many }) => ({
   transactions: many(transactions),
   goals: many(goals),
+  plaidItems: many(plaidItems),
 }));
 
-// Subscriptions Table (Users can only have one subscription)
 export const subscriptions = pgTable("subscriptions", {
   id: text("id").primaryKey(),
   stripeSubscriptionId: text("stripe_subscription_id").notNull().unique(),
@@ -41,7 +47,6 @@ export const subscriptions = pgTable("subscriptions", {
     .notNull(),
 });
 
-// Categories Table
 export const categories = pgTable("categories", {
   id: text("id").primaryKey(),
   plaidId: text("plaid_id"),
@@ -61,7 +66,40 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
   goals: many(goals),
 }));
 
-// Transactions Table
+export const plaidItems = pgTable("plaid_items", {
+  id: text("id").primaryKey(),
+  accountId: text("account_id").references(() => accounts.id, {
+    onDelete: "cascade",
+  }),
+  accessToken: text("access_token").notNull(),
+  transactionCursor: text("transaction_cursor"),
+  bankName: text("bank_name"),
+  isActive: boolean("is_active").notNull().default(true),
+});
+
+export const plaidItemsRelations = relations(plaidItems, ({ one, many }) => ({
+  account: one(accounts, {
+    fields: [plaidItems.accountId],
+    references: [accounts.id],
+  }),
+  accounts: many(plaidAccounts),
+}));
+
+export const plaidAccounts = pgTable("plaid_accounts", {
+  id: text("id").primaryKey(),
+  itemId: text("item_id").references(() => plaidItems.id, {
+    onDelete: "cascade",
+  }),
+  name: text("name").notNull(),
+});
+
+export const plaidAccountsRelations = relations(plaidAccounts, ({ one }) => ({
+  item: one(plaidItems, {
+    fields: [plaidAccounts.itemId],
+    references: [plaidItems.id],
+  }),
+}));
+
 export const transactions = pgTable("transactions", {
   id: text("id").primaryKey(),
   amount: integer("amount").notNull(),
