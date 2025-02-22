@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
+  numeric,
   pgEnum,
   pgTable,
   text,
@@ -68,6 +69,7 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
 
 export const plaidItems = pgTable("plaid_items", {
   id: text("id").primaryKey(),
+  itemId: text("item_id").notNull(),
   accountId: text("account_id").references(() => accounts.id, {
     onDelete: "cascade",
   }),
@@ -102,7 +104,7 @@ export const plaidAccountsRelations = relations(plaidAccounts, ({ one }) => ({
 
 export const transactions = pgTable("transactions", {
   id: text("id").primaryKey(),
-  amount: integer("amount").notNull(),
+  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
   payee: text("payee").notNull(),
   notes: text("notes"),
   date: timestamp("date", { mode: "date" }).notNull(),

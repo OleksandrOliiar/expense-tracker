@@ -7,11 +7,8 @@ import Hero7 from "./components/Hero";
 import Navbar1 from "./components/Navbar";
 import PricingServer from "./components/PricingServer";
 import Testimonial10 from "./components/Testimonials";
-import { getUserSubscription } from "@/lib/stripe";
 
 const Home = async () => {
-  const subscription = await getUserSubscription();
-
   return (
     <>
       <Navbar1 />

@@ -36,6 +36,20 @@
       "when": 1740000147514,
       "tag": "0004_married_black_crow",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1740233990031,
+      "tag": "0005_cute_mongu",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1740234222213,
+      "tag": "0006_material_doctor_strange",
+      "breakpoints": true
     }
   ]
 }
