@@ -23,6 +23,7 @@ export const generateLinkToken = async () => {
       language: "en",
       client_name: "Expense Tracker",
       webhook: process.env.PLAID_WEBHOOK_URL,
+      
     });
 
     return tokenResponse.data;

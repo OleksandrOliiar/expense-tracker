@@ -1,3 +1,4 @@
+import { qstashClient } from "@/lib/qstash";
 import { formatTransactionsData } from "../utils/formatTransactionsData";
 import { addTransactions } from "./addTransactions";
 import { fetchNewSyncData } from "./fetchNewSyncData";
@@ -35,6 +36,11 @@ export const syncTransactions = async (itemId: string) => {
     await updateCursorForItem({
       itemId,
       nextCursor,
+    });
+
+    await qstashClient.publishJSON({
+      url: `https://c05c-213-109-224-158.ngrok-free.app/api/tracker`,
+      body: { userId: accountId },
     });
   } catch (error) {
     console.log("Failed to sync transactions", error);

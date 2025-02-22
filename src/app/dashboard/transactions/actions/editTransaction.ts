@@ -7,6 +7,9 @@ import {
 } from "../validations/editTransactionSchema";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { qstashClient } from "@/lib/qstash";
+
 export const editTransaction = async (data: EditTransactionSchema) => {
   const result = editTransactionSchema.safeParse(data);
 
@@ -17,10 +20,26 @@ export const editTransaction = async (data: EditTransactionSchema) => {
   const { id, ...rest } = result.data;
 
   try {
+    const { isAuthenticated, getUser } = getKindeServerSession();
+
+    if (!(await isAuthenticated())) {
+      throw new Error("Unauthorized");
+    }
+
+    const user = await getUser();
+
     const result = await db
       .update(transactions)
-      .set(rest)
+      .set({
+        ...rest,
+        amount: rest.amount.toString(),
+      })
       .where(eq(transactions.id, id));
+
+    await qstashClient.publishJSON({
+      url: `https://c05c-213-109-224-158.ngrok-free.app/api/tracker`,
+      body: { userId: user.id },
+    });
 
     return result;
   } catch (error) {
