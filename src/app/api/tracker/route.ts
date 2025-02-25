@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const updates: { goalId: string; currentAmount: number }[] = [];
+    const updates: { goalId: string; currentAmount: number; isCompleted: boolean }[] = [];
     const now = new Date();
 
     for (const goal of userGoals) {
@@ -41,22 +41,17 @@ export async function POST(request: NextRequest) {
         }
       });
 
-      console.log(
-        `Goal ${
-          goal.id
-        }: Start date ${goalStartDate.toISOString()}, Total amount: ${totalAmount}, Target: ${
-          goal.targetAmount
-        }`
-      );
+      const isCompleted = Number(totalAmount) >= Number(goal.targetAmount);
 
-      if (
-        totalAmount >= goal.targetAmount &&
-        totalAmount < goal.currentAmount
-      ) {
+      if (isCompleted) {
         console.log(`Goal ${goal.id} completed!`);
       }
 
-      updates.push({ goalId: goal.id, currentAmount: totalAmount });
+      updates.push({
+        goalId: goal.id,
+        currentAmount: totalAmount,
+        isCompleted,
+      });
     }
 
     await batchUpdateGoalAmounts(updates);

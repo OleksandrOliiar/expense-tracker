@@ -130,8 +130,8 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
 export const goals = pgTable("goals", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
-  targetAmount: integer("target_amount").notNull(),
-  currentAmount: integer("current_amount").notNull().default(0),
+  targetAmount: numeric("target_amount", { precision: 10, scale: 2 }).notNull(),
+  currentAmount: numeric("current_amount", { precision: 10, scale: 2 }).notNull().default('0'),
   startDate: text("start_date"),
   endDate: text("end_date"),
   isCompleted: boolean("is_completed").notNull().default(false),
