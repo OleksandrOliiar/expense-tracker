@@ -44,6 +44,7 @@ const EditTransactionForm = ({
       onSubmit={handleSubmit}
       isPending={isPending}
       defaultValues={transaction}
+      type={transaction.amount > 0 ? "income" : "expense"}
     />
   );
 };

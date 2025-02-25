@@ -26,27 +26,25 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
 
     const user = await getUser();
 
+    const transaction = await db
+      .insert(transactions)
+      .values({
+        amount: result.data.amount.toString(),
+        payee: result.data.payee,
+        notes: result.data.notes,
+        date: result.data.date,
+        categoryId: result.data.categoryId,
+        id: crypto.randomUUID(),
+        userId: user.id,
+      })
+      .returning();
 
-    // const transaction = await db
-    //   .insert(transactions)
-    //   .values({
-    //     amount: result.data.amount.toString(),
-    //     payee: result.data.payee,
-    //     notes: result.data.notes,
-    //     date: result.data.date,
-    //     categoryId: result.data.categoryId,
-    //     type: result.data.type,
-    //     id: crypto.randomUUID(),
-    //     userId: user.id,
-    //   })
-    //   .returning();
+    await qstashClient.publishJSON({
+      url: `https://6b45-213-109-224-246.ngrok-free.app/api/tracker`,
+      body: { userId: user.id },
+    });
 
-    // await qstashClient.publishJSON({
-    //   url: `https://6b45-213-109-224-246.ngrok-free.app/api/tracker`,
-    //   body: { userId: user.id },
-    // });
-
-    // return transaction;
+    return transaction;
   } catch (error) {
     console.log("Error creating transaction", error);
     throw error;

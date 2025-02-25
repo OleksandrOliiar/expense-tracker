@@ -64,6 +64,13 @@
       "when": 1740516526862,
       "tag": "0008_mysterious_master_mold",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1740518597905,
+      "tag": "0009_broad_green_goblin",
+      "breakpoints": true
     }
   ]
 }

@@ -39,7 +39,7 @@ const CreateTransactionForm = ({
     <TransactionForm
       onSubmit={handleSubmit}
       isPending={isPending}
-      defaultValues={{ type }}
+      type={type}
     />
   );
 };

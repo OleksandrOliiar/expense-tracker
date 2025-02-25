@@ -33,20 +33,22 @@ type TransactionFormProps = {
   onSubmit: (data: CreateTransactionSchema) => Promise<void>;
   isPending: boolean;
   defaultValues?: Partial<CreateTransactionSchema>;
+  type: "income" | "expense";
 };
 
 const TransactionForm = ({
   onSubmit,
   isPending,
   defaultValues,
+  type,
 }: TransactionFormProps) => {
   const form = useForm<CreateTransactionSchema>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues,
   });
 
-  const handleSubmit = async (data: CreateTransactionSchema) => {
-    await onSubmit(data);
+  const handleSubmit = async ({ amount, ...data }: CreateTransactionSchema) => {
+    await onSubmit({ amount: type === "income" ? amount : -amount, ...data });
     form.reset();
   };
 
