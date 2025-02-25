@@ -1,0 +1,1 @@
+ALTER TABLE "goals" ADD COLUMN "is_completed" boolean DEFAULT false NOT NULL;--> statement-breakpoint

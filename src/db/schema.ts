@@ -64,7 +64,6 @@ export const categories = pgTable("categories", {
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
   transactions: many(transactions),
-  goals: many(goals),
 }));
 
 export const plaidItems = pgTable("plaid_items", {
@@ -130,25 +129,17 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
 // Goals Table
 export const goals = pgTable("goals", {
   id: text("id").primaryKey(),
-  name: text("name").notNull(),
+  title: text("title").notNull(),
   targetAmount: integer("target_amount").notNull(),
   currentAmount: integer("current_amount").notNull().default(0),
-  deadline: timestamp("deadline", { mode: "date" }),
+  startDate: text("start_date"),
+  endDate: text("end_date"),
+  isCompleted: boolean("is_completed").notNull().default(false),
   description: text("description"),
   userId: text("user_id").notNull(),
-  categoryId: text("category_id").references(() => categories.id, {
-    onDelete: "set null",
-  }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
 });
-
-export const goalsRelations = relations(goals, ({ one }) => ({
-  category: one(categories, {
-    fields: [goals.categoryId],
-    references: [categories.id],
-  }),
-}));
