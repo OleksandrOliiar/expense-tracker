@@ -6,6 +6,7 @@ export const createGoalSchema = z.object({
   currentAmount: z.number().default(0),
   description: z.string().optional(),
   dueDate: z.date().optional(),
+  startDate: z.date().optional(),
 });
 
 export type CreateGoalSchema = z.infer<typeof createGoalSchema>; 

@@ -19,7 +19,7 @@ const CreateGoalSheet = () => {
       <SheetTrigger asChild>
         <Button>Add Goal</Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="overflow-y-scroll">
         <SheetHeader>
           <SheetTitle>Add New Goal</SheetTitle>
         </SheetHeader>

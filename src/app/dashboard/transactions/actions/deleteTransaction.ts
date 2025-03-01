@@ -19,7 +19,7 @@ export const deleteTransaction = async (id: string) => {
     await db.delete(transactions).where(eq(transactions.id, id));
 
     await qstashClient.publishJSON({
-      url: `https://c05c-213-109-224-158.ngrok-free.app/api/tracker`,
+      url: `https://af0f-213-109-224-93.ngrok-free.app/api/tracker`,
       body: { userId: user.id },
     });
   } catch (error) {

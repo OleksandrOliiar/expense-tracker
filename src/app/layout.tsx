@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Providers from "@/components/providers";
+import Script from "next/script";
 
 import "./globals.css";
 
@@ -18,13 +19,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <html lang="en">
-        <body className={inter.className}>
-          <Toaster />
-          <main>{children}</main>
-        </body>
-      </html>
-    </Providers>
+    <>
+      <Providers>
+        <html lang="en">
+          <body className={inter.className}>
+            <Toaster />
+            <main>{children}</main>
+          </body>
+        </html>
+      </Providers>
+      <Script
+        src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+        defer
+      />
+    </>
   );
 }

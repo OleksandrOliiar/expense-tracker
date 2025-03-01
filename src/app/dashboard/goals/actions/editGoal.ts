@@ -35,6 +35,7 @@ export const editGoal = async (data: EditGoalSchema) => {
         targetAmount: rest.targetAmount.toString(),
         currentAmount: rest.currentAmount.toString(),
         endDate: rest.dueDate?.toString(),
+        startDate: rest.startDate?.toString(),
       })
       .where(eq(goals.id, id));
 

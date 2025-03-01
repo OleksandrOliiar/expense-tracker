@@ -40,7 +40,7 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
       .returning();
 
     await qstashClient.publishJSON({
-      url: `https://6b45-213-109-224-246.ngrok-free.app/api/tracker`,
+      url: `https://af0f-213-109-224-93.ngrok-free.app/api/tracker`,
       body: { userId: user.id },
     });
 

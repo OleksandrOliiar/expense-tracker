@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserGoalsWithTransactions } from "./actions/getUserGoals";
 import { batchUpdateGoalAmounts } from "./actions/updateGoalAmount";
+import { Notification } from "@onesignal/node-onesignal"
+import { oneSignalClient } from "@/lib/oneSignal";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("Tracker webhook received");
-
+    console.log("Tracker webhook called");
     const body = await request.json();
     const { userId } = body;
 
@@ -13,17 +14,19 @@ export async function POST(request: NextRequest) {
       userId
     );
 
-    console.log(transactionSums);
-
     if (!userGoals.length) {
-      console.log("No goals found for user");
       return NextResponse.json(
         { message: "No goals found for user" },
         { status: 200 }
       );
     }
 
-    const updates: { goalId: string; currentAmount: number; isCompleted: boolean }[] = [];
+    const updates: {
+      goalId: string;
+      currentAmount: number;
+      isCompleted: boolean;
+    }[] = [];
+    
     const now = new Date();
 
     for (const goal of userGoals) {
@@ -37,14 +40,21 @@ export async function POST(request: NextRequest) {
       Array.from(transactionSums).forEach(([dateStr, amount]) => {
         const transactionDate = new Date(dateStr);
         if (transactionDate >= goalStartDate) {
-          totalAmount += amount;
+          totalAmount += +amount;
         }
       });
 
       const isCompleted = Number(totalAmount) >= Number(goal.targetAmount);
 
-      if (isCompleted) {
-        console.log(`Goal ${goal.id} completed!`);
+      if (isCompleted && !goal.isCompleted) {
+        console.log("Sending notification");
+        const notification = new Notification();
+        notification.app_id = process.env.NEXT_PUBLIC_ONE_SIGNAL_APP_ID!;
+        notification.contents = {
+          en: "Hello OneSignal!"
+        };
+        notification.included_segments = ['Subscribed Users'];
+        await oneSignalClient.createNotification(notification);
       }
 
       updates.push({
