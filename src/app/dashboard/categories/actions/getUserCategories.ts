@@ -3,9 +3,9 @@
 import { db } from "@/db";
 import { categories, transactions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, like } from "drizzle-orm";
 
-export const getUserCategories = async () => {
+export const getUserCategories = async (name?: string) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
 
@@ -15,25 +15,29 @@ export const getUserCategories = async () => {
 
     const user = await getUser();
 
-    const userCategories = await db
+    // Create a dynamic query builder
+    const query = db
       .select({
         id: categories.id,
         name: categories.name,
-        userId: categories.userId,
-        plaidId: categories.plaidId,
-        createdAt: categories.createdAt,
-        updatedAt: categories.updatedAt,
         transactionsCount: sql<number>`CAST(COUNT(${transactions.id}) AS INTEGER)`,
       })
       .from(categories)
       .leftJoin(transactions, eq(transactions.categoryId, categories.id))
-      .where(eq(categories.userId, user.id))
-      .groupBy(categories.id);
+      .groupBy(categories.id)
+      .$dynamic();
 
-    return userCategories;
+    // Always filter by user ID
+    query.where(eq(categories.userId, user.id));
+
+    // Conditionally filter by name if provided
+    if (name && name.trim() !== '') {
+      query.where(like(categories.name, `%${name}%`));
+    }
+
+    return await query;
   } catch (error) {
     console.error("Failed to get categories", error);
     throw new Error("Failed to get categories");
   }
 };
-

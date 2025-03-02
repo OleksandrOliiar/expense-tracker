@@ -1,16 +1,18 @@
-import { Category } from "@/db/types";
-import { formatDistance } from "date-fns";
 import { Folder } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
+type CategoryCardProps = {
+  name: string;
+  transactionsCount: number;
+};
+
 const CategoryCard = ({
   name,
-  createdAt,
   transactionsCount,
-}: Category & { transactionsCount: number }) => {
+}: CategoryCardProps) => {
   return (
-    <Card className="hover:shadow-md flex-1 transition-all duration-300 cursor-pointer overflow-hidden group">
+    <Card className="hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden group">
       <CardContent className="p-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors">

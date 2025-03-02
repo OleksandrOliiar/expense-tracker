@@ -6,12 +6,16 @@ import {
 } from "@tanstack/react-query";
 import CategoriesClient from "./CategoriesClient";
 
-const CategoriesServer = async () => {
+type CategoriesServerProps = {
+  name?: string;
+};
+
+const CategoriesServer = async ({ name }: CategoriesServerProps) => {
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
-    queryKey: ["categories", "list"],
-    queryFn: () => getUserCategories(),
+    queryKey: ["categories", "list", name],
+    queryFn: () => getUserCategories(name),
   });
 
   return (
