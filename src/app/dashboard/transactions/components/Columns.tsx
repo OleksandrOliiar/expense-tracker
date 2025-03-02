@@ -9,9 +9,12 @@ import TransactionMenu from "./TransactionMenu";
 
 export type Transaction = {
   id: string;
-  amount: number;
+  amount: number | string;
   date: Date;
-  payee: string;
+  category: {
+    id: string;
+    name: string;
+  } | null;
 };
 
 export const columns: ColumnDef<Transaction>[] = [
@@ -39,7 +42,18 @@ export const columns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "date",
-    header: "Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="px-0 hover:bg-background"
+        >
+          Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const date = row.getValue("date");
 
@@ -51,22 +65,35 @@ export const columns: ColumnDef<Transaction>[] = [
     },
   },
   {
-    accessorKey: "payee",
+    accessorKey: "category",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="px-0 hover:bg-background"
         >
-          Payee
+          Category
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    accessorFn: (row) => row.category?.name ?? "No category",
   },
   {
     accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="px-0 hover:bg-background"
+        >
+          Amount
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
       const formatted = new Intl.NumberFormat("en-US", {

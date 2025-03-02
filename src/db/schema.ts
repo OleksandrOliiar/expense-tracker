@@ -52,9 +52,7 @@ export const categories = pgTable("categories", {
   id: text("id").primaryKey(),
   plaidId: text("plaid_id"),
   name: text("name").notNull(),
-  icon: text("icon"),
   userId: text("user_id").notNull(),
-  type: types("type").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -104,7 +102,6 @@ export const plaidAccountsRelations = relations(plaidAccounts, ({ one }) => ({
 export const transactions = pgTable("transactions", {
   id: text("id").primaryKey(),
   amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
-  payee: text("payee").notNull(),
   notes: text("notes"),
   date: timestamp("date", { mode: "date" }).notNull(),
   userId: text("user_id").notNull(),

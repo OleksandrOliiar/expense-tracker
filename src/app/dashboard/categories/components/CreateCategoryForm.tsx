@@ -36,7 +36,6 @@ const CreateCategoryForm = ({ onCloseDialog }: CreateCategoryFormProps) => {
     resolver: zodResolver(createCategorySchema),
     defaultValues: {
       name: "",
-      type: "expense",
     },
   });
 
@@ -73,27 +72,6 @@ const CreateCategoryForm = ({ onCloseDialog }: CreateCategoryFormProps) => {
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="expense">Expense</SelectItem>
-                  <SelectItem value="income">Income</SelectItem>
-                </SelectContent>
-              </Select>
               <FormMessage />
             </FormItem>
           )}

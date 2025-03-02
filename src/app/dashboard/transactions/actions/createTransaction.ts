@@ -9,6 +9,8 @@ import {
 import { transactions } from "@/db/schema";
 import { db } from "@/db";
 import { qstashClient } from "@/lib/qstash";
+import { Notification } from "@onesignal/node-onesignal";
+import { oneSignalClient } from "@/lib/oneSignal";
 
 export const createTransaction = async (data: CreateTransactionSchema) => {
   const result = createTransactionSchema.safeParse(data);
@@ -30,7 +32,6 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
       .insert(transactions)
       .values({
         amount: result.data.amount.toString(),
-        payee: result.data.payee,
         notes: result.data.notes,
         date: result.data.date,
         categoryId: result.data.categoryId,
@@ -40,7 +41,7 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
       .returning();
 
     await qstashClient.publishJSON({
-      url: `https://af0f-213-109-224-93.ngrok-free.app/api/tracker`,
+      url: `https://quick-papayas-dress.loca.lt/api/tracker`,
       body: { userId: user.id },
     });
 

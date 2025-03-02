@@ -71,6 +71,27 @@
       "when": 1740518597905,
       "tag": "0009_broad_green_goblin",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1740917392678,
+      "tag": "0010_worthless_molten_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1740921005379,
+      "tag": "0011_nebulous_tana_nile",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1740923242616,
+      "tag": "0012_true_dazzler",
+      "breakpoints": true
     }
   ]
 }

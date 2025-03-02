@@ -15,10 +15,17 @@ export const getUserTransactions = async () => {
 
     const user = await getUser();
 
-    const userTransactions = db
-      .select()
-      .from(transactions)
-      .where(eq(transactions.userId, user.id));
+    const userTransactions = db.query.transactions.findMany({
+      where: eq(transactions.userId, user.id),
+      with: {
+        category: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
 
     return userTransactions;
   } catch (error) {

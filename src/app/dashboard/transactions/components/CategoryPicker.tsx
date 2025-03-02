@@ -23,7 +23,7 @@ import { useFormContext } from "react-hook-form";
 import { getUserCategories } from "../../categories/actions/getUserCategories";
 
 const CategoryPicker = () => {
-  const { setValue, control } = useFormContext();
+  const { control } = useFormContext();
   const [isOpen, setIsOpen] = useState(false);
 
   const { data: categories } = useQuery({

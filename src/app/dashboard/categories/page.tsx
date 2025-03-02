@@ -3,10 +3,12 @@ import CreateCategoryDialog from "./components/CreateCategoryDialog";
 
 const Categories = () => {
   return (
-    <>
-      <CreateCategoryDialog />
+    <div className="px-4">
+      <div className="flex justify-end mb-6">
+        <CreateCategoryDialog />
+      </div>
       <CategoriesServer />
-    </>
+    </div>
   );
 };
 

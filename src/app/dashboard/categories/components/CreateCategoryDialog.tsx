@@ -10,17 +10,19 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import CreateCategoryForm from "./CreateCategoryForm";
+import { Plus } from "lucide-react";
 
 const CreateCategoryDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-
       <DialogTrigger asChild>
-        <Button className="w-[300px]">Create category</Button>
+        <Button>
+          <Plus /> category
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[400px]">
         <DialogHeader>
           <DialogTitle>Create category</DialogTitle>
         </DialogHeader>

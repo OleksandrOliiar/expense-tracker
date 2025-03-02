@@ -4,9 +4,6 @@ import {
   createTransactionSchema,
 } from "../validations/createTransactionSchema";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTransaction } from "../actions/createTransaction";
-import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -69,19 +66,6 @@ const TransactionForm = ({
                   {...props}
                   type="number"
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="payee"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Payee</FormLabel>
-              <FormControl>
-                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

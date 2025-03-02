@@ -23,7 +23,7 @@ const CategoriesClient = () => {
   }
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center flex-wrap gap-4">
       {categories.map((category) => (
         <CategoryCard key={category.id} {...category} />
       ))}
