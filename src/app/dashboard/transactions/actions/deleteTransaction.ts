@@ -18,10 +18,10 @@ export const deleteTransaction = async (id: string) => {
 
     await db.delete(transactions).where(eq(transactions.id, id));
 
-    await qstashClient.publishJSON({
-      url: `https://localhost:3000/api/tracker`,
-      body: { userId: user.id },
-    });
+    // await qstashClient.publishJSON({
+    //   url: `https://localhost:3000/api/tracker`,
+    //   body: { userId: user.id },
+    // });
   } catch (error) {
     console.error(error);
     throw error;

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { useState } from "react";
 import CreateTransactionForm from "./CreateTransactionForm";
+import { Plus } from "lucide-react";
 
 type CreateTransactionSheetProps = {
   type: "income" | "expense";
@@ -21,10 +22,12 @@ const CreateTransactionSheet = ({ type }: CreateTransactionSheetProps) => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button>Add {type}</Button>
+        <Button>
+          <Plus /> {type}
+        </Button>
       </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
+      <SheetContent className="overflow-y-scroll">
+        <SheetHeader className="mb-6">
           <SheetTitle>Add {type}</SheetTitle>
         </SheetHeader>
         <CreateTransactionForm

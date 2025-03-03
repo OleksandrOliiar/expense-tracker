@@ -40,10 +40,10 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
       })
       .returning();
 
-    await qstashClient.publishJSON({
-      url: `https://quick-papayas-dress.loca.lt/api/tracker`,
-      body: { userId: user.id },
-    });
+    // await qstashClient.publishJSON({
+    //   url: `https://quick-papayas-dress.loca.lt/api/tracker`,
+    //   body: { userId: user.id },
+    // });
 
     return transaction;
   } catch (error) {

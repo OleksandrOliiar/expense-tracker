@@ -22,14 +22,18 @@ const EditTransactionSheet = ({
     onOpenChange(open);
   };
 
+  console.log(transaction);
+  
+
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
         onClick={(e) => {
           e.stopPropagation();
         }}
+        className="overflow-y-scroll"
       >
-        <SheetHeader>
+        <SheetHeader className="mb-6">
           <SheetTitle>Edit Transaction</SheetTitle>
         </SheetHeader>
         <EditTransactionForm

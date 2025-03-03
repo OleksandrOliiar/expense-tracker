@@ -25,6 +25,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import CategoryPicker from "./CategoryPicker";
+import { useState } from "react";
+import { toast } from "sonner";
 
 type TransactionFormProps = {
   onSubmit: (data: CreateTransactionSchema) => Promise<void>;
@@ -39,19 +41,47 @@ const TransactionForm = ({
   defaultValues,
   type,
 }: TransactionFormProps) => {
+  const sanitizedDefaultValues = {
+    ...defaultValues,
+    amount:
+      defaultValues?.amount !== undefined ? Number(defaultValues.amount) : 0,
+    date: defaultValues?.date ? new Date(defaultValues.date) : new Date(),
+    categoryId: defaultValues?.categoryId ?? null,
+    notes: defaultValues?.notes ?? "",
+  };
+
   const form = useForm<CreateTransactionSchema>({
     resolver: zodResolver(createTransactionSchema),
-    defaultValues,
+    defaultValues: sanitizedDefaultValues,
   });
 
+  const [calendarOpen, setCalendarOpen] = useState(false);
+
   const handleSubmit = async ({ amount, ...data }: CreateTransactionSchema) => {
-    await onSubmit({ amount: type === "income" ? amount : -amount, ...data });
-    form.reset();
+    if (defaultValues) {
+      if (
+        Number(defaultValues?.amount) === amount &&
+        defaultValues.categoryId === data.categoryId &&
+        defaultValues.notes === data.notes &&
+        new Date(defaultValues?.date ?? "").toISOString() ===
+          data.date.toISOString()
+      ) {
+        toast.info("Please commit any changes");
+
+        return;
+      }
+    }
+
+    const numericAmount = Number(amount);
+    await onSubmit({
+      amount: type === "income" ? numericAmount : -numericAmount,
+      ...data,
+    });
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-3">
         <FormField
           control={form.control}
           name="amount"
@@ -60,8 +90,12 @@ const TransactionForm = ({
               <FormLabel>Amount</FormLabel>
               <FormControl>
                 <Input
-                  value={`${value}`}
-                  onChange={(e) => onChange(Number(e.target.value))}
+                  value={value === undefined ? "" : Math.abs(Number(value))}
+                  onChange={(e) => {
+                    const numericValue =
+                      e.target.value === "" ? 0 : Number(e.target.value);
+                    onChange(numericValue);
+                  }}
                   {...rest}
                   {...props}
                   type="number"
@@ -78,7 +112,7 @@ const TransactionForm = ({
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Date</FormLabel>
-              <Popover>
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -101,7 +135,10 @@ const TransactionForm = ({
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={field.onChange}
+                    onSelect={(value) => {
+                      field.onChange(value);
+                      setCalendarOpen(false);
+                    }}
                     disabled={(date) =>
                       date > new Date() || date < new Date("1900-01-01")
                     }
@@ -121,14 +158,14 @@ const TransactionForm = ({
             <FormItem>
               <FormLabel>Notes</FormLabel>
               <FormControl>
-                <Textarea {...field} rows={5} />
+                <Textarea {...field} rows={5} value={field.value ?? ""} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" disabled={isPending} className="w-full">
-          {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+          {form.formState.isSubmitting ? "Submitting..." : `Submit`}
         </Button>
       </form>
     </Form>
