@@ -15,6 +15,7 @@ export type Transaction = {
     id: string;
     name: string;
   } | null;
+  payee: string | null;
 };
 
 export const columns: ColumnDef<Transaction>[] = [
@@ -81,6 +82,22 @@ export const columns: ColumnDef<Transaction>[] = [
     accessorFn: (row) => row.category?.name ?? "No category",
   },
   {
+    accessorKey: "payee",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="px-0 hover:bg-background"
+        >
+          Payee
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    accessorFn: (row) => row.payee ?? "No payee",
+  },
+  {
     accessorKey: "amount",
     header: ({ column }) => {
       return (
@@ -101,7 +118,7 @@ export const columns: ColumnDef<Transaction>[] = [
         currency: "USD",
       }).format(amount);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="font-medium">{formatted}</div>;
     },
   },
   {

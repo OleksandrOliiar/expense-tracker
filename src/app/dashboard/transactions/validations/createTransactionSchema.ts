@@ -4,6 +4,7 @@ export const createTransactionSchema = z.object({
   amount: z.number({
     required_error: "Amount is required",
   }),
+  payee: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   date: z.date({
     required_error: "Date is required",

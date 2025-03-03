@@ -9,6 +9,8 @@ import {
   getSortedRowModel,
   useReactTable,
   VisibilityState,
+  Row,
+  Table as TTable,
 } from "@tanstack/react-table";
 
 import {
@@ -28,16 +30,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import DeleteTransactionsDialog from "./DeleteTransactionsDialog";
+import { Transaction } from "./Columns";
+import DownloadCsvButton from "./DownloadCsvButton";
+import { Columns, Search } from "lucide-react";
+import ColumnsDropdown from "./ColumnsDropdown";
 
-interface DataTableProps<TData, TValue> {
+interface TransactionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function TransactionsTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+}: TransactionsTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -62,43 +69,32 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const selectedRows = table.getFilteredSelectedRowModel().rows;
+
   return (
     <div>
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter payees..."
-          value={(table.getColumn("payee")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("payee")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {selectedRows.length > 0 ? (
+          <div className="flex items-center gap-2">
+            <DeleteTransactionsDialog
+              selectedRows={selectedRows as Row<Transaction>[]}
+            />
+            <DownloadCsvButton
+              selectedRows={selectedRows as Row<Transaction>[]}
+            />
+          </div>
+        ) : (
+          <Input
+            placeholder="Search payees..."
+            value={(table.getColumn("payee")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("payee")?.setFilterValue(event.target.value)
+            }
+            className="max-w-xs"
+            startIcon={Search}
+          />
+        )}
+        <ColumnsDropdown table={table as unknown as TTable<Transaction>} />
       </div>
       <div className="rounded-md border">
         <Table>

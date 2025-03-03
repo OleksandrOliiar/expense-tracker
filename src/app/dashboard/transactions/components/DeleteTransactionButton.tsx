@@ -4,12 +4,12 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 type DeleteTransactionButtonProps = {
-  transactionId: string;
+  transactionIds: string[]  ;
   onClose: () => void;
 };
 
 const DeleteTransactionButton = ({
-  transactionId,
+  transactionIds,
   onClose,
 }: DeleteTransactionButtonProps) => {
   const queryClient = useQueryClient();
@@ -17,11 +17,11 @@ const DeleteTransactionButton = ({
   const { mutate: deleteTransactionMutation, isPending } = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: () => {
-      toast.success("Transaction deleted successfully");
+      toast.success("Deleted successfully");
       onClose();
     },
     onError: () => {
-      toast.error("Failed to delete transaction");
+      toast.error("Failed to delete");
     },
     onSettled: () => {
       queryClient.refetchQueries({
@@ -34,7 +34,7 @@ const DeleteTransactionButton = ({
     <Button
       variant="destructive"
       disabled={isPending}
-      onClick={() => deleteTransactionMutation(transactionId)}
+      onClick={() => deleteTransactionMutation(transactionIds)}
     >
       {isPending ? "Deleting..." : "Delete"}
     </Button>

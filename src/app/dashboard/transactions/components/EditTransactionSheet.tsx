@@ -22,9 +22,6 @@ const EditTransactionSheet = ({
     onOpenChange(open);
   };
 
-  console.log(transaction);
-  
-
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent

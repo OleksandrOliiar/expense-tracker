@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserTransactions } from "../actions/getUserTransactions";
 import { columns } from "./Columns";
-import { DataTable } from "./DataTable";
+import { TransactionsTable } from "./TransactionsTable";
 
 const TransactionsClient = () => {
   const { data: transactions, isLoading, error } = useQuery({
@@ -15,7 +15,7 @@ const TransactionsClient = () => {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  return <DataTable columns={columns} data={transactions ?? []} />;
+  return <TransactionsTable columns={columns} data={transactions ?? []} />;
 };
 
 export default TransactionsClient;

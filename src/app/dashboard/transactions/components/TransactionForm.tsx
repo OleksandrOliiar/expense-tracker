@@ -48,6 +48,7 @@ const TransactionForm = ({
     date: defaultValues?.date ? new Date(defaultValues.date) : new Date(),
     categoryId: defaultValues?.categoryId ?? null,
     notes: defaultValues?.notes ?? "",
+    payee: defaultValues?.payee ?? "",
   };
 
   const form = useForm<CreateTransactionSchema>({
@@ -64,7 +65,8 @@ const TransactionForm = ({
         defaultValues.categoryId === data.categoryId &&
         defaultValues.notes === data.notes &&
         new Date(defaultValues?.date ?? "").toISOString() ===
-          data.date.toISOString()
+          data.date.toISOString() &&
+        defaultValues.payee === data.payee
       ) {
         toast.info("Please commit any changes");
 
@@ -99,6 +101,26 @@ const TransactionForm = ({
                   {...rest}
                   {...props}
                   type="number"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="payee"
+          render={({ field: { value, onChange, ...rest }, ...props }) => (
+            <FormItem>
+              <FormLabel>Payee</FormLabel>
+              <FormControl>
+                <Input
+                  value={value ?? ""}
+                  onChange={(e) => {
+                    onChange(e.target.value);
+                  }}
+                  {...rest}
+                  {...props}
                 />
               </FormControl>
               <FormMessage />

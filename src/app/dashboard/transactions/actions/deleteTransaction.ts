@@ -4,9 +4,9 @@ import { db } from "@/db";
 import { transactions } from "@/db/schema";
 import { qstashClient } from "@/lib/qstash";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { eq } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 
-export const deleteTransaction = async (id: string) => {
+export const deleteTransaction = async (ids: string[]) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
 
@@ -16,7 +16,7 @@ export const deleteTransaction = async (id: string) => {
 
     const user = await getUser();
 
-    await db.delete(transactions).where(eq(transactions.id, id));
+    await db.delete(transactions).where(inArray(transactions.id, ids));
 
     // await qstashClient.publishJSON({
     //   url: `https://localhost:3000/api/tracker`,

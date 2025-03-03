@@ -102,6 +102,7 @@ export const plaidAccountsRelations = relations(plaidAccounts, ({ one }) => ({
 export const transactions = pgTable("transactions", {
   id: text("id").primaryKey(),
   amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+  payee: text("payee"),
   notes: text("notes"),
   date: timestamp("date", { mode: "date" }).notNull(),
   userId: text("user_id").notNull(),
