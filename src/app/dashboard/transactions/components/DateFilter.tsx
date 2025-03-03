@@ -45,7 +45,7 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
 
   React.useEffect(() => {
     const startDate = debouncedCalendarDate?.from?.toISOString().split("T")[0];
-    
+
     const endDate = debouncedCalendarDate?.to
       ? addDays(debouncedCalendarDate?.to, 2).toISOString().split("T")[0]
       : undefined;
@@ -55,6 +55,10 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
       endDate,
     });
   }, [debouncedCalendarDate]);
+
+  const handleReset = () => {
+    setCalendarDate(undefined);
+  };
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -96,6 +100,15 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
                 date > new Date() || date < new Date("1900-01-01")
               }
             />
+          </div>
+          <div className="flex justify-end pb-4">
+            <Button
+              disabled={!calendarDate}
+              className="w-[100px]"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
           </div>
         </PopoverContent>
       </Popover>

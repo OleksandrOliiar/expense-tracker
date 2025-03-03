@@ -1,35 +1,38 @@
-"use client";
-
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
-import CreateCategoryForm from "../../components/CreateCategoryForm";
 import { Plus } from "lucide-react";
+import CreateCategoryForm from "../../components/CreateCategoryForm";
+import { useState } from "react";
 
-const CreateCategoryDialog = () => {
+const AddCategoryDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus /> category
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-sm font-normal"
+          type="button"
+        >
+          <Plus className="h-4 w-4" />
+          Add new category
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[400px]">
-        <DialogHeader>
+      <DialogContent>
+        <AlertDialogHeader>
           <DialogTitle>Create category</DialogTitle>
-        </DialogHeader>
+        </AlertDialogHeader>
         <CreateCategoryForm onCloseDialog={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );
 };
 
-export default CreateCategoryDialog;
+export default AddCategoryDialog;

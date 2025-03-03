@@ -12,11 +12,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { createCategory } from "../actions/createCategory";
+import { createCategory } from "../categories/actions/createCategory";
 import {
   CreateCategorySchema,
   createCategorySchema,
-} from "../validations/createCategorySchema";
+} from "../categories/validations/createCategorySchema";
 import {
   Select,
   SelectContent,

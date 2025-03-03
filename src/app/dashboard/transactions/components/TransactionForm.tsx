@@ -27,6 +27,8 @@ import { Textarea } from "@/components/ui/textarea";
 import CategoryPicker from "./CategoryPicker";
 import { useState } from "react";
 import { toast } from "sonner";
+import { getUserCategories } from "../../categories/actions/getUserCategories";
+import { Category } from "@/db/types";
 
 type TransactionFormProps = {
   onSubmit: (data: CreateTransactionSchema) => Promise<void>;
@@ -127,7 +129,20 @@ const TransactionForm = ({
             </FormItem>
           )}
         />
-        <CategoryPicker />
+        <FormField
+          control={form.control}
+          name="categoryId"
+          render={({ field: { value, onChange }, ...props }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <CategoryPicker value={value ?? ""} onChange={onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="date"

@@ -20,13 +20,13 @@ const CreateTransactionSheet = ({ type }: CreateTransactionSheetProps) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={open} onOpenChange={setOpen} >
       <SheetTrigger asChild>
         <Button>
           <Plus /> {type}
         </Button>
       </SheetTrigger>
-      <SheetContent className="overflow-y-scroll">
+      <SheetContent className="overflow-y-scroll" >
         <SheetHeader className="mb-6">
           <SheetTitle>Add {type}</SheetTitle>
         </SheetHeader>
