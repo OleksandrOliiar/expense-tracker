@@ -15,7 +15,6 @@ export const getUserCategories = async (name?: string) => {
 
     const user = await getUser();
 
-    // Create a dynamic query builder
     const query = db
       .select({
         id: categories.id,
@@ -27,10 +26,8 @@ export const getUserCategories = async (name?: string) => {
       .groupBy(categories.id)
       .$dynamic();
 
-    // Always filter by user ID
     query.where(eq(categories.userId, user.id));
 
-    // Conditionally filter by name if provided
     if (name && name.trim() !== '') {
       query.where(like(categories.name, `%${name}%`));
     }

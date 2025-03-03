@@ -1,18 +1,19 @@
 import {
   ColumnDef,
   ColumnFiltersState,
-  SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
+  SortingState,
+  Table as TTable,
   useReactTable,
   VisibilityState,
-  Row,
-  Table as TTable,
 } from "@tanstack/react-table";
 
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -21,20 +22,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import DeleteTransactionsDialog from "./DeleteTransactionsDialog";
 import { Transaction } from "./Columns";
-import DownloadCsvButton from "./DownloadCsvButton";
-import { Columns, Search } from "lucide-react";
 import ColumnsDropdown from "./ColumnsDropdown";
+import DeleteTransactionsDialog from "./DeleteTransactionsDialog";
+import DownloadCsvButton from "./DownloadCsvButton";
+import Search from "@/components/Search";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface TransactionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -84,15 +78,7 @@ export function TransactionsTable<TData, TValue>({
             />
           </div>
         ) : (
-          <Input
-            placeholder="Search payees..."
-            value={(table.getColumn("payee")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("payee")?.setFilterValue(event.target.value)
-            }
-            className="max-w-xs"
-            startIcon={Search}
-          />
+          <Search queryKey="payee" label="Search payees..." id="payee" />
         )}
         <ColumnsDropdown table={table as unknown as TTable<Transaction>} />
       </div>
@@ -153,7 +139,8 @@ export function TransactionsTable<TData, TValue>({
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Previous
+          <ChevronLeft className="h-4 w-4" />
+          Prev
         </Button>
         <Button
           variant="outline"
@@ -162,6 +149,7 @@ export function TransactionsTable<TData, TValue>({
           disabled={!table.getCanNextPage()}
         >
           Next
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
     </div>

@@ -1,11 +1,17 @@
 "use server";
 
 import { db } from "@/db";
-import { transactions } from "@/db/schema";
+import { categories, transactions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { eq } from "drizzle-orm";
+import { eq, ilike } from "drizzle-orm";
 
-export const getUserTransactions = async () => {
+type GetUserTransactionsProps = {
+  payee?: string;
+};
+
+export const getUserTransactions = async ({
+  payee,
+}: GetUserTransactionsProps) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
 
@@ -15,19 +21,30 @@ export const getUserTransactions = async () => {
 
     const user = await getUser();
 
-    const userTransactions = db.query.transactions.findMany({
-      where: eq(transactions.userId, user.id),
-      with: {
+    const query = db
+      .select({
+        id: transactions.id,
+        amount: transactions.amount,
+        payee: transactions.payee,
+        notes: transactions.notes,
+        date: transactions.date,
         category: {
-          columns: {
-            id: true,
-            name: true,
-          },
+          name: categories.name,
+          id: categories.id,
         },
-      },
-    });
+      })
+      .from(transactions)
+      .leftJoin(categories, eq(transactions.categoryId, categories.id))
+      .groupBy(categories.id, transactions.id)
+      .$dynamic();
 
-    return userTransactions;
+    query.where(eq(transactions.userId, user.id));
+
+    if (payee && payee.trim() !== "") {
+      query.where(ilike(transactions.payee, `%${payee}%`));
+    }
+
+    return await query;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to get user transactions");

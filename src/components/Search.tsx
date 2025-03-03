@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useEffect, useState } from "react";
+import { Search as SearchIcon } from "lucide-react";
 
 type Props = {
   id: string;
@@ -27,10 +28,11 @@ export default function Search({ label, id, queryKey }: Props) {
         {label}
       </label>
       <Input
-        placeholder="Search..."
+        placeholder={label}
         id={id}
         value={query ?? ""}
         onChange={(e) => setQuery(e.target.value)}
+        startIcon={SearchIcon}
       />
     </div>
   );

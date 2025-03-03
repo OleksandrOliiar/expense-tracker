@@ -6,12 +6,16 @@ import {
 import { getUserTransactions } from "../actions/getUserTransactions";
 import TransactionsClient from "./TransactionsClient";
 
-const TransactionsServer = async () => {
+type TransactionsServerProps = {
+  payee?: string;
+};
+
+const TransactionsServer = async ({ payee }: TransactionsServerProps) => {
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
-    queryKey: ["transactions", "list"],
-    queryFn: () => getUserTransactions(),
+    queryKey: ["transactions", "list", { payee }],
+    queryFn: () => getUserTransactions({ payee }),
   });
 
   return (

@@ -12,8 +12,8 @@ export type Transaction = {
   amount: number | string;
   date: Date;
   category: {
-    id: string;
     name: string;
+    id: string;
   } | null;
   payee: string | null;
 };
@@ -95,7 +95,7 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       );
     },
-    accessorFn: (row) => row.payee ?? "No payee",
+    accessorFn: (row) => !!row.payee ? row.payee : "No payee",
   },
   {
     accessorKey: "amount",

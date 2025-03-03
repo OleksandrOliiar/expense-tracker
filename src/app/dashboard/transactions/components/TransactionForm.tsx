@@ -48,7 +48,7 @@ const TransactionForm = ({
     date: defaultValues?.date ? new Date(defaultValues.date) : new Date(),
     categoryId: defaultValues?.categoryId ?? null,
     notes: defaultValues?.notes ?? "",
-    payee: defaultValues?.payee ?? "",
+    payee: defaultValues?.payee ?? null,
   };
 
   const form = useForm<CreateTransactionSchema>({
