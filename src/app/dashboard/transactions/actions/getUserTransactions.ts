@@ -3,14 +3,18 @@
 import { db } from "@/db";
 import { categories, transactions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { eq, ilike } from "drizzle-orm";
+import { eq, gte, ilike, lte } from "drizzle-orm";
 
 type GetUserTransactionsProps = {
-  payee?: string;
+  payee: string | null;
+  startDate: string | null;
+  endDate: string | null;
 };
 
 export const getUserTransactions = async ({
   payee,
+  startDate,
+  endDate,
 }: GetUserTransactionsProps) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
@@ -44,7 +48,17 @@ export const getUserTransactions = async ({
       query.where(ilike(transactions.payee, `%${payee}%`));
     }
 
-    return await query;
+    if (startDate) {
+      query.where(gte(transactions.date, new Date(startDate)));
+    }
+
+    if (endDate) {
+      query.where(lte(transactions.date, new Date(endDate)));
+    }
+
+    const result = await query;
+
+    return result;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to get user transactions");

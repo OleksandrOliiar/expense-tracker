@@ -5,26 +5,42 @@ import { getUserTransactions } from "../actions/getUserTransactions";
 import { columns } from "./Columns";
 import { TransactionsTable } from "./TransactionsTable";
 import { useSearchParams } from "next/navigation";
-import TransactionsTableSkeleton from "./TransactionsTableSkeleton";
 
 const TransactionsClient = () => {
   const searchParams = useSearchParams();
-  const payee = searchParams.get("payee");
 
   const {
     data: transactions,
     isLoading,
+    isFetching,
     error,
   } = useQuery({
-    queryKey: ["transactions", "list", { payee }],
-    queryFn: () => getUserTransactions({ payee: payee ?? undefined }),
+    queryKey: [
+      "transactions",
+      "list",
+      {
+        payee: searchParams.get("payee") ?? null,
+        startDate: searchParams.get("startDate") ?? null,
+        endDate: searchParams.get("endDate") ?? null,
+      },
+    ],
+    queryFn: () =>
+      getUserTransactions({
+        payee: searchParams.get("payee") ?? null,
+        startDate: searchParams.get("startDate") ?? null,
+        endDate: searchParams.get("endDate") ?? null,
+      }),
   });
-
-  if (isLoading) return <TransactionsTableSkeleton />;
 
   if (error) return <div>Error: {error.message}</div>;
 
-  return <TransactionsTable columns={columns} data={transactions ?? []} />;
+  return (
+    <TransactionsTable
+      columns={columns}
+      data={transactions ?? []}
+      isLoading={isLoading}
+    />
+  );
 };
 
 export default TransactionsClient;

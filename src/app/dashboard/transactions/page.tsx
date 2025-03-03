@@ -3,7 +3,9 @@ import TransactionsServer from "./components/TransactionsServer";
 
 type TransactionsProps = {
   searchParams: {
-    payee: string;
+    payee?: string;
+    startDate?: string;
+    endDate?: string;
   };
 };
 
@@ -14,7 +16,11 @@ const Transactions = ({ searchParams }: TransactionsProps) => {
         <CreateTransactionSheet type="income" />
         <CreateTransactionSheet type="expense" />
       </div>
-      <TransactionsServer payee={searchParams.payee} />
+      <TransactionsServer
+        payee={searchParams.payee}
+        startDate={searchParams.startDate}
+        endDate={searchParams.endDate}
+      />
     </div>
   );
 };

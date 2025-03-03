@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowDown01, ArrowDownZA, ArrowUp10, ArrowUpZA } from "lucide-react";
 import { EditTransactionSchema } from "../validations/editTransactionSchema";
 import TransactionMenu from "./TransactionMenu";
 
@@ -51,7 +51,11 @@ export const columns: ColumnDef<Transaction>[] = [
           className="px-0 hover:bg-background"
         >
           Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowDown01 className="h-4 w-4" />
+          ) : (
+            <ArrowUp10 className="h-4 w-4" />
+          )}
         </Button>
       );
     },
@@ -75,7 +79,11 @@ export const columns: ColumnDef<Transaction>[] = [
           className="px-0 hover:bg-background"
         >
           Category
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowDownZA className="h-4 w-4" />
+          ) : (
+            <ArrowUpZA className="h-4 w-4" />
+          )}
         </Button>
       );
     },
@@ -87,15 +95,21 @@ export const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => {
+            column.toggleSorting(column.getIsSorted() === "asc");
+          }}
           className="px-0 hover:bg-background"
         >
           Payee
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowDownZA className="h-4 w-4" />
+          ) : (
+            <ArrowUpZA className="h-4 w-4" />
+          )}
         </Button>
       );
     },
-    accessorFn: (row) => !!row.payee ? row.payee : "No payee",
+    accessorFn: (row) => (!!row.payee ? row.payee : "No payee"),
   },
   {
     accessorKey: "amount",
@@ -107,7 +121,11 @@ export const columns: ColumnDef<Transaction>[] = [
           className="px-0 hover:bg-background"
         >
           Amount
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowDown01 className="h-4 w-4" />
+          ) : (
+            <ArrowUp10 className="h-4 w-4" />
+          )}
         </Button>
       );
     },

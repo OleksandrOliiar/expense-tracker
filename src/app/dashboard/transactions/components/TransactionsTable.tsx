@@ -13,7 +13,9 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 
+import Search from "@/components/Search";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -22,23 +24,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Transaction } from "./Columns";
 import ColumnsDropdown from "./ColumnsDropdown";
+import DateFilter from "./DateFilter";
 import DeleteTransactionsDialog from "./DeleteTransactionsDialog";
 import DownloadCsvButton from "./DownloadCsvButton";
-import Search from "@/components/Search";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import TableBodySkeleton from "./TableBodySkeleton";
 
 interface TransactionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isLoading: boolean;
 }
 
 export function TransactionsTable<TData, TValue>({
   columns,
   data,
+  isLoading,
 }: TransactionsTableProps<TData, TValue>) {
+  const queryClient = useQueryClient();
+
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -67,7 +76,7 @@ export function TransactionsTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between flex-wrap gap-2 py-4">
         {selectedRows.length > 0 ? (
           <div className="flex items-center gap-2">
             <DeleteTransactionsDialog
@@ -80,7 +89,10 @@ export function TransactionsTable<TData, TValue>({
         ) : (
           <Search queryKey="payee" label="Search payees..." id="payee" />
         )}
-        <ColumnsDropdown table={table as unknown as TTable<Transaction>} />
+        <div className={cn("flex items-center gap-2", {})}>
+          <DateFilter />
+          <ColumnsDropdown table={table as unknown as TTable<Transaction>} />
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -102,34 +114,38 @@ export function TransactionsTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+          {isLoading ? (
+            <TableBodySkeleton />
+          ) : (
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+              )}
+            </TableBody>
+          )}
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">

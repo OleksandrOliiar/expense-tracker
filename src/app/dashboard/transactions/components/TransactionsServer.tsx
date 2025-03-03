@@ -8,14 +8,33 @@ import TransactionsClient from "./TransactionsClient";
 
 type TransactionsServerProps = {
   payee?: string;
+  startDate?: string;
+  endDate?: string;
 };
 
-const TransactionsServer = async ({ payee }: TransactionsServerProps) => {
+const TransactionsServer = async ({
+  payee,
+  endDate,
+  startDate,
+}: TransactionsServerProps) => {
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
-    queryKey: ["transactions", "list", { payee }],
-    queryFn: () => getUserTransactions({ payee }),
+    queryKey: [
+      "transactions",
+      "list",
+      {
+        payee: payee ?? null,
+        startDate: startDate ?? null,
+        endDate: endDate ?? null,
+      },
+    ],
+    queryFn: () =>
+      getUserTransactions({
+        payee: payee ?? null,
+        startDate: startDate ?? null,
+        endDate: endDate ?? null,
+      }),
   });
 
   return (

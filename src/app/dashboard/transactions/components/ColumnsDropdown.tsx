@@ -14,7 +14,7 @@ const ColumnsDropdown = ({ table }: { table: Table<Transaction> }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="ml-auto">
+        <Button variant="outline">
           <Columns />
           Columns
         </Button>
