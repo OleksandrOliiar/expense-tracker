@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getUserCategories } from "../../actions/getUserCategories";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,28 +30,49 @@ export interface CategoryPickerProps<Multiple extends boolean = false> {
   showAddCategory?: boolean;
   /** Whether to allow multiple categories to be selected */
   multiple?: Multiple;
+  width?: string;
 }
+
+type Category = {
+  id: string;
+  name: string;
+  transactionsCount: number;
+};
 
 export default function CategoryPicker<Multiple extends boolean = false>({
   value,
   onChange,
   showAddCategory = true,
   multiple = false as Multiple,
+  width = "auto",
 }: CategoryPickerProps<Multiple>) {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
 
-  // Fetch categories using useQuery
   const {
-    data: categories = [],
+    data: categories,
     isLoading,
     error,
-  } = useCategories(debouncedSearchTerm);
+  } = useCategories(open ? debouncedSearchTerm : null);
 
-  const selectedCategory = multiple
-    ? undefined
-    : categories.find((category) => category.id === value);
+  // Use empty array if categories is undefined
+  const categoriesList = categories || [];
+
+  useEffect(() => {
+    if (multiple) {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(
+        categoriesList.find((category) => {
+          return category.id === value;
+        }) ?? null
+      );
+    }
+  }, [value, multiple]);
 
   const handleSelect = (currentValue: string) => {
     if (multiple) {
@@ -64,7 +85,6 @@ export default function CategoryPicker<Multiple extends boolean = false>({
     } else {
       const newValue = currentValue === value ? "" : currentValue;
       (onChange as (value: string) => void)(newValue);
-      !multiple && setOpen(false);
     }
   };
 
@@ -75,7 +95,8 @@ export default function CategoryPicker<Multiple extends boolean = false>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="justify-between w-full"
+          className="justify-between"
+          style={{ width: width }}
         >
           {multiple ? (
             <div>
@@ -122,15 +143,15 @@ export default function CategoryPicker<Multiple extends boolean = false>({
               </div>
             )}
 
-            {!isLoading && !error && categories.length === 0 && (
+            {!isLoading && !error && categoriesList.length === 0 && (
               <CommandEmpty>No categories found</CommandEmpty>
             )}
 
             <CommandGroup>
-              {isLoading && categories.length === 0 ? (
+              {isLoading ? (
                 <DefaultLoadingSkeleton />
               ) : (
-                categories.map((category) => (
+                categoriesList.map((category) => (
                   <CommandItem
                     key={category.id}
                     value={category.id}

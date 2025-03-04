@@ -134,7 +134,11 @@ const TransactionForm = ({
             <FormItem>
               <FormLabel>Category</FormLabel>
               <FormControl>
-                <CategoryPicker value={value ?? ""} onChange={onChange} />
+                <CategoryPicker
+                  value={value ?? ""}
+                  onChange={onChange}
+                  width="100%"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -4,10 +4,14 @@ import { useQueryParams } from "@/hooks/useQueryParams";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 const CategoriesFilter = () => {
-  const [categories, setCategories] = useState<string[]>([]);
-  const debouncedCategories = useDebouncedValue(categories, 300);
+  const { setQueryParams, queryParams } = useQueryParams();
 
-  const { setQueryParams } = useQueryParams();
+  const [categories, setCategories] = useState<string[]>(() => {
+    const categoriesString = queryParams.get("categories");
+    return categoriesString ? categoriesString.split(",") : [];
+  });
+  
+  const debouncedCategories = useDebouncedValue(categories, 300);
 
   useEffect(() => {
     if (debouncedCategories.length > 0) {

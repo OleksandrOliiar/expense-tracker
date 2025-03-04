@@ -33,6 +33,7 @@ export default function Search({ label, id, queryKey }: Props) {
         value={query ?? ""}
         onChange={(e) => setQuery(e.target.value)}
         startIcon={SearchIcon}
+        className="h-9"
       />
     </div>
   );

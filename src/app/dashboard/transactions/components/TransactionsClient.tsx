@@ -12,7 +12,6 @@ const TransactionsClient = () => {
   const {
     data: transactions,
     isLoading,
-    isFetching,
     error,
   } = useQuery({
     queryKey: [
@@ -22,6 +21,7 @@ const TransactionsClient = () => {
         payee: searchParams.get("payee") ?? null,
         startDate: searchParams.get("startDate") ?? null,
         endDate: searchParams.get("endDate") ?? null,
+        categories: searchParams.get("categories") ?? null,
       },
     ],
     queryFn: () =>
@@ -29,6 +29,7 @@ const TransactionsClient = () => {
         payee: searchParams.get("payee") ?? null,
         startDate: searchParams.get("startDate") ?? null,
         endDate: searchParams.get("endDate") ?? null,
+        categories: searchParams.get("categories") ?? null,
       }),
   });
 

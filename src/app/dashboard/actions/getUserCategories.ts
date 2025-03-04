@@ -7,6 +7,7 @@ import { eq, sql, like } from "drizzle-orm";
 
 export const getUserCategories = async (name?: string) => {
   try {
+    console.log("Getting user categories");
     const { isAuthenticated, getUser } = getKindeServerSession();
 
     if (!(await isAuthenticated())) {

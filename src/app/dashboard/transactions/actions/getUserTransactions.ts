@@ -3,18 +3,20 @@
 import { db } from "@/db";
 import { categories, transactions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { eq, gte, ilike, lte } from "drizzle-orm";
+import { eq, gte, ilike, inArray, lte } from "drizzle-orm";
 
 type GetUserTransactionsProps = {
   payee: string | null;
   startDate: string | null;
   endDate: string | null;
+  categories: string | null;
 };
 
 export const getUserTransactions = async ({
   payee,
   startDate,
   endDate,
+  categories: categoriesString,
 }: GetUserTransactionsProps) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
@@ -54,6 +56,11 @@ export const getUserTransactions = async ({
 
     if (endDate) {
       query.where(lte(transactions.date, new Date(endDate)));
+    }
+
+    if (categoriesString) {
+      const categoriesArr = categoriesString.split(",");
+      query.where(inArray(transactions.categoryId, categoriesArr));
     }
 
     const result = await query;

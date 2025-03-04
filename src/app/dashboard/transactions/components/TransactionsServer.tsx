@@ -10,13 +10,17 @@ type TransactionsServerProps = {
   payee?: string;
   startDate?: string;
   endDate?: string;
+  categories?: string;
 };
 
 const TransactionsServer = async ({
   payee,
   endDate,
   startDate,
+  categories,
 }: TransactionsServerProps) => {
+  console.log({ categories: categories?.split(",") });
+
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
@@ -27,6 +31,7 @@ const TransactionsServer = async ({
         payee: payee ?? null,
         startDate: startDate ?? null,
         endDate: endDate ?? null,
+        categories: categories ?? null,
       },
     ],
     queryFn: () =>
@@ -34,6 +39,7 @@ const TransactionsServer = async ({
         payee: payee ?? null,
         startDate: startDate ?? null,
         endDate: endDate ?? null,
+        categories: categories ?? null,
       }),
   });
 
