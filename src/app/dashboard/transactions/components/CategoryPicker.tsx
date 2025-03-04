@@ -1,7 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { getUserCategories } from "../../actions/getUserCategories";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -18,8 +14,10 @@ import {
 } from "@/components/ui/popover";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { cn } from "@/lib/utils";
-import AddCategoryDialog from "./AddCategoryDialog";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useCategories } from "../../hooks/useCategories";
+import AddCategoryDialog from "./AddCategoryDialog";
 
 export interface CategoryPickerProps<Multiple extends boolean = false> {
   /** Currently selected value */
@@ -37,6 +35,7 @@ type Category = {
   id: string;
   name: string;
   icon: string | null;
+  transactionsCount: number;
 };
 
 export default function CategoryPicker<Multiple extends boolean = false>({
@@ -58,6 +57,8 @@ export default function CategoryPicker<Multiple extends boolean = false>({
     isLoading,
     error,
   } = useCategories(open ? debouncedSearchTerm : null);
+
+  console.log(categories);
 
   // Use empty array if categories is undefined
   const categoriesList = categories || [];
@@ -170,6 +171,9 @@ export default function CategoryPicker<Multiple extends boolean = false>({
                     <div className="flex items-center gap-2">
                       {category.icon && <span>{category.icon}</span>}
                       <span>{category.name}</span>
+                      <span className="text-muted-foreground">
+                        ({category.transactionsCount})
+                      </span>
                     </div>
                     <Check
                       className={cn(

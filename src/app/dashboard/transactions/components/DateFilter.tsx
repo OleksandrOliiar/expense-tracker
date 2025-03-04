@@ -54,7 +54,9 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
 
   React.useEffect(() => {
     if (isRange) {
-      const startDate = debouncedCalendarDate?.from?.toISOString().split("T")[0];
+      const startDate = debouncedCalendarDate?.from
+        ?.toISOString()
+        .split("T")[0];
       const endDate = debouncedCalendarDate?.to
         ? addDays(debouncedCalendarDate.to, 2).toISOString().split("T")[0]
         : undefined;
@@ -65,8 +67,10 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
         endDate,
       });
     } else {
-      const date = debouncedSingleDate?.toISOString().split("T")[0];
-      
+      const date = debouncedSingleDate
+        ? addDays(debouncedSingleDate, 1).toISOString().split("T")[0]
+        : undefined;
+
       setQueryParams({
         date,
         startDate: undefined,
@@ -99,14 +103,17 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
 
   // Determine what to display in the button
   const displayDate = isRange
-    ? calendarDate?.from 
-      ? calendarDate.to 
-        ? `${format(calendarDate.from, "LLL dd, y")} - ${format(calendarDate.to, "LLL dd, y")}`
+    ? calendarDate?.from
+      ? calendarDate.to
+        ? `${format(calendarDate.from, "LLL dd, y")} - ${format(
+            calendarDate.to,
+            "LLL dd, y"
+          )}`
         : format(calendarDate.from, "LLL dd, y")
       : "Pick a date"
     : singleDate
-      ? format(singleDate, "LLL dd, y") 
-      : "Pick a date";
+    ? format(singleDate, "LLL dd, y")
+    : "Pick a date";
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -121,7 +128,11 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
             )}
           >
             <CalendarIcon />
-            {typeof displayDate === "string" ? <span>{displayDate}</span> : displayDate}
+            {typeof displayDate === "string" ? (
+              <span>{displayDate}</span>
+            ) : (
+              displayDate
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0 pr-4" align="end">
