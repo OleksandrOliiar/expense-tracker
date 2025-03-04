@@ -19,10 +19,12 @@ import { Transaction } from "./Columns";
 
 type DeleteTransactionsDialogProps<TData> = {
   selectedRows: Row<TData>[];
+  onDelete: () => void;
 };
 
 const DeleteTransactionsDialog = ({
   selectedRows,
+  onDelete,
 }: DeleteTransactionsDialogProps<Transaction>) => {
   const [open, setOpen] = useState(false);
 
@@ -32,6 +34,7 @@ const DeleteTransactionsDialog = ({
 
   const handleClose = () => {
     handleOpenChange(false);
+    onDelete();
   };
 
   const count = selectedRows.length;
@@ -59,7 +62,10 @@ const DeleteTransactionsDialog = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <DeleteTransactionButton transactionIds={ids} onClose={handleClose} />
+          <DeleteTransactionButton
+            transactionIds={ids}
+            onClose={handleClose}
+          />
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

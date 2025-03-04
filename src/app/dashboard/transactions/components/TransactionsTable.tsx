@@ -70,6 +70,10 @@ export function TransactionsTable<TData, TValue>({
 
   const selectedRows = table.getFilteredSelectedRowModel().rows;
 
+  const handleDelete = () => {
+    table.toggleAllRowsSelected(false);
+  };
+
   return (
     <div>
       <div className="flex items-center flex-wrap gap-2 py-4">
@@ -77,6 +81,7 @@ export function TransactionsTable<TData, TValue>({
           <div className="flex items-center gap-2">
             <DeleteTransactionsDialog
               selectedRows={selectedRows as Row<Transaction>[]}
+              onDelete={handleDelete}
             />
             <DownloadCsvButton
               selectedRows={selectedRows as Row<Transaction>[]}

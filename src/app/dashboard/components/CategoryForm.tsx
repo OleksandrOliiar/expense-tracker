@@ -59,7 +59,10 @@ const CategoryForm = ({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(submitHandler)}
+        onSubmit={(e) => {
+          e.stopPropagation();
+          form.handleSubmit(submitHandler)(e);
+        }}
         className="flex flex-col gap-4"
       >
         <FormField
@@ -107,7 +110,6 @@ const CategoryForm = ({
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent
-                
                   side="bottom"
                   sideOffset={-200}
                   className="w-full"
