@@ -39,7 +39,7 @@ const sidebarItems = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarContent>
+      <SidebarContent className="pt-[76px]">
         <SidebarGroup>
           <SidebarMenu>
             {sidebarItems.map((item) => (

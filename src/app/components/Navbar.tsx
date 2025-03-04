@@ -1,10 +1,5 @@
-import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  RegisterLink,
-  LoginLink,
-  LogoutLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
+import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
 
 import {
   Accordion,
@@ -31,6 +26,7 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import Authentication from "./Authentication";
+import ModeToggler from "./ModeToggler";
 
 const subMenuItemsOne = [
   {
@@ -81,18 +77,12 @@ const subMenuItemsTwo = [
 
 const Navbar1 = () => {
   return (
-    <section className="py-4">
+    <section className="py-4 z-30 bg-background sticky top-0 px-4">
       <div className="container">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <Image
-                src="https://shadcnblocks.com/images/block/block-1.svg"
-                width={32}
-                height={32}
-                alt="logo"
-              />
-              <span className="text-lg font-semibold">Shadcnblocks.com</span>
+              <span className="text-lg font-semibold">Finance Tracker</span>
             </div>
             <div className="flex items-center">
               <a
@@ -198,7 +188,10 @@ const Navbar1 = () => {
               </a>
             </div>
           </div>
-          <Authentication />
+          <div className="flex items-center gap-2">
+            <ModeToggler />
+            <Authentication />
+          </div>
         </nav>
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">

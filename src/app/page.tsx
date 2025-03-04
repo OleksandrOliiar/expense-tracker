@@ -11,7 +11,7 @@ import Testimonial10 from "./components/Testimonials";
 const Home = async () => {
   return (
     <>
-      <Navbar1 />
+     
       <Hero7 />
       <Features />
       <Testimonial10 />

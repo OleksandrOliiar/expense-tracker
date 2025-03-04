@@ -5,15 +5,21 @@ import {
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import Link from "next/link";
 
 const Authentication = async () => {
   const { isAuthenticated } = getKindeServerSession();
 
   if (await isAuthenticated()) {
     return (
-      <LogoutLink>
-        <Button>Logout</Button>
-      </LogoutLink>
+      <div className="flex items-center gap-2">
+        <Link href="/dashboard">
+          <Button variant="outline">Dashboard</Button>
+        </Link>
+        <LogoutLink>
+          <Button>Logout</Button>
+        </LogoutLink>
+      </div>
     );
   }
 
@@ -25,4 +31,4 @@ const Authentication = async () => {
   );
 };
 
-export default Authentication
+export default Authentication;

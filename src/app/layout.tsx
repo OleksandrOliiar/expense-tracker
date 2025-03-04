@@ -5,6 +5,7 @@ import Providers from "@/components/providers";
 import Script from "next/script";
 
 import "./globals.css";
+import Navbar1 from "./components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,14 +21,15 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Providers>
-        <html lang="en">
-          <body className={inter.className}>
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <Providers>
             <Toaster />
+            <Navbar1 />
             <main>{children}</main>
-          </body>
-        </html>
-      </Providers>
+          </Providers>
+        </body>
+      </html>
       <Script
         src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
         defer
