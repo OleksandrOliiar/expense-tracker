@@ -1,4 +1,4 @@
-import { getUserCategories } from "../../actions/getUserCategories";
+import { getUserCategories, getUserCategoriesWithTransactions } from "../../actions/getUserCategories";
 import {
   dehydrate,
   HydrationBoundary,
@@ -15,7 +15,7 @@ const CategoriesServer = async ({ name }: CategoriesServerProps) => {
 
   await queryClient.fetchQuery({
     queryKey: ["categories", "list", name],
-    queryFn: () => getUserCategories(name),
+    queryFn: () => getUserCategoriesWithTransactions(name),
   });
 
   return (

@@ -119,6 +119,10 @@ export function TransactionsTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    onClick={() => {
+                      row.toggleSelected();
+                    }}
+                    className="cursor-pointer"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

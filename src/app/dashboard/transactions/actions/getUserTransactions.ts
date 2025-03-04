@@ -20,7 +20,7 @@ export const getUserTransactions = async ({
   endDate,
   categories: categoriesString,
   type,
-  date
+  date,
 }: GetUserTransactionsProps) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
@@ -41,6 +41,7 @@ export const getUserTransactions = async ({
         category: {
           name: categories.name,
           id: categories.id,
+          icon: categories.icon,
         },
       })
       .from(transactions)

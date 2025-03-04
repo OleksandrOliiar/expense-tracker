@@ -8,9 +8,15 @@ type CategoryCardProps = {
   id: string;
   name: string;
   transactionsCount: number;
+  icon: string | null;
 };
 
-const CategoryCard = ({ id, name, transactionsCount }: CategoryCardProps) => {
+const CategoryCard = ({
+  id,
+  name,
+  transactionsCount,
+  icon,
+}: CategoryCardProps) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -25,7 +31,11 @@ const CategoryCard = ({ id, name, transactionsCount }: CategoryCardProps) => {
       <CardContent className="p-5">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary/10 rounded-full group-hover:bg-primary/15 transition-colors">
-            <Folder className="h-5 w-5 text-primary" />
+            {icon ? (
+              <span className="text-xl">{icon}</span>
+            ) : (
+              <Folder className="h-5 w-5 text-primary" />
+            )}
           </div>
           <div className="flex-1">
             <h3 className="font-medium text-foreground">{name}</h3>
@@ -35,7 +45,7 @@ const CategoryCard = ({ id, name, transactionsCount }: CategoryCardProps) => {
               </Badge>
             </div>
           </div>
-          <CategoryCardMenu id={id} name={name} />
+          <CategoryCardMenu id={id} name={name} icon={icon} />
         </div>
       </CardContent>
     </Card>

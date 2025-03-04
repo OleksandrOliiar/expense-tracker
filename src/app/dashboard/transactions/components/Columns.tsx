@@ -14,6 +14,7 @@ export type Transaction = {
   category: {
     name: string;
     id: string;
+    icon: string | null;
   } | null;
   payee: string | null;
 };
@@ -87,7 +88,10 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       );
     },
-    accessorFn: (row) => row.category?.name ?? "No category",
+    accessorFn: (row) =>
+      row.category
+        ? `${row.category.icon} ${row.category.name}`
+        : "No category",
   },
   {
     accessorKey: "payee",

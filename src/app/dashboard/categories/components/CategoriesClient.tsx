@@ -1,8 +1,9 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { useCategories } from "../../hooks/useCategories";
+import { getUserCategoriesWithTransactions } from "../../actions/getUserCategories";
 import CategoryCard from "./CategoryCard";
 
 const CategoriesClient = () => {
@@ -12,7 +13,11 @@ const CategoriesClient = () => {
     data: categories,
     isLoading,
     error,
-  } = useCategories(searchParams.get("name") ?? undefined);
+  } = useQuery({
+    queryKey: ["categories", "list", searchParams.get("name") ?? undefined],
+    queryFn: () =>
+      getUserCategoriesWithTransactions(searchParams.get("name") ?? undefined),
+  });
 
   if (isLoading) {
     return (

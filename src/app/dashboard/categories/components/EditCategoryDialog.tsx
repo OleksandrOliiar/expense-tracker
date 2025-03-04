@@ -13,9 +13,14 @@ import { Pencil } from "lucide-react";
 type EditCategoryDialogProps = {
   name: string;
   categoryId: string;
+  icon: string | null;
 };
 
-const EditCategoryDialog = ({ name, categoryId }: EditCategoryDialogProps) => {
+const EditCategoryDialog = ({
+  name,
+  categoryId,
+  icon,
+}: EditCategoryDialogProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,6 +37,7 @@ const EditCategoryDialog = ({ name, categoryId }: EditCategoryDialogProps) => {
         <EditCategoryForm
           defaultValues={{
             name,
+            icon: icon || undefined,
           }}
           onCloseDialog={() => setOpen(false)}
           categoryId={categoryId}

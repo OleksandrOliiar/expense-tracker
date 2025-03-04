@@ -36,7 +36,7 @@ export interface CategoryPickerProps<Multiple extends boolean = false> {
 type Category = {
   id: string;
   name: string;
-  transactionsCount: number;
+  icon: string | null;
 };
 
 export default function CategoryPicker<Multiple extends boolean = false>({
@@ -107,7 +107,10 @@ export default function CategoryPicker<Multiple extends boolean = false>({
                 : "Select categories..."}
             </div>
           ) : selectedCategory ? (
-            <div>{selectedCategory.name}</div>
+            <div className="flex items-center gap-2">
+              <span>{selectedCategory.icon}</span>
+              <span>{selectedCategory.name}</span>
+            </div>
           ) : (
             "Select category..."
           )}
@@ -165,7 +168,8 @@ export default function CategoryPicker<Multiple extends boolean = false>({
                     })}
                   >
                     <div className="flex items-center gap-2">
-                      {category.name}
+                      {category.icon && <span>{category.icon}</span>}
+                      <span>{category.name}</span>
                     </div>
                     <Check
                       className={cn(

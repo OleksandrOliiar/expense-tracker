@@ -17,9 +17,10 @@ import DeleteCategoryDialog from "./DeleteCategoryDialog";
 type CategoryCardMenuProps = {
   id: string;
   name: string;
+  icon: string | null;
 };
 
-const CategoryCardMenu = ({ id, name }: CategoryCardMenuProps) => {
+const CategoryCardMenu = ({ id, name, icon }: CategoryCardMenuProps) => {
   return (
     <DropdownMenu>
       <TooltipProvider delayDuration={200}>
@@ -40,7 +41,7 @@ const CategoryCardMenu = ({ id, name }: CategoryCardMenuProps) => {
         </Tooltip>
       </TooltipProvider>
       <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
-        <EditCategoryDialog name={name} categoryId={id} />
+        <EditCategoryDialog name={name} categoryId={id} icon={icon} />
         <DeleteCategoryDialog categoryId={id} />
       </DropdownMenuContent>
     </DropdownMenu>
