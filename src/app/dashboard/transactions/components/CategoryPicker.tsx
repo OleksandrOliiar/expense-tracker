@@ -1,9 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { getUserCategories } from "../../categories/actions/getUserCategories";
-
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -19,19 +17,27 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { cn } from "@/lib/utils";
 import AddCategoryDialog from "./AddCategoryDialog";
+import { useCategories } from "../../hooks/useCategories";
 
-export interface CategoryPickerProps {
+export interface CategoryPickerProps<Multiple extends boolean = false> {
   /** Currently selected value */
-  value: string;
+  value: Multiple extends true ? string[] : string;
   /** Callback when selection changes */
-  onChange: (value: string) => void;
+  onChange: (value: Multiple extends true ? string[] : string) => void;
+  /** Whether to show the add category dialog */
+  showAddCategory?: boolean;
+  /** Whether to allow multiple categories to be selected */
+  multiple?: Multiple;
 }
 
-export default function CategoryPicker({
+export default function CategoryPicker<Multiple extends boolean = false>({
   value,
   onChange,
-}: CategoryPickerProps) {
+  showAddCategory = true,
+  multiple = false as Multiple,
+}: CategoryPickerProps<Multiple>) {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
@@ -41,16 +47,25 @@ export default function CategoryPicker({
     data: categories = [],
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["categories", "list", debouncedSearchTerm],
-    queryFn: () => getUserCategories(debouncedSearchTerm || undefined),
-  });
+  } = useCategories(debouncedSearchTerm);
 
-  const selectedCategory = categories.find((category) => category.id === value);
+  const selectedCategory = multiple
+    ? undefined
+    : categories.find((category) => category.id === value);
 
   const handleSelect = (currentValue: string) => {
-    const newValue = currentValue === value ? "" : currentValue;
-    onChange(newValue);
+    if (multiple) {
+      // Type assertion needed since TypeScript can't infer properly in this context
+      const valueArray = value as string[];
+      const newValue = valueArray.includes(currentValue)
+        ? valueArray.filter((v) => v !== currentValue)
+        : [...valueArray, currentValue];
+      (onChange as (value: string[]) => void)(newValue);
+    } else {
+      const newValue = currentValue === value ? "" : currentValue;
+      (onChange as (value: string) => void)(newValue);
+      !multiple && setOpen(false);
+    }
   };
 
   return (
@@ -62,7 +77,13 @@ export default function CategoryPicker({
           aria-expanded={open}
           className="justify-between w-full"
         >
-          {selectedCategory ? (
+          {multiple ? (
+            <div>
+              {(value as string[]).length > 0
+                ? `${(value as string[]).length} categories selected`
+                : "Select categories..."}
+            </div>
+          ) : selectedCategory ? (
             <div>{selectedCategory.name}</div>
           ) : (
             "Select category..."
@@ -86,9 +107,11 @@ export default function CategoryPicker({
           </div>
 
           {/* Add Category Button */}
-          <div className="p-1 border-b">
-            <AddCategoryDialog />
-          </div>
+          {showAddCategory && (
+            <div className="p-1 border-b">
+              <AddCategoryDialog />
+            </div>
+          )}
 
           <CommandList>
             {error && (
@@ -111,9 +134,11 @@ export default function CategoryPicker({
                   <CommandItem
                     key={category.id}
                     value={category.id}
-                    onSelect={handleSelect} // Empty to prevent default behavior
+                    onSelect={() => handleSelect(category.id)}
                     className={cn("!cursor-pointer hover:bg-accent", {
-                      "bg-accent": value === category.id,
+                      "bg-accent": multiple
+                        ? (value as string[]).includes(category.id)
+                        : value === category.id,
                     })}
                   >
                     <div className="flex items-center gap-2">
@@ -122,7 +147,13 @@ export default function CategoryPicker({
                     <Check
                       className={cn(
                         "ml-auto h-3 w-3",
-                        value === category.id ? "opacity-100" : "opacity-0"
+                        multiple
+                          ? (value as string[]).includes(category.id)
+                            ? "opacity-100"
+                            : "opacity-0"
+                          : value === category.id
+                          ? "opacity-100"
+                          : "opacity-0"
                       )}
                     />
                   </CommandItem>

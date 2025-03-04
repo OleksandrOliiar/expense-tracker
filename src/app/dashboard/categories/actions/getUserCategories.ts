@@ -7,6 +7,8 @@ import { eq, sql, like } from "drizzle-orm";
 
 export const getUserCategories = async (name?: string) => {
   try {
+    console.log("starting ---___--+++----");
+    
     const { isAuthenticated, getUser } = getKindeServerSession();
 
     if (!(await isAuthenticated())) {
@@ -32,7 +34,9 @@ export const getUserCategories = async (name?: string) => {
       query.where(like(categories.name, `%${name}%`));
     }
 
-    return await query;
+    const result = await query;
+    console.log("ending");
+    return result;
   } catch (error) {
     console.error("Failed to get categories", error);
     throw new Error("Failed to get categories");

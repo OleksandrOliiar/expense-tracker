@@ -34,6 +34,7 @@ import DateFilter from "./DateFilter";
 import DeleteTransactionsDialog from "./DeleteTransactionsDialog";
 import DownloadCsvButton from "./DownloadCsvButton";
 import TableBodySkeleton from "./TableBodySkeleton";
+import CategoriesFilter from "./CategoriesFilter";
 
 interface TransactionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -90,6 +91,7 @@ export function TransactionsTable<TData, TValue>({
           <Search queryKey="payee" label="Search payees..." id="payee" />
         )}
         <div className={cn("flex items-center gap-2", {})}>
+          <CategoriesFilter />
           <DateFilter />
           <ColumnsDropdown table={table as unknown as TTable<Transaction>} />
         </div>
