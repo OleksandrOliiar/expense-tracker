@@ -23,7 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Transaction } from "./Columns";
@@ -33,6 +32,7 @@ import DeleteTransactionsDialog from "./DeleteTransactionsDialog";
 import DownloadCsvButton from "./DownloadCsvButton";
 import TableBodySkeleton from "./TableBodySkeleton";
 import CategoriesFilter from "./CategoriesFilter";
+import TypeFilter from "./TypeFilter";
 
 interface TransactionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -88,6 +88,7 @@ export function TransactionsTable<TData, TValue>({
         )}
         <CategoriesFilter />
         <DateFilter />
+        <TypeFilter />
         <ColumnsDropdown table={table as unknown as TTable<Transaction>} />
       </div>
       <div className="rounded-md border">

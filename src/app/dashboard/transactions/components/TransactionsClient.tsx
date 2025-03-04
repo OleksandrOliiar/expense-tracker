@@ -22,6 +22,7 @@ const TransactionsClient = () => {
         startDate: searchParams.get("startDate") ?? null,
         endDate: searchParams.get("endDate") ?? null,
         categories: searchParams.get("categories") ?? null,
+        type: searchParams.get("type") ?? null,
       },
     ],
     queryFn: () =>
@@ -30,6 +31,8 @@ const TransactionsClient = () => {
         startDate: searchParams.get("startDate") ?? null,
         endDate: searchParams.get("endDate") ?? null,
         categories: searchParams.get("categories") ?? null,
+        type:
+          (searchParams.get("type") as "all" | "income" | "expense") ?? null,
       }),
   });
 

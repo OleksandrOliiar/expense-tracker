@@ -11,6 +11,7 @@ type TransactionsServerProps = {
   startDate?: string;
   endDate?: string;
   categories?: string;
+  type?: "income" | "expense" | "all";
 };
 
 const TransactionsServer = async ({
@@ -18,9 +19,8 @@ const TransactionsServer = async ({
   endDate,
   startDate,
   categories,
+  type,
 }: TransactionsServerProps) => {
-  console.log({ categories: categories?.split(",") });
-
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
@@ -32,6 +32,7 @@ const TransactionsServer = async ({
         startDate: startDate ?? null,
         endDate: endDate ?? null,
         categories: categories ?? null,
+        type: type ?? null,
       },
     ],
     queryFn: () =>
@@ -40,6 +41,7 @@ const TransactionsServer = async ({
         startDate: startDate ?? null,
         endDate: endDate ?? null,
         categories: categories ?? null,
+        type: type ?? null,
       }),
   });
 
