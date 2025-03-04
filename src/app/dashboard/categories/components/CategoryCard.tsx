@@ -2,6 +2,7 @@ import { Folder } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CategoryCardMenu from "./CategoryCardMenu";
+import { useRouter } from "next/navigation";
 
 type CategoryCardProps = {
   id: string;
@@ -10,8 +11,17 @@ type CategoryCardProps = {
 };
 
 const CategoryCard = ({ id, name, transactionsCount }: CategoryCardProps) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/dashboard/transactions?categories=${id}`);
+  };
+
   return (
-    <Card className="min-w-[250px] flex-1 hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden group ">
+    <Card
+      onClick={handleClick}
+      className="min-w-[250px] flex-1 hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden group "
+    >
       <CardContent className="p-5">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary/10 rounded-full group-hover:bg-primary/15 transition-colors">

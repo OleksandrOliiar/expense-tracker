@@ -39,7 +39,7 @@ const CategoryCardMenu = ({ id, name }: CategoryCardMenuProps) => {
           <TooltipContent side="bottom">Options</TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <DropdownMenuContent>
+      <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
         <EditCategoryDialog name={name} categoryId={id} />
         <DeleteCategoryDialog categoryId={id} />
       </DropdownMenuContent>

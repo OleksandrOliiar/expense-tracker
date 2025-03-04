@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useQueryParams } from "@/hooks/useQueryParams";
-import { Banknote } from "lucide-react";
+import { Banknote, List, Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const TypeFilter = () => {
@@ -22,7 +22,7 @@ const TypeFilter = () => {
 
   return (
     <Select value={value} onValueChange={setValue} defaultValue="all">
-      <SelectTrigger className="w-[120px]">
+      <SelectTrigger className="w-fit">
         <SelectValue
           placeholder={
             <div className="flex items-center gap-2">
@@ -32,9 +32,21 @@ const TypeFilter = () => {
         />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="income">Incomes</SelectItem>
-        <SelectItem value="expense">Expenses</SelectItem>
-        <SelectItem value="all">All</SelectItem>
+        <SelectItem value="income">
+          <div className="flex items-center gap-2">
+            <Plus className="w-4 h-4" /> Incomes
+          </div>
+        </SelectItem>
+        <SelectItem value="expense">
+          <div className="flex items-center gap-2">
+            <Minus className="w-4 h-4" /> Expenses
+          </div>
+        </SelectItem>
+        <SelectItem value="all">
+          <div className="flex items-center gap-2">
+            <List className="w-4 h-4" /> All
+          </div>
+        </SelectItem>
       </SelectContent>
     </Select>
   );

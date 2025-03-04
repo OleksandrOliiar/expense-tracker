@@ -101,7 +101,9 @@ export default function CategoryPicker<Multiple extends boolean = false>({
           {multiple ? (
             <div>
               {(value as string[]).length > 0
-                ? `${(value as string[]).length} categories selected`
+                ? (value as string[]).length === 1
+                  ? "1 category selected"
+                  : `${(value as string[]).length} categories selected`
                 : "Select categories..."}
             </div>
           ) : selectedCategory ? (

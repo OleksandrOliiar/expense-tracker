@@ -14,7 +14,6 @@ import {
 } from "@tanstack/react-table";
 
 import Search from "@/components/Search";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -23,15 +22,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import CategoriesFilter from "./CategoriesFilter";
 import { Transaction } from "./Columns";
 import ColumnsDropdown from "./ColumnsDropdown";
 import DateFilter from "./DateFilter";
 import DeleteTransactionsDialog from "./DeleteTransactionsDialog";
 import DownloadCsvButton from "./DownloadCsvButton";
 import TableBodySkeleton from "./TableBodySkeleton";
-import CategoriesFilter from "./CategoriesFilter";
+import TransactionsTablePagination from "./TransactionsTablePagination";
 import TypeFilter from "./TypeFilter";
 
 interface TransactionsTableProps<TData, TValue> {
@@ -145,27 +144,7 @@ export function TransactionsTable<TData, TValue>({
           )}
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Prev
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
+      <TransactionsTablePagination table={table} />
     </div>
   );
 }
