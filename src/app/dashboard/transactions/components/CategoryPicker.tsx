@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { getUserCategories } from "../../categories/actions/getUserCategories";
+import { getUserCategories } from "../../actions/getUserCategories";
 import { Button } from "@/components/ui/button";
 import {
   Command,

@@ -68,7 +68,7 @@ const TransactionForm = ({
           data.date.toISOString() &&
         defaultValues.payee === data.payee
       ) {
-        toast.info("Please commit any changes");
+        toast.info("Please make some changes");
 
         return;
       }

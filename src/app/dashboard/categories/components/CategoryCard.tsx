@@ -1,21 +1,20 @@
 import { Folder } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import CategoryCardMenu from "./CategoryCardMenu";
 
 type CategoryCardProps = {
+  id: string;
   name: string;
   transactionsCount: number;
 };
 
-const CategoryCard = ({
-  name,
-  transactionsCount,
-}: CategoryCardProps) => {
+const CategoryCard = ({ id, name, transactionsCount }: CategoryCardProps) => {
   return (
-    <Card className="hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden group">
-      <CardContent className="p-4">
+    <Card className="min-w-[250px] flex-1 hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden group ">
+      <CardContent className="p-5">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors">
+          <div className="p-2 bg-primary/10 rounded-full group-hover:bg-primary/15 transition-colors">
             <Folder className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1">
@@ -26,6 +25,7 @@ const CategoryCard = ({
               </Badge>
             </div>
           </div>
+          <CategoryCardMenu id={id} name={name} />
         </div>
       </CardContent>
     </Card>

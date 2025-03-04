@@ -1,4 +1,4 @@
-import { getUserCategories } from "../actions/getUserCategories";
+import { getUserCategories } from "../../actions/getUserCategories";
 import {
   dehydrate,
   HydrationBoundary,

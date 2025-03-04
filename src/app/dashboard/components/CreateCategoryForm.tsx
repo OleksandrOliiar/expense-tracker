@@ -1,29 +1,8 @@
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { createCategory } from "../categories/actions/createCategory";
-import {
-  CreateCategorySchema,
-  createCategorySchema,
-} from "../categories/validations/createCategorySchema";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { createCategory } from "../actions/createCategory";
+import { CreateCategorySchema } from "../validations/createCategorySchema";
+import CategoryForm from "./CategoryForm";
 
 type CreateCategoryFormProps = {
   onCloseDialog: () => void;
@@ -32,14 +11,7 @@ type CreateCategoryFormProps = {
 const CreateCategoryForm = ({ onCloseDialog }: CreateCategoryFormProps) => {
   const queryClient = useQueryClient();
 
-  const form = useForm<CreateCategorySchema>({
-    resolver: zodResolver(createCategorySchema),
-    defaultValues: {
-      name: "",
-    },
-  });
-
-  const { mutate: createCategoryMutation, isPending } = useMutation({
+  const { mutateAsync: createCategoryMutation, isPending } = useMutation({
     mutationFn: createCategory,
     onSuccess: () => {
       onCloseDialog();
@@ -53,35 +25,11 @@ const CreateCategoryForm = ({ onCloseDialog }: CreateCategoryFormProps) => {
     },
   });
 
-  function onSubmit(values: CreateCategorySchema) {
-    createCategoryMutation(values);
+  async function onSubmit(values: CreateCategorySchema) {
+    await createCategoryMutation(values);
   }
 
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
-      >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Creating..." : "Create"}
-        </Button>
-      </form>
-    </Form>
-  );
+  return <CategoryForm onSubmit={onSubmit} isPending={isPending} />;
 };
 
 export default CreateCategoryForm;
