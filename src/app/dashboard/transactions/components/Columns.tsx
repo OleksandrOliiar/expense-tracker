@@ -48,7 +48,7 @@ export const columns: ColumnDef<Transaction>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px-0 hover:bg-background"
+          className="px-0 hover:bg-muted/40"
         >
           Date
           {column.getIsSorted() === "asc" ? (
@@ -76,7 +76,7 @@ export const columns: ColumnDef<Transaction>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px-0 hover:bg-background"
+          className="px-0 hover:bg-muted/40"
         >
           Category
           {column.getIsSorted() === "asc" ? (
@@ -98,7 +98,7 @@ export const columns: ColumnDef<Transaction>[] = [
           onClick={() => {
             column.toggleSorting(column.getIsSorted() === "asc");
           }}
-          className="px-0 hover:bg-background"
+          className="px-0 hover:bg-muted/40"
         >
           Payee
           {column.getIsSorted() === "asc" ? (
@@ -118,7 +118,7 @@ export const columns: ColumnDef<Transaction>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px-0 hover:bg-background"
+          className="px-0 hover:bg-muted/40"
         >
           Amount
           {column.getIsSorted() === "asc" ? (

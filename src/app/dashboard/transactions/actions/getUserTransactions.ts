@@ -11,6 +11,7 @@ type GetUserTransactionsProps = {
   endDate: string | null;
   categories: string | null;
   type: "all" | "income" | "expense" | null;
+  date: string | null;
 };
 
 export const getUserTransactions = async ({
@@ -19,6 +20,7 @@ export const getUserTransactions = async ({
   endDate,
   categories: categoriesString,
   type,
+  date
 }: GetUserTransactionsProps) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
@@ -69,6 +71,10 @@ export const getUserTransactions = async ({
       query.where(lte(transactions.amount, "0"));
     } else if (type && type === "income") {
       query.where(gte(transactions.amount, "0"));
+    }
+
+    if (date) {
+      query.where(eq(transactions.date, new Date(date)));
     }
 
     const result = await query;

@@ -18,7 +18,9 @@ import { cn } from "@/lib/utils";
 
 function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
   const { setQueryParams, queryParams } = useQueryParams();
+  const [isRange, setIsRange] = React.useState(true);
 
+  // Range mode state
   const [calendarDate, setCalendarDate] = React.useState<DateRange | undefined>(
     () => {
       const result: DateRange = {
@@ -41,24 +43,70 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
     }
   );
 
+  // Single date mode state
+  const [singleDate, setSingleDate] = React.useState<Date | undefined>(() => {
+    const date = queryParams.get("date");
+    return date ? new Date(date) : undefined;
+  });
+
   const debouncedCalendarDate = useDebouncedValue(calendarDate, 300);
+  const debouncedSingleDate = useDebouncedValue(singleDate, 300);
 
   React.useEffect(() => {
-    const startDate = debouncedCalendarDate?.from?.toISOString().split("T")[0];
+    if (isRange) {
+      const startDate = debouncedCalendarDate?.from?.toISOString().split("T")[0];
+      const endDate = debouncedCalendarDate?.to
+        ? addDays(debouncedCalendarDate.to, 2).toISOString().split("T")[0]
+        : undefined;
 
-    const endDate = debouncedCalendarDate?.to
-      ? addDays(debouncedCalendarDate?.to, 2).toISOString().split("T")[0]
-      : undefined;
-
-    setQueryParams({
-      startDate,
-      endDate,
-    });
-  }, [debouncedCalendarDate]);
+      setQueryParams({
+        date: undefined,
+        startDate,
+        endDate,
+      });
+    } else {
+      const date = debouncedSingleDate?.toISOString().split("T")[0];
+      
+      setQueryParams({
+        date,
+        startDate: undefined,
+        endDate: undefined,
+      });
+    }
+  }, [debouncedCalendarDate, debouncedSingleDate, isRange, setQueryParams]);
 
   const handleReset = () => {
-    setCalendarDate(undefined);
+    if (isRange) {
+      setCalendarDate(undefined);
+    } else {
+      setSingleDate(undefined);
+    }
   };
+
+  // Handle mode toggle
+  const handleModeToggle = () => {
+    // When switching modes, try to preserve the selected date if possible
+    if (isRange && calendarDate?.from) {
+      setSingleDate(calendarDate.from);
+    } else if (!isRange && singleDate) {
+      setCalendarDate({
+        from: singleDate,
+        to: undefined,
+      });
+    }
+    setIsRange(!isRange);
+  };
+
+  // Determine what to display in the button
+  const displayDate = isRange
+    ? calendarDate?.from 
+      ? calendarDate.to 
+        ? `${format(calendarDate.from, "LLL dd, y")} - ${format(calendarDate.to, "LLL dd, y")}`
+        : format(calendarDate.from, "LLL dd, y")
+      : "Pick a date"
+    : singleDate
+      ? format(singleDate, "LLL dd, y") 
+      : "Pick a date";
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -69,41 +117,51 @@ function DateFilter({ className }: React.HTMLAttributes<HTMLDivElement>) {
             variant={"outline"}
             className={cn(
               "justify-start text-left font-normal",
-              !calendarDate && "text-muted-foreground"
+              !displayDate && "text-muted-foreground"
             )}
           >
             <CalendarIcon />
-            {calendarDate?.from ? (
-              calendarDate.to ? (
-                <>
-                  {format(calendarDate.from, "LLL dd, y")} -{" "}
-                  {format(calendarDate.to, "LLL dd, y")}
-                </>
-              ) : (
-                format(calendarDate.from, "LLL dd, y")
-              )
-            ) : (
-              <span>Pick a date</span>
-            )}
+            {typeof displayDate === "string" ? <span>{displayDate}</span> : displayDate}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0 pr-4" align="end">
           <div className="flex items-center gap-2 flex-wrap">
-            <Calendar
-              initialFocus
-              mode="range"
-              defaultMonth={calendarDate?.from}
-              selected={calendarDate}
-              onSelect={setCalendarDate}
-              numberOfMonths={2}
-              disabled={(date) =>
-                date > new Date() || date < new Date("1900-01-01")
-              }
-            />
+            {isRange ? (
+              <Calendar
+                initialFocus
+                mode={"range"}
+                defaultMonth={calendarDate?.from}
+                selected={calendarDate}
+                onSelect={setCalendarDate}
+                numberOfMonths={2}
+                disabled={(date) =>
+                  date > new Date() || date < new Date("1900-01-01")
+                }
+              />
+            ) : (
+              <Calendar
+                initialFocus
+                mode="single"
+                defaultMonth={singleDate}
+                selected={singleDate}
+                onSelect={setSingleDate}
+                numberOfMonths={1}
+                disabled={(date) =>
+                  date > new Date() || date < new Date("1900-01-01")
+                }
+              />
+            )}
           </div>
-          <div className="flex justify-end pb-4">
+          <div className="flex justify-end gap-2 pb-4">
             <Button
-              disabled={!calendarDate}
+              className="w-[100px]"
+              variant="outline"
+              onClick={handleModeToggle}
+            >
+              {isRange ? "Single" : "Range"}
+            </Button>
+            <Button
+              disabled={isRange ? !calendarDate : !singleDate}
               className="w-[100px]"
               onClick={handleReset}
             >

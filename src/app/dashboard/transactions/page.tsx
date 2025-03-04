@@ -8,6 +8,7 @@ type TransactionsProps = {
     endDate?: string;
     categories?: string;
     type?: "income" | "expense" | "all";
+    date?: string;
   };
 };
 
@@ -24,6 +25,7 @@ const Transactions = ({ searchParams }: TransactionsProps) => {
         endDate={searchParams.endDate}
         categories={searchParams.categories}
         type={searchParams.type}
+        date={searchParams.date}
       />
     </div>
   );
