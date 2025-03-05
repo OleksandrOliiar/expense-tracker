@@ -12,14 +12,20 @@ import { useState } from "react";
 import CreateCategoryForm from "../../components/CreateCategoryForm";
 import { Plus } from "lucide-react";
 
-const CreateCategoryDialog = () => {
+interface CreateCategoryDialogProps {
+  title?: string;
+}
+
+const CreateCategoryDialog = ({
+  title = "Category",
+}: CreateCategoryDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Plus /> category
+          <Plus /> {title}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[400px]">

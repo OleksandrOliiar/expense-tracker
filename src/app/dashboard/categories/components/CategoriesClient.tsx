@@ -5,6 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { getUserCategoriesWithTransactions } from "../../actions/getUserCategories";
 import CategoryCard from "./CategoryCard";
+import Search from "@/components/Search";
+import CreateCategoryDialog from "./CreateCategoryDialog";
+import NoSearchResults from "./NoSearchResult";
+import NoCategoriesMessage from "./NoCategoriesMessage";
 
 const CategoriesClient = () => {
   const searchParams = useSearchParams();
@@ -31,16 +35,31 @@ const CategoriesClient = () => {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  if (!categories || categories.length === 0) {
-    return <p>No categories found</p>;
-  }
+  if (!categories?.length && !searchParams.get("name"))
+    return <NoCategoriesMessage />;
 
   return (
-    <div className="flex flex-wrap items-center gap-4">
-      {categories.map((category) => (
-        <CategoryCard key={category.id} {...category} />
-      ))}
-    </div>
+    <>
+      <div className="flex justify-between flex-wrap items-center mb-6 gap-4">
+        <div className="max-w-[350px]">
+          <Search
+            queryKey="name"
+            id="category-name"
+            label="Search by name..."
+          />
+        </div>
+        <CreateCategoryDialog />
+      </div>
+      {categories && categories?.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-4">
+          {categories.map((category) => (
+            <CategoryCard key={category.id} {...category} />
+          ))}
+        </div>
+      ) : (
+        <NoSearchResults searchQuery={searchParams.get("name") ?? ""} />
+      )}
+    </>
   );
 };
 
