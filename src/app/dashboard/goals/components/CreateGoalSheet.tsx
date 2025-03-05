@@ -10,14 +10,21 @@ import {
 } from "@/components/ui/sheet";
 import { useState } from "react";
 import CreateGoalForm from "./CreateGoalForm";
+import { Plus } from "lucide-react";
 
-const CreateGoalSheet = () => {
+type CreateGoalSheetProps = {
+  title?: string;
+};
+
+const CreateGoalSheet = ({ title = "Goal" }: CreateGoalSheetProps) => {
   const [open, setOpen] = useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button>Add Goal</Button>
+        <Button>
+          <Plus className="h-4 w-4" /> {title}
+        </Button>
       </SheetTrigger>
       <SheetContent className="overflow-y-scroll">
         <SheetHeader>
@@ -29,4 +36,4 @@ const CreateGoalSheet = () => {
   );
 };
 
-export default CreateGoalSheet; 
+export default CreateGoalSheet;
