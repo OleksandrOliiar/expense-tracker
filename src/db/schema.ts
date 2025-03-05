@@ -63,6 +63,7 @@ export const categories = pgTable("categories", {
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
   transactions: many(transactions),
+  budgets: many(budgets),
 }));
 
 export const plaidItems = pgTable("plaid_items", {
@@ -129,7 +130,9 @@ export const goals = pgTable("goals", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
   targetAmount: numeric("target_amount", { precision: 10, scale: 2 }).notNull(),
-  currentAmount: numeric("current_amount", { precision: 10, scale: 2 }).notNull().default('0'),
+  currentAmount: numeric("current_amount", { precision: 10, scale: 2 })
+    .notNull()
+    .default("0"),
   startDate: text("start_date"),
   endDate: text("end_date"),
   isCompleted: boolean("is_completed").notNull().default(false),
@@ -141,3 +144,32 @@ export const goals = pgTable("goals", {
     .$onUpdate(() => new Date())
     .notNull(),
 });
+
+export const budgets = pgTable("budgets", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  targetAmount: numeric("target_amount", { precision: 10, scale: 2 }).notNull(),
+  currentAmount: numeric("current_amount", { precision: 10, scale: 2 })
+    .notNull()
+    .default("0"),
+  startDate: text("start_date"),
+  endDate: text("end_date"),
+  isCompleted: boolean("is_completed").notNull().default(false),
+  description: text("description"),
+  categoryId: text("category_id").references(() => categories.id, {
+    onDelete: "set null",
+  }),
+  userId: text("user_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+export const budgetsRelations = relations(budgets, ({ one }) => ({
+  category: one(categories, {
+    fields: [budgets.categoryId],
+    references: [categories.id],
+  }),
+}));
