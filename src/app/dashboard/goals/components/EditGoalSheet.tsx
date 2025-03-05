@@ -28,6 +28,7 @@ const EditGoalSheet = ({
         onClick={(e) => {
           e.stopPropagation();
         }}
+        className="overflow-y-scroll"
       >
         <SheetHeader>
           <SheetTitle>Edit Goal</SheetTitle>

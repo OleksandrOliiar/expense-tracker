@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown01, ArrowDownZA, ArrowUp10, ArrowUpZA } from "lucide-react";
 import { EditTransactionSchema } from "../validations/editTransactionSchema";
 import TransactionMenu from "./TransactionMenu";
+import { cn } from "@/lib/utils";
 
 export type Transaction = {
   id: string;
@@ -135,12 +136,25 @@ export const columns: ColumnDef<Transaction>[] = [
     },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
+      let formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
       }).format(amount);
 
-      return <div className="font-medium">{formatted}</div>;
+      if (amount > 0) {
+        formatted = `+${formatted}`;
+      } 
+
+      return (
+        <div
+          className={cn("font-medium", {
+            "text-green-500": amount > 0,
+            "text-destructive": amount < 0,
+          })}
+        >
+          {formatted}
+        </div>
+      );
     },
   },
   {

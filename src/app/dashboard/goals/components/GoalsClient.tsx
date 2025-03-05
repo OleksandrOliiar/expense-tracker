@@ -3,11 +3,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserGoals } from "../actions/getUserGoals";
 import GoalCard from "./GoalCard";
+import { useSearchParams } from "next/navigation";
 
 const GoalsClient = () => {
+  const searchParams = useSearchParams();
+  const name = searchParams.get("name");
+
   const { data: goals, isLoading, error } = useQuery({
-    queryKey: ["goals", "list"],
-    queryFn: () => getUserGoals(),
+    queryKey: ["goals", "list", { name }],
+    queryFn: () => getUserGoals({ name: name ?? undefined }),
   });
 
   if (isLoading) return <div>Loading goals...</div>;

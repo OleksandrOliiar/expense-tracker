@@ -6,12 +6,12 @@ import {
 import { getUserGoals } from "../actions/getUserGoals";
 import GoalsClient from "./GoalsClient";
 
-const GoalsServer = async () => {
+const GoalsServer = async ({ name }: { name?: string }) => {
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
-    queryKey: ["goals", "list"],
-    queryFn: () => getUserGoals(),
+    queryKey: ["goals", "list", { name }],
+    queryFn: () => getUserGoals({ name }),
   });
 
   return (
