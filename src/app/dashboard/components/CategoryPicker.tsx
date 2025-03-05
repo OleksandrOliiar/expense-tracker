@@ -16,8 +16,8 @@ import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useCategories } from "../../hooks/useCategories";
-import AddCategoryDialog from "./AddCategoryDialog";
+import { useCategories } from "../hooks/useCategories";
+import AddCategoryDialog from "../transactions/components/AddCategoryDialog";
 
 export interface CategoryPickerProps<Multiple extends boolean = false> {
   /** Currently selected value */
@@ -53,27 +53,22 @@ export default function CategoryPicker<Multiple extends boolean = false>({
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
 
   const {
-    data: categories,
+    data: categoriesList,
     isLoading,
     error,
-  } = useCategories(open ? debouncedSearchTerm : null);
-
-  console.log(categories);
-
-  // Use empty array if categories is undefined
-  const categoriesList = categories || [];
+  } = useCategories(debouncedSearchTerm);
 
   useEffect(() => {
     if (multiple) {
       setSelectedCategory(null);
     } else {
       setSelectedCategory(
-        categoriesList.find((category) => {
+        (categoriesList ?? []).find((category) => {
           return category.id === value;
         }) ?? null
       );
     }
-  }, [value, multiple]);
+  }, [value, multiple, categoriesList]);
 
   const handleSelect = (currentValue: string) => {
     if (multiple) {
@@ -86,8 +81,11 @@ export default function CategoryPicker<Multiple extends boolean = false>({
     } else {
       const newValue = currentValue === value ? "" : currentValue;
       (onChange as (value: string) => void)(newValue);
+      setOpen(false);
     }
   };
+
+  console.log("selectedCategory: ", selectedCategory);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -149,7 +147,7 @@ export default function CategoryPicker<Multiple extends boolean = false>({
               </div>
             )}
 
-            {!isLoading && !error && categoriesList.length === 0 && (
+            {!isLoading && !error && categoriesList?.length === 0 && (
               <CommandEmpty>No categories found</CommandEmpty>
             )}
 
@@ -157,7 +155,7 @@ export default function CategoryPicker<Multiple extends boolean = false>({
               {isLoading ? (
                 <DefaultLoadingSkeleton />
               ) : (
-                categoriesList.map((category) => (
+                categoriesList?.map((category) => (
                   <CommandItem
                     key={category.id}
                     value={category.id}

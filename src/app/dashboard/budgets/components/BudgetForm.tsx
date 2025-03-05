@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  CreateGoalSchema,
-  createGoalSchema,
-} from "../validations/createGoalSchema";
+  CreateBudgetSchema,
+  createBudgetSchema,
+} from "../validations/createBudgetSchema";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -26,27 +26,25 @@ import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
+import CategoryPicker from "../../components/CategoryPicker";
+import { UserBudget } from "../actions/getUserBudgets";
 
-type GoalFormProps = {
-  onSubmit: (data: CreateGoalSchema) => Promise<void>;
+type BudgetFormProps = {
+  onSubmit: (data: CreateBudgetSchema) => Promise<void>;
   isPending: boolean;
-  defaultValues?: {
-    title: string;
-    targetAmount: string;
-    currentAmount: string;
-    id: string;
-    description?: string | null;
-    endDate?: string | null;
-    startDate?: string | null;
-  };
+  defaultValues?: Partial<UserBudget>;
 };
 
-const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
+const BudgetForm = ({
+  onSubmit,
+  isPending,
+  defaultValues,
+}: BudgetFormProps) => {
   const [startOpen, setStartOpen] = useState(false);
   const [dueOpen, setDueOpen] = useState(false);
 
-  const form = useForm<CreateGoalSchema>({
-    resolver: zodResolver(createGoalSchema),
+  const form = useForm<CreateBudgetSchema>({
+    resolver: zodResolver(createBudgetSchema),
     // @ts-ignore
     defaultValues: {
       ...defaultValues,
@@ -59,17 +57,19 @@ const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
       endDate: defaultValues?.endDate
         ? new Date(defaultValues.endDate)
         : undefined,
+      categoryId: defaultValues?.category?.id ?? undefined,
     },
   });
 
-  const handleSubmit = async (data: CreateGoalSchema) => {
+  const handleSubmit = async (data: CreateBudgetSchema) => {
     if (defaultValues) {
       if (
         data.title === defaultValues.title &&
         Number(data.targetAmount) === Number(defaultValues.targetAmount) &&
-        data.startDate?.toString() === defaultValues.startDate &&
-        data.endDate?.toString() === defaultValues.endDate &&
-        data.description === defaultValues.description
+        data.startDate?.toString() === defaultValues.startDate?.toString() &&
+        data.endDate?.toString() === defaultValues.endDate?.toString() &&
+        data.description === defaultValues.description &&
+        data.categoryId === defaultValues.category?.id
       ) {
         toast.info("Please commit any changes");
         return;
@@ -91,7 +91,7 @@ const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Goal Name</FormLabel>
+              <FormLabel>Budget Name</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -104,7 +104,7 @@ const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
           name="targetAmount"
           render={({ field: { value, onChange, ...rest }, ...props }) => (
             <FormItem>
-              <FormLabel>Target Amount</FormLabel>
+              <FormLabel>Limit</FormLabel>
               <FormControl>
                 <Input
                   value={`${value}`}
@@ -205,6 +205,23 @@ const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
         />
         <FormField
           control={form.control}
+          name="categoryId"
+          render={({ field: { value, onChange } }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <CategoryPicker
+                  value={value ?? ""}
+                  onChange={onChange}
+                  width="100%"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="description"
           render={({ field }) => (
             <FormItem>
@@ -217,11 +234,11 @@ const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
           )}
         />
         <Button type="submit" disabled={isPending} className="w-full">
-          {form.formState.isSubmitting ? "Saving..." : "Save Goal"}
+          {form.formState.isSubmitting ? "Saving..." : "Save Budget"}
         </Button>
       </form>
     </Form>
   );
 };
 
-export default GoalForm;
+export default BudgetForm;

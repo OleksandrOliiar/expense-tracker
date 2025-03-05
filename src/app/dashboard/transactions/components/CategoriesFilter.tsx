@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CategoryPicker from "./CategoryPicker";
+import CategoryPicker from "../../components/CategoryPicker";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
@@ -19,7 +19,7 @@ const CategoriesFilter = () => {
     } else {
       setQueryParams({ categories: undefined });
     }
-  }, [debouncedCategories]);
+  }, [debouncedCategories, setQueryParams]);
 
   return (
     <CategoryPicker

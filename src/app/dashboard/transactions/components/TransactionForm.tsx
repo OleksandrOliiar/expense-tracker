@@ -24,7 +24,7 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
-import CategoryPicker from "./CategoryPicker";
+import CategoryPicker from "../../components/CategoryPicker";
 import { useState } from "react";
 import { toast } from "sonner";
 

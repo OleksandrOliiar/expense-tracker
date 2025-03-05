@@ -148,7 +148,7 @@ export const columns: ColumnDef<Transaction>[] = [
       return (
         <div
           className={cn("font-medium", {
-            "text-green-500": amount > 0,
+            "text-emerald-500": amount > 0,
             "text-destructive": amount < 0,
           })}
         >

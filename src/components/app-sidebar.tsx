@@ -31,6 +31,10 @@ const sidebarItems = [
     url: "/dashboard/goals",
   },
   {
+    title: "Budgets",
+    url: "/dashboard/budgets",
+  },
+  {
     title: "Settings",
     url: "/dashboard/settings",
   },

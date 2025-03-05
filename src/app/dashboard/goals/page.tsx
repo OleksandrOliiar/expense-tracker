@@ -1,5 +1,3 @@
-import Search from "@/components/Search";
-import CreateGoalSheet from "./components/CreateGoalSheet";
 import GoalsServer from "./components/GoalsServer";
 
 type GoalsProps = {

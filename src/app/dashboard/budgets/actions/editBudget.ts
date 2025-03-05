@@ -1,17 +1,16 @@
 "use server";
 
-import { goals } from "@/db/schema";
+import { budgets, goals } from "@/db/schema";
 import {
-  editGoalSchema,
-  EditGoalSchema,
-} from "../validations/editGoalSchema";
+  editBudgetSchema,
+  EditBudgetSchema,
+} from "../validations/editBudgetSchema";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-export const editGoal = async (data: EditGoalSchema) => {
-  console.log(data);
-  const result = editGoalSchema.safeParse(data);
+export const editBudget = async (data: EditBudgetSchema) => {
+  const result = editBudgetSchema.safeParse(data);
 
   if (!result.success) {
     throw new Error(result.error.message);
@@ -27,18 +26,18 @@ export const editGoal = async (data: EditGoalSchema) => {
     }
 
     const result = await db
-      .update(goals)
+      .update(budgets)
       .set({
         ...rest,
         targetAmount: rest.targetAmount.toString(),
         endDate: rest.endDate?.toString(),
         startDate: rest.startDate?.toString(),
       })
-      .where(eq(goals.id, id));
+      .where(eq(budgets.id, id));
 
     return result;
   } catch (error) {
-    console.error(error);
-    throw new Error("Failed to edit goal");
+    console.error("failed to edit budget", error);
+    throw new Error("Failed to edit budget");
   }
 }; 

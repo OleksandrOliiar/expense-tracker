@@ -37,7 +37,7 @@ const CategoryCardMenu = ({ id, name, icon }: CategoryCardMenuProps) => {
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent side="bottom">Options</TooltipContent>
+          <TooltipContent side="bottom">Actions</TooltipContent>
         </Tooltip>
       </TooltipProvider>
       <DropdownMenuContent onClick={(e) => e.stopPropagation()}>

@@ -8,28 +8,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Trash, Pencil } from "lucide-react";
 import { useState } from "react";
-import DeleteGoalDialog from "./DeleteGoalDialog";
-import EditGoalSheet from "./EditGoalSheet";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import DeleteBudgetDialog from "./DeleteBudgetDialog";
+import EditBudgetSheet from "./EditBudgetSheet";
+import { UserBudget } from "../actions/getUserBudgets";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-type GoalMenuProps = {
-  goal: {
-    title: string;
-    targetAmount: string;
-    currentAmount: string;
-    id: string;
-    description?: string | null;
-    endDate?: string | null;
-    startDate?: string | null;
-  };
+type BudgetMenuProps = {
+  budget: UserBudget;
 };
 
-const GoalMenu = ({ goal }: GoalMenuProps) => {
+const BudgetMenu = ({ budget }: BudgetMenuProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [editSheetOpen, setEditSheetOpen] = useState(false);
@@ -71,13 +59,13 @@ const GoalMenu = ({ goal }: GoalMenuProps) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DeleteGoalDialog
+      <DeleteBudgetDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        goalId={goal.id}
+        budgetId={budget.id}
       />
-      <EditGoalSheet
-        goal={goal}
+      <EditBudgetSheet
+        budget={budget}
         open={editSheetOpen}
         onOpenChange={setEditSheetOpen}
       />
@@ -85,4 +73,4 @@ const GoalMenu = ({ goal }: GoalMenuProps) => {
   );
 };
 
-export default GoalMenu;
+export default BudgetMenu;
