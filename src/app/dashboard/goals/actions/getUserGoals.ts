@@ -5,11 +5,7 @@ import { goals } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { eq, like } from "drizzle-orm";
 
-type GetUserGoalsProps = {
-  name?: string;
-};
-
-export const getUserGoals = async ({ name }: GetUserGoalsProps) => {
+export const getUserGoals = async (name?: string) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
 

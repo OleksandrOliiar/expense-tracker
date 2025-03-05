@@ -5,7 +5,7 @@ export const createGoalSchema = z.object({
   targetAmount: z.number().min(1, "Target amount must be at least 1"),
   currentAmount: z.number().default(0),
   description: z.string().optional(),
-  dueDate: z.date().optional(),
+  endDate: z.date().optional(),
   startDate: z.date().optional(),
 });
 

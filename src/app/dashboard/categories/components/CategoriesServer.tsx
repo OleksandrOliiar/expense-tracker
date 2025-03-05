@@ -1,4 +1,4 @@
-import { getUserCategories, getUserCategoriesWithTransactions } from "../../actions/getUserCategories";
+import { getUserCategoriesWithTransactions } from "../../actions/getUserCategories";
 import {
   dehydrate,
   HydrationBoundary,

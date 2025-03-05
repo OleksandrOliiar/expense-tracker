@@ -4,20 +4,23 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { EditGoalSchema } from "../validations/editGoalSchema";
 import EditGoalForm from "./EditGoalForm";
 
 type EditGoalSheetProps = {
-  goal: EditGoalSchema;
+  goal: {
+    title: string;
+    targetAmount: string;
+    currentAmount: string;
+    id: string;
+    description?: string | null;
+    endDate?: string | null;
+    startDate?: string | null;
+  };
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
-const EditGoalSheet = ({
-  goal,
-  open,
-  onOpenChange,
-}: EditGoalSheetProps) => {
+const EditGoalSheet = ({ goal, open, onOpenChange }: EditGoalSheetProps) => {
   const handleOpenChange = (open: boolean) => {
     onOpenChange(open);
   };
@@ -33,13 +36,10 @@ const EditGoalSheet = ({
         <SheetHeader>
           <SheetTitle>Edit Goal</SheetTitle>
         </SheetHeader>
-        <EditGoalForm
-          goal={goal}
-          onSheetClose={() => onOpenChange(false)}
-        />
+        <EditGoalForm goal={goal} onSheetClose={() => onOpenChange(false)} />
       </SheetContent>
     </Sheet>
   );
 };
 
-export default EditGoalSheet; 
+export default EditGoalSheet;

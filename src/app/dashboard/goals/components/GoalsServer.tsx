@@ -10,8 +10,8 @@ const GoalsServer = async ({ name }: { name?: string }) => {
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
-    queryKey: ["goals", "list", { name }],
-    queryFn: () => getUserGoals({ name }),
+    queryKey: ["goals", "list", name],
+    queryFn: () => getUserGoals(name),
   });
 
   return (
@@ -21,4 +21,4 @@ const GoalsServer = async ({ name }: { name?: string }) => {
   );
 };
 
-export default GoalsServer; 
+export default GoalsServer;

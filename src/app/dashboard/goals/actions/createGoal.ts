@@ -34,7 +34,7 @@ export const createGoal = async (data: CreateGoalSchema) => {
         description: result.data.description,
         targetAmount: result.data.targetAmount.toString(),
         currentAmount: (result.data.currentAmount || 0).toString(),
-        endDate: result.data.dueDate?.toString(),
+        endDate: result.data.endDate?.toString(),
         startDate: result.data.startDate?.toString(),
       })
       .returning();

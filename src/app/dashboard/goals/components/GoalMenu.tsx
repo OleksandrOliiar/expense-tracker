@@ -6,14 +6,21 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Trash, Pencil } from "lucide-react";
 import { useState } from "react";
 import DeleteGoalDialog from "./DeleteGoalDialog";
 import EditGoalSheet from "./EditGoalSheet";
-import { EditGoalSchema } from "../validations/editGoalSchema";
 
 type GoalMenuProps = {
-  goal: EditGoalSchema;
+  goal: {
+    title: string;
+    targetAmount: string;
+    currentAmount: string;
+    id: string;
+    description?: string | null;
+    endDate?: string | null;
+    startDate?: string | null;
+  };
 };
 
 const GoalMenu = ({ goal }: GoalMenuProps) => {
@@ -28,7 +35,11 @@ const GoalMenu = ({ goal }: GoalMenuProps) => {
 
   return (
     <>
-      <DropdownMenu modal={false} open={dropdownOpen} onOpenChange={setDropdownOpen}>
+      <DropdownMenu
+        modal={false}
+        open={dropdownOpen}
+        onOpenChange={setDropdownOpen}
+      >
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Open menu</span>
@@ -38,9 +49,11 @@ const GoalMenu = ({ goal }: GoalMenuProps) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onSelect={() => setEditSheetOpen(true)}>
+            <Pencil className="w-4 h-4" />
             Edit
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={handleDeleteClick}>
+            <Trash className="w-4 h-4" />
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -59,4 +72,4 @@ const GoalMenu = ({ goal }: GoalMenuProps) => {
   );
 };
 
-export default GoalMenu; 
+export default GoalMenu;

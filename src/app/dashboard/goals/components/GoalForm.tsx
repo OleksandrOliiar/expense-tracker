@@ -24,34 +24,72 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { toast } from "sonner";
 
 type GoalFormProps = {
   onSubmit: (data: CreateGoalSchema) => Promise<void>;
   isPending: boolean;
-  defaultValues?: Partial<CreateGoalSchema>;
+  defaultValues?: {
+    title: string;
+    targetAmount: string;
+    currentAmount: string;
+    id: string;
+    description?: string | null;
+    endDate?: string | null;
+    startDate?: string | null;
+  };
 };
 
-const GoalForm = ({
-  onSubmit,
-  isPending,
-  defaultValues,
-}: GoalFormProps) => {
+const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
+  const [startOpen, setStartOpen] = useState(false);
+  const [dueOpen, setDueOpen] = useState(false);
+
   const form = useForm<CreateGoalSchema>({
     resolver: zodResolver(createGoalSchema),
+    // @ts-ignore
     defaultValues: {
-      currentAmount: 0,
       ...defaultValues,
+      targetAmount: defaultValues?.targetAmount
+        ? Number(defaultValues.targetAmount)
+        : 0,
+      currentAmount: defaultValues?.currentAmount
+        ? Number(defaultValues.currentAmount)
+        : 0,
+      startDate: defaultValues?.startDate
+        ? new Date(defaultValues.startDate)
+        : undefined,
+      endDate: defaultValues?.endDate
+        ? new Date(defaultValues.endDate)
+        : undefined,
     },
   });
 
   const handleSubmit = async (data: CreateGoalSchema) => {
+    if (defaultValues) {
+      if (
+        data.title === defaultValues.title &&
+        Number(data.targetAmount) === Number(defaultValues.targetAmount) &&
+        Number(data.currentAmount) === Number(defaultValues.currentAmount) &&
+        data.startDate?.toString() === defaultValues.startDate &&
+        data.endDate?.toString() === defaultValues.endDate &&
+        data.description === defaultValues.description
+      ) {
+        toast.info("Please commit any changes");
+        return;
+      }
+    }
+
     await onSubmit(data);
     form.reset();
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 mt-4">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-4 mt-4"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -103,13 +141,13 @@ const GoalForm = ({
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           control={form.control}
           name="startDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Start Date</FormLabel>
-              <Popover>
+              <Popover open={startOpen} onOpenChange={setStartOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -132,7 +170,10 @@ const GoalForm = ({
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={field.onChange}
+                    onSelect={(value) => {
+                      field.onChange(value);
+                      setStartOpen(false);
+                    }}
                     initialFocus
                     className="pointer-events-auto"
                   />
@@ -144,11 +185,11 @@ const GoalForm = ({
         />
         <FormField
           control={form.control}
-          name="dueDate"
+          name="endDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Due Date</FormLabel>
-              <Popover>
+              <Popover open={dueOpen} onOpenChange={setDueOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -171,10 +212,11 @@ const GoalForm = ({
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date()
-                    }
+                    onSelect={(value) => {
+                      field.onChange(value);
+                      setDueOpen(false);
+                    }}
+                    disabled={(date) => date < new Date()}
                     initialFocus
                     className="pointer-events-auto"
                   />
@@ -205,4 +247,4 @@ const GoalForm = ({
   );
 };
 
-export default GoalForm; 
+export default GoalForm;

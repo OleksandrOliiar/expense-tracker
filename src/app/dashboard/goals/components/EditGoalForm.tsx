@@ -6,14 +6,19 @@ import GoalForm from "./GoalForm";
 import { CreateGoalSchema } from "../validations/createGoalSchema";
 
 type EditGoalFormProps = {
-  goal: EditGoalSchema;
+  goal: {
+    title: string;
+    targetAmount: string;
+    currentAmount: string;
+    id: string;
+    description?: string | null;
+    endDate?: string | null;
+    startDate?: string | null;
+  };
   onSheetClose: () => void;
 };
 
-const EditGoalForm = ({
-  goal,
-  onSheetClose,
-}: EditGoalFormProps) => {
+const EditGoalForm = ({ goal, onSheetClose }: EditGoalFormProps) => {
   const queryClient = useQueryClient();
 
   const { mutateAsync: editGoalMutation, isPending } = useMutation({
@@ -48,4 +53,4 @@ const EditGoalForm = ({
   );
 };
 
-export default EditGoalForm; 
+export default EditGoalForm;
