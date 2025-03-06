@@ -13,10 +13,9 @@ export const formatTransactionsData = ({
   return plaidTransactions.map((transaction) => {
     return {
       id: crypto.randomUUID(),
-      amount: transaction.amount,
+      amount: transaction.amount.toString(),
       date: new Date(transaction.date),
       payee: transaction.name,
-      type: transaction.amount < 0 ? "expense" : "income",
       userId: accountId,
     };
   });

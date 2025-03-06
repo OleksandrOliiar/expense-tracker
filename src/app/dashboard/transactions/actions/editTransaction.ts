@@ -36,10 +36,14 @@ export const editTransaction = async (data: EditTransactionSchema) => {
       })
       .where(eq(transactions.id, id));
 
-    // await qstashClient.publishJSON({
-    //   url: `https://localhost:3000/api/tracker`,
-    //   body: { userId: user.id },
-    // });
+    await qstashClient.publishJSON({
+      url: `${process.env.APP_URL}/api/tracker/schema`,
+      body: {
+        transactionId: id,
+        userId: user.id,
+        type: "edit",
+      },
+    });
 
     return result;
   } catch (error) {

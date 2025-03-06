@@ -12,14 +12,5 @@ export const createTransactionSchema = z
     }),
     categoryId: z.string().optional().nullable(),
   })
-  .refine(
-    (data) => {
-      return data.amount !== 0;
-    },
-    {
-      message: "Amount cannot be 0",
-      path: ["amount"],
-    }
-  );
 
 export type CreateTransactionSchema = z.infer<typeof createTransactionSchema>;

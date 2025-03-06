@@ -27,6 +27,7 @@ const EditTransactionSheet = ({
       <SheetContent
         onClick={(e) => {
           e.stopPropagation();
+          e.preventDefault();
         }}
         className="overflow-y-scroll"
       >

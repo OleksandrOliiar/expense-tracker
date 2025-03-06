@@ -36,7 +36,7 @@ const BudgetMenu = ({ budget }: BudgetMenuProps) => {
       >
         <TooltipProvider delayDuration={200}>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="rounded-full" size="icon">
                   <span className="sr-only">Open menu</span>

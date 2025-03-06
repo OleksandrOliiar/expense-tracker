@@ -39,8 +39,12 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
       .returning();
 
     await qstashClient.publishJSON({
-      url: `https://quick-papayas-dress.loca.lt/api/tracker/addTransaction`,
-      body: { transaction },
+      url: `${process.env.APP_URL}/api/tracker`,
+      body: {
+        transactionId: transaction[0].id,
+        userId: user.id,
+        type: "create",
+      },
     });
 
     return transaction;

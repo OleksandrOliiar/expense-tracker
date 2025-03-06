@@ -39,7 +39,7 @@ const TransactionMenu = ({ transaction }: TransactionMenuProps) => {
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onSelect={() => setEditSheetOpen(true)}>
             Edit

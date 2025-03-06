@@ -1,79 +1,77 @@
+import { db } from "@/db";
+import { transactions } from "@/db/schema";
+import { and, eq, inArray } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import { getUserGoalsWithTransactions } from "./actions/getUserGoals";
-import { batchUpdateGoalAmounts } from "./actions/updateGoalAmount";
-import { Notification } from "@onesignal/node-onesignal"
-import { oneSignalClient } from "@/lib/oneSignal";
+import { recalculateAllGoals } from "./actions/recalculateAllGoals";
+import { recalculateAllBudgets } from "./actions/recalculateAllBudgets";
+import { updateRelevantGoals } from "./actions/updateRelevantGoals";
+import { updateRelevantBudgets } from "./actions/updateRelevantBudgets";
+import { Transaction } from "@/db/types";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("Tracker webhook called");
     const body = await request.json();
-    const { userId } = body;
+    const { transactionId, transactionIds, userId, type = "create" } = body;
 
-    const { userGoals, transactionSums } = await getUserGoalsWithTransactions(
-      userId
-    );
-
-    if (!userGoals.length) {
+    if (!userId) {
       return NextResponse.json(
-        { message: "No goals found for user" },
-        { status: 200 }
+        { message: "User ID required" },
+        { status: 400 }
       );
     }
 
-    const updates: {
-      goalId: string;
-      currentAmount: number;
-      isCompleted: boolean;
-    }[] = [];
-    
-    const now = new Date();
+    let updatedBudgets = 0;
+    let updatedGoals = 0;
 
-    for (const goal of userGoals) {
-      const goalEndDate = new Date(goal.endDate as string);
-      if (goalEndDate < now) continue;
+    if (type === "delete" && transactionIds?.length) {
+      updatedGoals = await recalculateAllGoals(userId);
+      updatedBudgets = await recalculateAllBudgets(userId);
+    } else {
+      let transactionsList: Transaction[] = [];
 
-      const goalStartDate = new Date(goal.startDate as string);
+      if (type === "bulk" && transactionIds?.length) {
+        transactionsList = await db
+          .select()
+          .from(transactions)
+          .where(
+            and(
+              eq(transactions.userId, userId),
+              inArray(transactions.id, transactionIds)
+            )
+          );
+      } else if (transactionId) {
+        const singleTransaction = await db
+          .select()
+          .from(transactions)
+          .where(eq(transactions.id, transactionId));
 
-      // Calculate total amount by summing all transactions after the goal start date
-      let totalAmount = 0;
-      Array.from(transactionSums).forEach(([dateStr, amount]) => {
-        const transactionDate = new Date(dateStr);
-        if (transactionDate >= goalStartDate) {
-          totalAmount += +amount;
+        if (singleTransaction.length) {
+          transactionsList = singleTransaction;
         }
-      });
-
-      const isCompleted = Number(totalAmount) >= Number(goal.targetAmount);
-
-      if (isCompleted && !goal.isCompleted) {
-        console.log("Sending notification");
-        const notification = new Notification();
-        notification.app_id = process.env.NEXT_PUBLIC_ONE_SIGNAL_APP_ID!;
-        notification.contents = {
-          en: "Hello OneSignal!"
-        };
-        notification.included_segments = ['Subscribed Users'];
-        await oneSignalClient.createNotification(notification);
       }
 
-      updates.push({
-        goalId: goal.id,
-        currentAmount: totalAmount,
-        isCompleted,
-      });
+      for (const transaction of transactionsList) {
+        const { amount, date, categoryId } = transaction;
+
+        await updateRelevantGoals(userId, new Date(date));
+
+        if (Number(amount) < 0) {
+          await updateRelevantBudgets(
+            userId,
+            new Date(date),
+            categoryId
+          );
+        }
+      }
     }
 
-    await batchUpdateGoalAmounts(updates);
-
-    return NextResponse.json(
-      { message: "Goals updated successfully", updatedGoals: updates.length },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      message: "Successfully processed transaction changes",
+    });
   } catch (error) {
-    console.error("Error in tracker webhook", error);
+    console.error("Error in transaction webhook:", error);
     return NextResponse.json(
-      { message: "Error in tracker webhook" },
+      { message: "Error processing transaction changes" },
       { status: 500 }
     );
   }

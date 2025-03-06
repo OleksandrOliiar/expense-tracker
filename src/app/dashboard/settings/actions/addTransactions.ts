@@ -1,12 +1,30 @@
 import { CreateTransactionProps } from "@/db/types";
 import { db } from "@/db";
 import { transactions } from "@/db/schema";
+import { qstashClient } from "@/lib/qstash";
 
 export const addTransactions = async (
   transactionsValues: CreateTransactionProps[]
 ) => {
   try {
-    await db.insert(transactions).values(transactionsValues);
+    const result = await db
+      .insert(transactions)
+      .values(transactionsValues)
+      .returning();
+
+    if (result.length > 0) {
+      const userId = result[0].userId;
+      const transactionIds = result.map((t) => t.id);
+
+      await qstashClient.publishJSON({
+        url: `${process.env.APP_URL}/api/tracker/schema`,
+        body: {
+          transactionIds,
+          userId,
+          type: "bulk",
+        },
+      });
+    }
   } catch (error) {
     console.log("Failed to add transactions", error);
     throw error;
