@@ -18,7 +18,7 @@ const TransactionsClient = () => {
       "transactions",
       "list",
       {
-        payee: searchParams.get("payee") ?? null,
+        name: searchParams.get("name") ?? null,
         startDate: searchParams.get("startDate") ?? null,
         endDate: searchParams.get("endDate") ?? null,
         categories: searchParams.get("categories") ?? null,
@@ -28,7 +28,7 @@ const TransactionsClient = () => {
     ],
     queryFn: () =>
       getUserTransactions({
-        payee: searchParams.get("payee") ?? null,
+        name: searchParams.get("name") ?? null,
         startDate: searchParams.get("startDate") ?? null,
         endDate: searchParams.get("endDate") ?? null,
         categories: searchParams.get("categories") ?? null,

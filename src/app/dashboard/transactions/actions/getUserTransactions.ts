@@ -6,7 +6,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { eq, gte, ilike, inArray, lte } from "drizzle-orm";
 
 type GetUserTransactionsProps = {
-  payee: string | null;
+  name: string | null;
   startDate: string | null;
   endDate: string | null;
   categories: string | null;
@@ -15,7 +15,7 @@ type GetUserTransactionsProps = {
 };
 
 export const getUserTransactions = async ({
-  payee,
+  name,
   startDate,
   endDate,
   categories: categoriesString,
@@ -35,7 +35,7 @@ export const getUserTransactions = async ({
       .select({
         id: transactions.id,
         amount: transactions.amount,
-        payee: transactions.payee,
+        name: transactions.name,
         date: transactions.date,
         category: {
           name: categories.name,
@@ -50,8 +50,8 @@ export const getUserTransactions = async ({
 
     query.where(eq(transactions.userId, user.id));
 
-    if (payee && payee.trim() !== "") {
-      query.where(ilike(transactions.payee, `%${payee}%`));
+    if (name && name.trim() !== "") {
+      query.where(ilike(transactions.name, `%${name}%`));
     }
 
     if (startDate) {

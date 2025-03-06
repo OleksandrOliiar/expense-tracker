@@ -17,7 +17,7 @@ export type Transaction = {
     id: string;
     icon: string | null;
   } | null;
-  payee: string | null;
+  name: string | null;
 };
 
 export const columns: ColumnDef<Transaction>[] = [
@@ -95,7 +95,7 @@ export const columns: ColumnDef<Transaction>[] = [
         : "No category",
   },
   {
-    accessorKey: "payee",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
@@ -105,7 +105,7 @@ export const columns: ColumnDef<Transaction>[] = [
           }}
           className="px-0 hover:bg-muted/40"
         >
-          Payee
+          Name
           {column.getIsSorted() === "asc" ? (
             <ArrowDownZA className="h-4 w-4" />
           ) : (
@@ -114,7 +114,7 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       );
     },
-    accessorFn: (row) => (!!row.payee ? row.payee : "No payee"),
+    accessorFn: (row) => (!!row.name ? row.name : "No name"),
   },
   {
     accessorKey: "amount",
@@ -143,7 +143,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
       if (amount > 0) {
         formatted = `+${formatted}`;
-      } 
+      }
 
       return (
         <div

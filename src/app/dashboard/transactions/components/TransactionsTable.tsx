@@ -87,9 +87,7 @@ export function TransactionsTable<TData, TValue>({
               selectedRows={selectedRows as Row<Transaction>[]}
             />
           </div>
-        ) : (
-          <Search queryKey="payee" label="Search payees..." id="payee" />
-        )}
+        ) : null}
         <CategoriesFilter />
         <DateFilter />
         <TypeFilter />

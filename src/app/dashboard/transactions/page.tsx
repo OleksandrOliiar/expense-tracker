@@ -1,9 +1,10 @@
+import Search from "@/components/Search";
 import CreateTransactionSheet from "./components/CreateTransactionSheet";
 import TransactionsServer from "./components/TransactionsServer";
 
 type TransactionsProps = {
   searchParams: {
-    payee?: string;
+    name?: string;
     startDate?: string;
     endDate?: string;
     categories?: string;
@@ -15,12 +16,15 @@ type TransactionsProps = {
 const Transactions = ({ searchParams }: TransactionsProps) => {
   return (
     <div className="px-4">
-      <div className="flex items-center gap-2 justify-end">
-        <CreateTransactionSheet type="income" />
-        <CreateTransactionSheet type="expense" />
+      <div className="flex items-center gap-2 justify-between">
+        <Search queryKey="name" label="Search names..." id="name" />
+        <div className="flex items-center gap-2">
+          <CreateTransactionSheet type="income" />
+          <CreateTransactionSheet type="expense" />
+        </div>
       </div>
       <TransactionsServer
-        payee={searchParams.payee}
+        name={searchParams.name}
         startDate={searchParams.startDate}
         endDate={searchParams.endDate}
         categories={searchParams.categories}

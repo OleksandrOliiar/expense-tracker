@@ -7,7 +7,7 @@ import { getUserTransactions } from "../actions/getUserTransactions";
 import TransactionsClient from "./TransactionsClient";
 
 type TransactionsServerProps = {
-  payee?: string;
+  name?: string;
   startDate?: string;
   endDate?: string;
   categories?: string;
@@ -16,7 +16,7 @@ type TransactionsServerProps = {
 };
 
 const TransactionsServer = async ({
-  payee,
+  name,
   endDate,
   startDate,
   categories,
@@ -30,7 +30,7 @@ const TransactionsServer = async ({
       "transactions",
       "list",
       {
-        payee: payee ?? null,
+        name: name ?? null,
         startDate: startDate ?? null,
         endDate: endDate ?? null,
         categories: categories ?? null,
@@ -40,7 +40,7 @@ const TransactionsServer = async ({
     ],
     queryFn: () =>
       getUserTransactions({
-        payee: payee ?? null,
+        name: name ?? null,
         startDate: startDate ?? null,
         endDate: endDate ?? null,
         categories: categories ?? null,

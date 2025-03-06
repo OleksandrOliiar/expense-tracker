@@ -34,6 +34,7 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
         categoryId: result.data.categoryId,
         id: crypto.randomUUID(),
         userId: user.id,
+        name: result.data.name,
       })
       .returning();
 

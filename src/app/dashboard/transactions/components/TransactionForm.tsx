@@ -23,7 +23,6 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { Textarea } from "@/components/ui/textarea";
 import CategoryPicker from "../../components/CategoryPicker";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -47,8 +46,7 @@ const TransactionForm = ({
       defaultValues?.amount !== undefined ? Number(defaultValues.amount) : 0,
     date: defaultValues?.date ? new Date(defaultValues.date) : new Date(),
     categoryId: defaultValues?.categoryId ?? null,
-    notes: defaultValues?.notes ?? "",
-    payee: defaultValues?.payee ?? null,
+    name: defaultValues?.name ?? "",
   };
 
   const form = useForm<CreateTransactionSchema>({
@@ -63,10 +61,9 @@ const TransactionForm = ({
       if (
         Number(defaultValues?.amount) === amount &&
         defaultValues.categoryId === data.categoryId &&
-        defaultValues.notes === data.notes &&
         new Date(defaultValues?.date ?? "").toISOString() ===
           data.date.toISOString() &&
-        defaultValues.payee === data.payee
+        defaultValues.name === data.name
       ) {
         toast.info("Please make some changes");
 
@@ -109,10 +106,10 @@ const TransactionForm = ({
         />
         <FormField
           control={form.control}
-          name="payee"
+          name="name"
           render={({ field: { value, onChange, ...rest }, ...props }) => (
             <FormItem>
-              <FormLabel>Payee</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
                   value={value ?? ""}

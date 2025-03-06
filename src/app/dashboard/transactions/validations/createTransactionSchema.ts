@@ -5,8 +5,7 @@ export const createTransactionSchema = z
     amount: z.number({
       required_error: "Amount is required",
     }),
-    payee: z.string().optional().nullable(),
-    notes: z.string().optional().nullable(),
+    name: z.string().min(1, { message: "Name is required" }),
     date: z.date({
       required_error: "Date is required",
     }),
