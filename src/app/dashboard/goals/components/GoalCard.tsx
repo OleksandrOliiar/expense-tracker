@@ -18,8 +18,8 @@ type GoalCardProps = {
     currentAmount: string;
     id: string;
     description?: string | null;
-    endDate?: string | null;
-    startDate?: string | null;
+    endDate: Date;
+    startDate: Date;
   };
 };
 

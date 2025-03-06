@@ -36,8 +36,8 @@ type GoalFormProps = {
     currentAmount: string;
     id: string;
     description?: string | null;
-    endDate?: string | null;
-    startDate?: string | null;
+    endDate: Date;
+    startDate: Date;
   };
 };
 
@@ -53,12 +53,8 @@ const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
       targetAmount: defaultValues?.targetAmount
         ? Number(defaultValues.targetAmount)
         : 0,
-      startDate: defaultValues?.startDate
-        ? new Date(defaultValues.startDate)
-        : undefined,
-      endDate: defaultValues?.endDate
-        ? new Date(defaultValues.endDate)
-        : undefined,
+      startDate: defaultValues?.startDate ? defaultValues.startDate : undefined,
+      endDate: defaultValues?.endDate ? defaultValues.endDate : undefined,
     },
   });
 
@@ -67,8 +63,8 @@ const GoalForm = ({ onSubmit, isPending, defaultValues }: GoalFormProps) => {
       if (
         data.title === defaultValues.title &&
         Number(data.targetAmount) === Number(defaultValues.targetAmount) &&
-        data.startDate?.toString() === defaultValues.startDate &&
-        data.endDate?.toString() === defaultValues.endDate &&
+        data.startDate.toString() === defaultValues.startDate.toString() &&
+        data.endDate.toString() === defaultValues.endDate.toString() &&
         data.description === defaultValues.description
       ) {
         toast.info("Please commit any changes");

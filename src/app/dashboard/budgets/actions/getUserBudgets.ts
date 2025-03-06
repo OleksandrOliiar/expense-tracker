@@ -55,8 +55,8 @@ export type UserBudget = {
   title: string;
   currentAmount: string;
   targetAmount: string;
-  startDate: string | null;
-  endDate: string | null;
+  startDate: Date;
+  endDate: Date;
   category: {
     id: string;
     name: string;

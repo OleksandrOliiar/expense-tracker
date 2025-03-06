@@ -13,8 +13,8 @@ type EditGoalSheetProps = {
     currentAmount: string;
     id: string;
     description?: string | null;
-    endDate?: string | null;
-    startDate?: string | null;
+    endDate: Date;
+    startDate: Date;
   };
   open: boolean;
   onOpenChange: (open: boolean) => void;

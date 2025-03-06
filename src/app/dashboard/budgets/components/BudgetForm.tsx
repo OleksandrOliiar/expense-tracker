@@ -51,12 +51,8 @@ const BudgetForm = ({
       targetAmount: defaultValues?.targetAmount
         ? Number(defaultValues.targetAmount)
         : 0,
-      startDate: defaultValues?.startDate
-        ? new Date(defaultValues.startDate)
-        : undefined,
-      endDate: defaultValues?.endDate
-        ? new Date(defaultValues.endDate)
-        : undefined,
+      startDate: defaultValues?.startDate ? defaultValues.startDate : undefined,
+      endDate: defaultValues?.endDate ? defaultValues.endDate : undefined,
       categoryId: defaultValues?.category?.id ?? undefined,
     },
   });

@@ -9,8 +9,6 @@ import {
 import { transactions } from "@/db/schema";
 import { db } from "@/db";
 import { qstashClient } from "@/lib/qstash";
-import { Notification } from "@onesignal/node-onesignal";
-import { oneSignalClient } from "@/lib/oneSignal";
 
 export const createTransaction = async (data: CreateTransactionSchema) => {
   const result = createTransactionSchema.safeParse(data);
@@ -40,10 +38,10 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
       })
       .returning();
 
-    // await qstashClient.publishJSON({
-    //   url: `https://quick-papayas-dress.loca.lt/api/tracker`,
-    //   body: { userId: user.id },
-    // });
+    await qstashClient.publishJSON({
+      url: `https://quick-papayas-dress.loca.lt/api/tracker/addTransaction`,
+      body: { transaction },
+    });
 
     return transaction;
   } catch (error) {

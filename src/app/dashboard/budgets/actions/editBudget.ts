@@ -39,8 +39,8 @@ export const editBudget = async (data: EditBudgetSchema) => {
     }
 
     const needsRecalculation =
-      rest.startDate?.toString() !== originalBudget.startDate ||
-      rest.endDate?.toString() !== originalBudget.endDate ||
+      rest.startDate !== originalBudget.startDate ||
+      rest.endDate !== originalBudget.endDate ||
       rest.categoryId !== originalBudget.categoryId;
 
     let currentAmount = originalBudget.currentAmount;
@@ -62,8 +62,8 @@ export const editBudget = async (data: EditBudgetSchema) => {
         ...rest,
         currentAmount: currentAmount?.toString(),
         targetAmount: rest.targetAmount.toString(),
-        endDate: rest.endDate?.toString(),
-        startDate: rest.startDate?.toString(),
+        endDate: rest.endDate,
+        startDate: rest.startDate,
       })
       .where(eq(budgets.id, id));
 

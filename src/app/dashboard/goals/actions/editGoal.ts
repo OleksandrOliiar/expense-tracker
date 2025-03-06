@@ -33,8 +33,8 @@ export const editGoal = async (data: EditGoalSchema) => {
     }
 
     const needsRecalculation =
-      originalGoal.startDate !== rest.startDate.toString() ||
-      originalGoal.endDate !== rest.endDate.toString();
+      originalGoal.startDate !== rest.startDate ||
+      originalGoal.endDate !== rest.endDate;
 
     let currentAmount = originalGoal.currentAmount;
     if (needsRecalculation) {
@@ -50,8 +50,8 @@ export const editGoal = async (data: EditGoalSchema) => {
       .set({
         ...rest,
         targetAmount: rest.targetAmount.toString(),
-        endDate: rest.endDate?.toString(),
-        startDate: rest.startDate?.toString(),
+        endDate: rest.endDate,
+        startDate: rest.startDate,
         currentAmount,
       })
       .where(eq(goals.id, id));

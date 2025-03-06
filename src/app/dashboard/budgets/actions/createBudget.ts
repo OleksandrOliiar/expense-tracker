@@ -40,8 +40,8 @@ export const createBudget = async (data: CreateBudgetSchema) => {
         title: result.data.title,
         description: result.data.description,
         targetAmount: result.data.targetAmount.toString(),
-        endDate: result.data.endDate?.toString(),
-        startDate: result.data.startDate?.toString(),
+        endDate: result.data.endDate,
+        startDate: result.data.startDate,
         categoryId: result.data.categoryId,
         currentAmount,
       })

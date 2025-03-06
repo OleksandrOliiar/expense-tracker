@@ -133,8 +133,8 @@ export const goals = pgTable("goals", {
   currentAmount: numeric("current_amount", { precision: 10, scale: 2 })
     .notNull()
     .default("0"),
-  startDate: text("start_date"),
-  endDate: text("end_date"),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
   isCompleted: boolean("is_completed").notNull().default(false),
   description: text("description"),
   userId: text("user_id").notNull(),
@@ -152,8 +152,8 @@ export const budgets = pgTable("budgets", {
   currentAmount: numeric("current_amount", { precision: 10, scale: 2 })
     .notNull()
     .default("0"),
-  startDate: text("start_date"),
-  endDate: text("end_date"),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
   isCompleted: boolean("is_completed").notNull().default(false),
   description: text("description"),
   categoryId: text("category_id").references(() => categories.id, {
