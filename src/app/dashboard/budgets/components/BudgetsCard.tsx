@@ -78,7 +78,7 @@ const BudgetsCard = ({ budget }: BudgetsCardProps) => {
           />
 
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Target</span>
+            <span className="text-muted-foreground">Limit</span>
             <span className="font-medium">
               ${targetAmount.toLocaleString()}
             </span>

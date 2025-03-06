@@ -1,6 +1,6 @@
 "use server";
 
-import { budgets, goals } from "@/db/schema";
+import { budgets } from "@/db/schema";
 import {
   editBudgetSchema,
   EditBudgetSchema,
@@ -8,6 +8,7 @@ import {
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { calculateCurrentAmount } from "./calculateCurrentAmount";
 
 export const editBudget = async (data: EditBudgetSchema) => {
   const result = editBudgetSchema.safeParse(data);
@@ -19,16 +20,47 @@ export const editBudget = async (data: EditBudgetSchema) => {
   const { id, ...rest } = result.data;
 
   try {
-    const { isAuthenticated } = getKindeServerSession();
+    const { getUser, isAuthenticated } = getKindeServerSession();
 
     if (!(await isAuthenticated())) {
       throw new Error("Unauthorized");
+    }
+
+    const user = await getUser();
+    if (!user?.id) throw new Error("User not found");
+
+    const [originalBudget] = await db
+      .select()
+      .from(budgets)
+      .where(eq(budgets.id, id));
+
+    if (!originalBudget) {
+      throw new Error("Budget not found");
+    }
+
+    const needsRecalculation =
+      rest.startDate?.toString() !== originalBudget.startDate ||
+      rest.endDate?.toString() !== originalBudget.endDate ||
+      rest.categoryId !== originalBudget.categoryId;
+
+    let currentAmount = originalBudget.currentAmount;
+    if (needsRecalculation) {
+      const startDate = new Date(rest.startDate || originalBudget.startDate);
+      const endDate = new Date(rest.endDate || originalBudget.endDate);
+      
+      currentAmount = await calculateCurrentAmount({
+        startDate,
+        endDate,
+        categoryId: rest.categoryId,
+        userId: user.id,
+      });
     }
 
     const result = await db
       .update(budgets)
       .set({
         ...rest,
+        currentAmount: currentAmount?.toString(),
         targetAmount: rest.targetAmount.toString(),
         endDate: rest.endDate?.toString(),
         startDate: rest.startDate?.toString(),

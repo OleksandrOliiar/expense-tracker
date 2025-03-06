@@ -7,7 +7,6 @@ import { getUserBudgets } from "../actions/getUserBudgets";
 import BudgetsCard from "./BudgetsCard";
 import CreateBudgetSheet from "./CreateBudgetSheet";
 import NoSearchResults from "./NoSearchResults";
-import { Skeleton } from "@/components/ui/skeleton";
 import NoBudgetsMessage from "./NoBudgetsMessage";
 import BudgetsCardSkeleton from "./BudgetCardSkeleton";
 
