@@ -8,6 +8,7 @@ import {
 
 import { goals } from "@/db/schema";
 import { db } from "@/db";
+import { calculateCurrentAmount } from "./calculateCurrentAmount";
 
 export const createGoal = async (data: CreateGoalSchema) => {
   const result = createGoalSchema.safeParse(data);
@@ -25,6 +26,12 @@ export const createGoal = async (data: CreateGoalSchema) => {
 
     const user = await getUser();
 
+    const currentAmount = await calculateCurrentAmount({
+      startDate: result.data.startDate,
+      endDate: result.data.endDate,
+      userId: user.id,
+    });
+
     const goal = await db
       .insert(goals)
       .values({
@@ -33,9 +40,9 @@ export const createGoal = async (data: CreateGoalSchema) => {
         title: result.data.title,
         description: result.data.description,
         targetAmount: result.data.targetAmount.toString(),
-        currentAmount: (result.data.currentAmount || 0).toString(),
-        endDate: result.data.endDate?.toString(),
-        startDate: result.data.startDate?.toString(),
+        endDate: result.data.endDate.toString(),
+        startDate: result.data.startDate.toString(),
+        currentAmount,
       })
       .returning();
 
