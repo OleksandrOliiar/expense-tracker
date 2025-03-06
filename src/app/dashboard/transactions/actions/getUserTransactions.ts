@@ -36,7 +36,6 @@ export const getUserTransactions = async ({
         id: transactions.id,
         amount: transactions.amount,
         payee: transactions.payee,
-        notes: transactions.notes,
         date: transactions.date,
         category: {
           name: categories.name,

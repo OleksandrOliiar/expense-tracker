@@ -17,7 +17,7 @@ export const addTransactions = async (
       const transactionIds = result.map((t) => t.id);
 
       await qstashClient.publishJSON({
-        url: `${process.env.APP_URL}/api/tracker/schema`,
+        url: `${process.env.APP_URL}/api/tracker`,
         body: {
           transactionIds,
           userId,

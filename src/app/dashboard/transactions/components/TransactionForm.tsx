@@ -190,19 +190,6 @@ const TransactionForm = ({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <FormControl>
-                <Textarea {...field} rows={5} value={field.value ?? ""} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button type="submit" disabled={isPending} className="w-full">
           {form.formState.isSubmitting ? "Submitting..." : `Submit`}
         </Button>

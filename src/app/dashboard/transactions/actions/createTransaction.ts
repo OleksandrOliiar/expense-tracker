@@ -30,7 +30,6 @@ export const createTransaction = async (data: CreateTransactionSchema) => {
       .insert(transactions)
       .values({
         amount: result.data.amount.toString(),
-        notes: result.data.notes,
         date: result.data.date,
         categoryId: result.data.categoryId,
         id: crypto.randomUUID(),

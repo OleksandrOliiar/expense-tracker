@@ -37,7 +37,7 @@ export const editTransaction = async (data: EditTransactionSchema) => {
       .where(eq(transactions.id, id));
 
     await qstashClient.publishJSON({
-      url: `${process.env.APP_URL}/api/tracker/schema`,
+      url: `${process.env.APP_URL}/api/tracker`,
       body: {
         transactionId: id,
         userId: user.id,
