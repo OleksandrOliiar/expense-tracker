@@ -7,6 +7,7 @@ import { recalculateAllBudgets } from "./actions/recalculateAllBudgets";
 import { updateRelevantGoals } from "./actions/updateRelevantGoals";
 import { updateRelevantBudgets } from "./actions/updateRelevantBudgets";
 import { Transaction } from "@/db/types";
+import { pusherServer } from "@/lib/pusher";
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,16 +54,33 @@ export async function POST(request: NextRequest) {
       for (const transaction of transactionsList) {
         const { amount, date, categoryId } = transaction;
 
-        await updateRelevantGoals(userId, new Date(date));
+        const goalResults = await updateRelevantGoals(userId, new Date(date));
+
+        updatedGoals += goalResults;
 
         if (Number(amount) < 0) {
-          await updateRelevantBudgets(
+          const budgetResults = await updateRelevantBudgets(
             userId,
             new Date(date),
             categoryId
           );
+
+          updatedBudgets += budgetResults;
         }
       }
+    }
+
+    console.log("updatedBudgets", updatedBudgets);
+    console.log("updatedGoals", updatedGoals);
+
+    if (updatedBudgets > 0) {
+      console.log("triggering budgets-updated");
+      pusherServer.trigger(userId, "budgets-updated", {});
+    }
+
+    if (updatedGoals > 0) {
+      console.log("triggering goals-updated");
+      pusherServer.trigger(userId, "goals-updated", {});
     }
 
     return NextResponse.json({
