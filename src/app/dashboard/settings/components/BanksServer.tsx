@@ -3,19 +3,20 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { getUserBanks } from "../actions/getUserBanks";
+import { BankStatus, getUserBanks } from "../actions/getUserBanks";
 import BanksClient from "./BanksClient";
 
 type BanksServerProps = {
   name?: string;
+  status?: string;
 };
 
-const BanksServer = async ({ name }: BanksServerProps) => {
+const BanksServer = async ({ name, status }: BanksServerProps) => {
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
-    queryKey: ["banks", "list", name],
-    queryFn: () => getUserBanks(name),
+    queryKey: ["banks", "list", { name, status }],
+    queryFn: () => getUserBanks({ name, status: status as BankStatus }),
   });
 
   return (

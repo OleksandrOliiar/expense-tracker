@@ -1,20 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { PowerOff } from "lucide-react";
 import { deactivateBank } from "../actions/deactivateBank";
 import { toast } from "sonner";
 
 type DeactivateBankButtonProps = {
   itemId: string;
+  onDialogClose: () => void;
 };
 
-const DeactivateBankButton = ({ itemId }: DeactivateBankButtonProps) => {
+const DeactivateBankButton = ({
+  itemId,
+  onDialogClose,
+}: DeactivateBankButtonProps) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => deactivateBank(itemId),
     onSuccess: () => {
       toast.success("Bank deactivated successfully");
+      onDialogClose();
     },
     onError: () => {
       toast.error("Failed to deactivate bank");
@@ -27,11 +31,9 @@ const DeactivateBankButton = ({ itemId }: DeactivateBankButtonProps) => {
   return (
     <Button
       variant="destructive"
-      size="sm"
       onClick={() => mutate()}
       disabled={isPending}
     >
-      <PowerOff className="mr-1 h-4 w-4" />
       {isPending ? "Deactivating..." : "Deactivate"}
     </Button>
   );

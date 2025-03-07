@@ -4,7 +4,7 @@ import { Building, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { UserBank } from "../actions/getUserBanks";
-import DeactivateBankButton from "./DeactivateBankButton";
+import DeactivateBankDialog from "./DeactivateBankDialog";
 
 type BankCardProps = {
   bank: UserBank;
@@ -70,7 +70,7 @@ const BankCard = ({ bank }: BankCardProps) => {
             </span>
           )}
 
-          <DeactivateBankButton itemId={bank.itemId} />
+          <DeactivateBankDialog bankId={bank.itemId} />
         </div>
       </CardContent>
     </Card>

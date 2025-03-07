@@ -6,13 +6,17 @@ import { toast } from "sonner";
 import { usePlaidLink, PlaidLinkOnSuccess } from "react-plaid-link";
 import { Button } from "@/components/ui/button";
 import { exchangePublicToken } from "../actions/exchangePublicToken";
+import { useQueryClient } from "@tanstack/react-query";
 
 const PlaidLink = () => {
+  const queryClient = useQueryClient();
   const [token, setToken] = useState<string | null>(null);
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(async (publicToken) => {
     try {
       await exchangePublicToken(publicToken);
+
+      queryClient.invalidateQueries({ queryKey: ["banks", "list"] });
     } catch (error) {
       toast.error("Error exchanging public token");
     }
