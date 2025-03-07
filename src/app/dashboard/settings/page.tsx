@@ -1,13 +1,11 @@
 import Search from "@/components/Search";
 import BanksServer from "./components/BanksServer";
 import PortalLink from "./components/PortalLink";
-import BankStatusFilter from "./components/BankStatusFilter";
 import PlaidLink from "./components/PlaidLink";
 
 type SettingsProps = {
   searchParams: {
     name?: string;
-    status?: string;
   };
 };
 
@@ -19,15 +17,12 @@ const Settings = ({ searchParams }: SettingsProps) => {
         Connected banks
       </h2>
       <div className="flex justify-between flex-wrap items-center mb-6 gap-4">
-        <div className="flex items-center gap-2">
-          <div className="max-w-[350px]">
-            <Search queryKey="name" id="bank-name" label="Search by name..." />
-          </div>
-          <BankStatusFilter />
+        <div className="max-w-[350px]">
+          <Search queryKey="name" id="bank-name" label="Search by name..." />
         </div>
         <PlaidLink />
       </div>
-      <BanksServer name={searchParams.name} status={searchParams.status} />
+      <BanksServer name={searchParams.name} />
     </div>
   );
 };

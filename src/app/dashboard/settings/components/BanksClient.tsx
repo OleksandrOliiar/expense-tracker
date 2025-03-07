@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { BankStatus, getUserBanks } from "../actions/getUserBanks";
+import { getUserBanks } from "../actions/getUserBanks";
 import BankCard from "./BankCard";
 import NoBanksMessage from "./NoBanksMessage";
 import NoSearchResults from "./NoSearchResults";
@@ -10,11 +10,10 @@ import NoSearchResults from "./NoSearchResults";
 const BanksClient = () => {
   const searchParams = useSearchParams();
   const name = searchParams.get("name") ?? undefined;
-  const status = searchParams.get("status") ?? undefined;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["banks", "list", { name, status }],
-    queryFn: () => getUserBanks({ name, status: status as BankStatus }),
+    queryKey: ["banks", "list", { name }],
+    queryFn: () => getUserBanks({ name }),
   });
 
   if (isLoading) return <div>Loading...</div>;

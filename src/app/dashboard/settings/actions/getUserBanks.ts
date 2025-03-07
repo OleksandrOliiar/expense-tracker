@@ -5,14 +5,11 @@ import { plaidAccounts, plaidItems } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { eq, like, sql } from "drizzle-orm";
 
-export type BankStatus = "active" | "inactive" | "all";
-
 type GetUserBanksParams = {
   name?: string;
-  status?: BankStatus;
 };
 
-export const getUserBanks = async ({ name, status }: GetUserBanksParams) => {
+export const getUserBanks = async ({ name }: GetUserBanksParams) => {
   try {
     const { getUser, isAuthenticated } = getKindeServerSession();
 
@@ -40,12 +37,6 @@ export const getUserBanks = async ({ name, status }: GetUserBanksParams) => {
 
     if (name && name.trim() !== "") {
       banks.where(like(plaidItems.bankName, `%${name}%`));
-    }
-
-    if (status === "active") {
-      banks.where(eq(plaidItems.isActive, true));
-    } else if (status === "inactive") {
-      banks.where(eq(plaidItems.isActive, false));
     }
 
     const result = await banks;
