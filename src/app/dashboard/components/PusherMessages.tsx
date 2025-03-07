@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { pusherClient } from "@/lib/pusher";
+import { pusherClient } from "@/lib/pusherClient";
 import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";

@@ -75,6 +75,8 @@ export const plaidItems = pgTable("plaid_items", {
   accessToken: text("access_token").notNull(),
   transactionCursor: text("transaction_cursor"),
   bankName: text("bank_name"),
+  logo: text("logo"),
+  url: text("url"),
   isActive: boolean("is_active").notNull().default(true),
 });
 

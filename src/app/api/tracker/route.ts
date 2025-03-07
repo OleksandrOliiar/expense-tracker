@@ -7,7 +7,7 @@ import { recalculateAllBudgets } from "./actions/recalculateAllBudgets";
 import { updateRelevantGoals } from "./actions/updateRelevantGoals";
 import { updateRelevantBudgets } from "./actions/updateRelevantBudgets";
 import { Transaction } from "@/db/types";
-import { pusherServer } from "@/lib/pusher";
+import { pusherServer } from "@/lib/pusherServer";
 
 export async function POST(request: NextRequest) {
   try {

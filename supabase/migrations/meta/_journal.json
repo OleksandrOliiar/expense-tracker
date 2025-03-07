@@ -134,6 +134,13 @@
       "when": 1741273491914,
       "tag": "0018_young_machine_man",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1741337517258,
+      "tag": "0019_equal_roland_deschain",
+      "breakpoints": true
     }
   ]
 }

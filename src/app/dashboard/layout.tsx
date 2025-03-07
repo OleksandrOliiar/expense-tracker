@@ -5,6 +5,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import PusherMessages from "./components/PusherMessages";
+import BeamsNotifications from "./components/BeamsNotifications";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -21,6 +22,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         </SidebarInset>
       </SidebarProvider>
       <PusherMessages />
+      <BeamsNotifications />
     </>
   );
 };

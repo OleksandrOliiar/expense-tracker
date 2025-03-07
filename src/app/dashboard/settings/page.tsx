@@ -1,11 +1,19 @@
+import BanksServer from "./components/BanksServer";
 import PlaidLink from "./components/PlaidLink";
 import PortalLink from "./components/PortalLink";
 
-const Settings = () => {
+type SettingsProps = {
+  searchParams: {
+    name?: string;
+  };
+};
+
+const Settings = ({ searchParams }: SettingsProps) => {
   return (
-    <div>
+    <div className="px-4">
       <PortalLink />
       <PlaidLink />
+      <BanksServer name={searchParams.name} />
     </div>
   );
 };
