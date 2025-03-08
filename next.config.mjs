@@ -13,6 +13,14 @@ const nextConfig = {
       process.env.KINDE_POST_LOGIN_REDIRECT_URL ??
       `https://${process.env.VERCEL_URL}/dashboard`,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "plaid-category-icons.plaid.com",
+      }
+    ]
+  }
 };
 
 export default nextConfig;

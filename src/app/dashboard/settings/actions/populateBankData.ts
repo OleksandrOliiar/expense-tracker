@@ -1,13 +1,15 @@
 import { plaidClient } from "@/lib/plaid";
 import { CountryCode } from "plaid";
-import { addBankForItem } from "./addBankForItem";
+import { createItem } from "./createItem";
 
 type PopulateBankDataProps = {
+  userId: string;
   itemId: string;
   accessToken: string;
 };
 
 export const populateBankData = async ({
+  userId,
   itemId,
   accessToken,
 }: PopulateBankDataProps) => {
@@ -35,11 +37,14 @@ export const populateBankData = async ({
     const logo = institutionResponse.data.institution.logo;
     const url = institutionResponse.data.institution.url;
 
-    await addBankForItem({
+    await createItem({
       itemId,
       institutionName,
       logo,
       url,
+      institutionId,
+      accessToken,
+      userId,
     });
   } catch (error) {
     console.log("Error populating bank data", error);

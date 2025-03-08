@@ -2,9 +2,8 @@
 
 import { plaidClient } from "@/lib/plaid";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { createItem } from "./createItem";
 import { populateBankData } from "./populateBankData";
-import { syncTransactions } from "./syncTransactions";
+import { syncData } from "./syncData";
 
 export const exchangePublicToken = async (publicToken: string) => {
   try {
@@ -22,18 +21,13 @@ export const exchangePublicToken = async (publicToken: string) => {
 
     const tokenData = tokenResponse.data;
 
-    await createItem({
-      itemId: tokenData.item_id,
-      userId: user.id,
-      accessToken: tokenData.access_token,
-    });
-
     await populateBankData({
       itemId: tokenData.item_id,
       accessToken: tokenData.access_token,
+      userId: user.id,
     });
-
-    // await syncTransactions(tokenData.item_id);
+    
+    await syncData(tokenData.item_id);
   } catch (error) {
     console.log("Error exchanging public token", error);
     throw error;

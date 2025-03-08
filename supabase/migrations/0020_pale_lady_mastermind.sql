@@ -1,0 +1,1 @@
+ALTER TABLE "accounts" ADD COLUMN "categories_synced" boolean DEFAULT false NOT NULL;

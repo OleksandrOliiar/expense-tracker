@@ -7,6 +7,7 @@ import { ArrowDown01, ArrowDownZA, ArrowUp10, ArrowUpZA } from "lucide-react";
 import { EditTransactionSchema } from "../validations/editTransactionSchema";
 import TransactionMenu from "./TransactionMenu";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export type Transaction = {
   id: string;
@@ -89,10 +90,32 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       );
     },
-    accessorFn: (row) =>
-      row.category
-        ? `${row.category.icon} ${row.category.name}`
-        : "No category",
+    cell: ({ row }) => {
+      const category = row.getValue("category") as {
+        name: string;
+        icon: string | null;
+      };
+
+      if (!category) {
+        return "No category";
+      }
+
+      if (category.icon && category.icon.includes("https")) {
+        return (
+          <div className="flex items-center gap-2">
+            <Image
+              src={category.icon}
+              alt={category.name}
+              width={20}
+              height={20}
+            />
+            {category.name}
+          </div>
+        );
+      }
+
+      return `${category.icon} ${category.name}`;
+    },
   },
   {
     accessorKey: "name",

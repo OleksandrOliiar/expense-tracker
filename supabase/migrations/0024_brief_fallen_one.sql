@@ -1,0 +1,2 @@
+ALTER TABLE "plaid_items" ADD CONSTRAINT "plaid_items_institution_id_unique" UNIQUE("institution_id");--> statement-breakpoint
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_plaid_id_unique" UNIQUE("plaid_id");

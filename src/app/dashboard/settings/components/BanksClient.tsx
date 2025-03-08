@@ -6,6 +6,8 @@ import { getUserBanks } from "../actions/getUserBanks";
 import BankCard from "./BankCard";
 import NoBanksMessage from "./NoBanksMessage";
 import NoSearchResults from "./NoSearchResults";
+import Search from "@/components/Search";
+import PlaidLink from "./PlaidLink";
 
 const BanksClient = () => {
   const searchParams = useSearchParams();
@@ -24,6 +26,12 @@ const BanksClient = () => {
 
   return (
     <>
+      <div className="flex justify-between flex-wrap items-center mb-6 gap-4">
+        <div className="max-w-[350px]">
+          <Search queryKey="name" id="bank-name" label="Search by name..." />
+        </div>
+        <PlaidLink />
+      </div>
       {data && data?.length > 0 ? (
         <div className="flex flex-wrap items-center gap-4">
           {data.map((bank) => (

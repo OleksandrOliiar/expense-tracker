@@ -56,7 +56,7 @@ export default function CategoryPicker<Multiple extends boolean = false>({
     data: categoriesList,
     isLoading,
     error,
-  } = useCategories(debouncedSearchTerm);
+  } = useCategories(debouncedSearchTerm ?? undefined);
 
   useEffect(() => {
     if (multiple) {

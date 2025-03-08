@@ -1,7 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
-  integer,
   numeric,
   pgEnum,
   pgTable,
@@ -75,6 +74,7 @@ export const plaidItems = pgTable("plaid_items", {
   accessToken: text("access_token").notNull(),
   transactionCursor: text("transaction_cursor"),
   bankName: text("bank_name"),
+  institutionId: text("institution_id").notNull().unique(),
   logo: text("logo"),
   url: text("url"),
   isActive: boolean("is_active").notNull().default(true),
@@ -109,6 +109,7 @@ export const transactions = pgTable("transactions", {
   name: text("name"),
   date: timestamp("date", { mode: "date" }).notNull(),
   userId: text("user_id").notNull(),
+  plaidId: text("plaid_id").unique(),
   categoryId: text("category_id").references(() => categories.id, {
     onDelete: "set null",
   }),

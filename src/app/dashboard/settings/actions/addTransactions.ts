@@ -6,11 +6,15 @@ import { qstashClient } from "@/lib/qstash";
 export const addTransactions = async (
   transactionsValues: CreateTransactionProps[]
 ) => {
+  console.log("transactionsValues: ", transactionsValues);
   try {
     const result = await db
       .insert(transactions)
       .values(transactionsValues)
-      .returning();
+      .returning()
+      .onConflictDoNothing({
+        target: [transactions.plaidId],
+      })
 
     if (result.length > 0) {
       const userId = result[0].userId;
