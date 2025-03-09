@@ -12,6 +12,7 @@ type TransactionsProps = {
     date?: string;
     page?: string;
     perPage?: string;
+    sort?: string;
   };
 };
 
@@ -34,6 +35,7 @@ const Transactions = ({ searchParams }: TransactionsProps) => {
         date={searchParams.date}
         page={searchParams.page}
         perPage={searchParams.perPage}
+        sort={searchParams.sort}
       />
     </div>
   );

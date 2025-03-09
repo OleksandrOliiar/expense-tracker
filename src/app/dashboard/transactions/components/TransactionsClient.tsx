@@ -9,6 +9,19 @@ import { useSearchParams } from "next/navigation";
 const TransactionsClient = () => {
   const searchParams = useSearchParams();
 
+  let formattedSort: { id: string; desc: boolean }[] | undefined;
+
+  const [field, order] = searchParams.get("sort")?.split("-") ?? [];
+
+  if (field && order) {
+    formattedSort = [
+      {
+        id: field,
+        desc: order === "desc",
+      },
+    ];
+  }
+
   const { data, isLoading, error } = useQuery({
     queryKey: [
       "transactions",
@@ -26,6 +39,7 @@ const TransactionsClient = () => {
         perPage: searchParams.get("perPage")
           ? parseInt(searchParams.get("perPage")!)
           : undefined,
+        sort: formattedSort,
       },
     ],
     queryFn: () =>
@@ -43,6 +57,7 @@ const TransactionsClient = () => {
         perPage: searchParams.get("perPage")
           ? parseInt(searchParams.get("perPage")!)
           : undefined,
+        sort: formattedSort,
       }),
   });
 

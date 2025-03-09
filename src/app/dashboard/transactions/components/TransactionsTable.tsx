@@ -5,7 +5,6 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
   Row,
   SortingState,
   Table as TTable,
@@ -32,6 +31,7 @@ import DownloadCsvButton from "./DownloadCsvButton";
 import TableBodySkeleton from "./TableBodySkeleton";
 import TransactionsTablePagination from "./TransactionsTablePagination";
 import TypeFilter from "./TypeFilter";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 interface TransactionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -49,6 +49,7 @@ export function TransactionsTable<TData, TValue>({
   const { setQueryParams, queryParams } = useQueryParams<{
     page: string;
     perPage: string;
+    sort: string;
   }>();
 
   const [rowSelection, setRowSelection] = useState({});
@@ -72,7 +73,6 @@ export function TransactionsTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -87,6 +87,7 @@ export function TransactionsTable<TData, TValue>({
     },
     manualPagination: true,
     pageCount: totalPages,
+    manualSorting: true,
   });
 
   const selectedRows = table.getFilteredSelectedRowModel().rows;
@@ -95,12 +96,29 @@ export function TransactionsTable<TData, TValue>({
     table.toggleAllRowsSelected(false);
   };
 
+  const debouncedPagination = useDebouncedValue(pagination, 300);
+
   useEffect(() => {
     setQueryParams({
-      page: pagination.pageIndex.toString(),
-      perPage: pagination.pageSize.toString(),
+      page: debouncedPagination.pageIndex.toString(),
+      perPage: debouncedPagination.pageSize.toString(),
     });
-  }, [pagination]);
+  }, [debouncedPagination]);
+
+  const debouncedSorting = useDebouncedValue(sorting, 300);
+
+  useEffect(() => {
+    if (debouncedSorting.length > 0) {
+      const sort = debouncedSorting[0];
+
+      const field = sort.id as "date" | "amount" | "name";
+      const order = sort.desc ? "desc" : "asc";
+
+      setQueryParams({ sort: `${field}-${order}` });
+    } else {
+      setQueryParams({ sort: undefined });
+    }
+  }, [debouncedSorting]);
 
   return (
     <div>

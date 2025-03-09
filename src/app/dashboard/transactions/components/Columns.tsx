@@ -71,22 +71,14 @@ export const columns: ColumnDef<Transaction>[] = [
 
       return formatted;
     },
+    enableMultiSort: true
   },
   {
     accessorKey: "category",
-    header: ({ column }) => {
+    header: () => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px-0 hover:bg-muted/40"
-        >
+        <Button variant="ghost" className="px-0 hover:bg-muted/40">
           Category
-          {column.getIsSorted() === "asc" ? (
-            <ArrowDownZA className="h-4 w-4" />
-          ) : (
-            <ArrowUpZA className="h-4 w-4" />
-          )}
         </Button>
       );
     },
@@ -138,6 +130,7 @@ export const columns: ColumnDef<Transaction>[] = [
       );
     },
     accessorFn: (row) => (!!row.name ? row.name : "No name"),
+    enableMultiSort: true
   },
   {
     accessorKey: "amount",
@@ -179,6 +172,7 @@ export const columns: ColumnDef<Transaction>[] = [
         </div>
       );
     },
+    enableMultiSort: true
   },
   {
     id: "actions",

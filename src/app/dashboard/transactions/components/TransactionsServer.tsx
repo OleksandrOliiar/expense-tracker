@@ -15,6 +15,7 @@ type TransactionsServerProps = {
   date?: string;
   page?: string;
   perPage?: string;
+  sort?: string;
 };
 
 const TransactionsServer = async ({
@@ -26,35 +27,38 @@ const TransactionsServer = async ({
   date,
   page,
   perPage,
+  sort,
 }: TransactionsServerProps) => {
   const queryClient = new QueryClient();
 
-  await queryClient.fetchQuery({
-    queryKey: [
-      "transactions",
-      "list",
+  const [field, order] = sort?.split("-") ?? [];
+
+  let formattedSort;
+
+  if (field && order) {
+    formattedSort = [
       {
-        name: name ?? null,
-        startDate: startDate ?? null,
-        endDate: endDate ?? null,
-        categories: categories ?? null,
-        type: type ?? null,
-        date: date ?? null,
-        page: page ? parseInt(page) : undefined,
-        perPage: perPage ? parseInt(perPage) : undefined,
+        id: field,
+        desc: order === "desc",
       },
-    ],
-    queryFn: () =>
-      getUserTransactions({
-        name: name ?? null,
-        startDate: startDate ?? null,
-        endDate: endDate ?? null,
-        categories: categories ?? null,
-        type: type ?? null,
-        date: date ?? null,
-        page: page ? parseInt(page) : undefined,
-        perPage: perPage ? parseInt(perPage) : undefined,
-      }),
+    ];
+  }
+
+  const formattedParams = {
+    name: name ?? null,
+    startDate: startDate ?? null,
+    endDate: endDate ?? null,
+    categories: categories ?? null,
+    type: type ?? null,
+    date: date ?? null,
+    page: page ? parseInt(page) : undefined,
+    perPage: perPage ? parseInt(perPage) : undefined,
+    sort: formattedSort,
+  };
+
+  await queryClient.fetchQuery({
+    queryKey: ["transactions", "list", formattedParams],
+    queryFn: () => getUserTransactions(formattedParams),
   });
 
   return (

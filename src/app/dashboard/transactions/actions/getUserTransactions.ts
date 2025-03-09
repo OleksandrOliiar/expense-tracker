@@ -14,8 +14,7 @@ type GetUserTransactionsProps = {
   date: string | null;
   page?: number;
   perPage?: number;
-  sortField?: "date" | "amount" | "name";
-  sortOrder?: "asc" | "desc";
+  sort?: { id: string; desc: boolean }[];
 };
 
 export const getUserTransactions = async ({
@@ -27,8 +26,7 @@ export const getUserTransactions = async ({
   date,
   page = 0,
   perPage = 10,
-  sortField,
-  sortOrder,
+  sort,
 }: GetUserTransactionsProps) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
@@ -85,12 +83,16 @@ export const getUserTransactions = async ({
       query.where(eq(transactions.date, new Date(date)));
     }
 
-    if (sortField && sortOrder) {
-      const orderFn = sortOrder === "asc" ? asc : desc;
+    if (sort && sort.length > 0) {
+      console.log(sort);
+      
+      const currentSort = sort[0];
+      const orderFn = currentSort.desc ? desc : asc;
+      const sortField = currentSort.id as "date" | "amount" | "name";
       query.orderBy(orderFn(transactions[sortField]));
     }
 
-    query.limit(perPage).offset((page) * perPage);
+    query.limit(perPage).offset(page * perPage);
 
     const transactionsCount = db.select({ count: count() }).from(transactions);
 
