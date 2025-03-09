@@ -23,6 +23,7 @@ import { useTheme } from "next-themes";
 import { useState } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import Image from "next/image";
 
 type CategoryFormProps = {
   defaultValues?: Partial<CreateCategorySchema>;
@@ -54,6 +55,21 @@ const CategoryForm = ({
     }
 
     onSubmit(values);
+  }
+
+  let icon;
+  const iconValue = form.getValues("icon");
+  if (iconValue && typeof iconValue === "string" && iconValue.includes("https")) {
+    icon = (
+      <Image
+        src={iconValue}
+        alt={form.getValues("name")}
+        width={20}
+        height={20}
+      />
+    );
+  } else {
+    icon = <span className="text-xl">{form.getValues("icon")}</span>;
   }
 
   return (
@@ -96,10 +112,7 @@ const CategoryForm = ({
                       onClick={() => setIsEmojiPickerOpen(true)}
                     >
                       {field.value ? (
-                        <>
-                          <span className="text-xl">{field.value}</span> Change
-                          icon
-                        </>
+                        <>{icon} Change icon</>
                       ) : (
                         <>
                           {" "}

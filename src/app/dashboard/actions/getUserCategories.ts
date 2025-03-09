@@ -3,11 +3,20 @@
 import { db } from "@/db";
 import { categories, transactions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { eq, sql, like } from "drizzle-orm";
+import { eq, sql, like, count } from "drizzle-orm";
 
-export const getUserCategoriesWithTransactions = async (name?: string) => {
+type GetUserCategoriesWithTransactionsProps = {
+  name?: string;
+  page?: number;
+  pageSize?: number;
+};
+
+export const getUserCategoriesWithTransactions = async ({
+  name,
+  page = 1,
+  pageSize = 9,
+}: GetUserCategoriesWithTransactionsProps) => {
   try {
-    console.log("Getting user categories");
     const { isAuthenticated, getUser } = getKindeServerSession();
 
     if (!(await isAuthenticated())) {
@@ -30,12 +39,20 @@ export const getUserCategoriesWithTransactions = async (name?: string) => {
 
     query.where(eq(categories.userId, user.id));
 
-    if (name && name.trim() !== '') {
+    if (name && name.trim() !== "") {
       query.where(like(categories.name, `%${name}%`));
     }
 
-    const result = await query;
-    return result;
+    query.limit(pageSize).offset((page - 1) * pageSize);
+
+    const categoriesCount = db.select({ count: count() }).from(categories);
+
+    const [data, total] = await Promise.all([query, categoriesCount]);
+
+    return {
+      data,
+      totalPages: Math.ceil(total[0].count / pageSize),
+    };
   } catch (error) {
     console.error("Failed to get categories", error);
     throw new Error("Failed to get categories");

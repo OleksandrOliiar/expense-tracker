@@ -16,8 +16,10 @@ import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useCategories } from "../hooks/useCategories";
 import AddCategoryDialog from "../transactions/components/AddCategoryDialog";
+import { useQuery } from "@tanstack/react-query";
+import { getUserCategoriesWithTransactions } from "../actions/getUserCategories";
+import Image from "next/image";
 
 export interface CategoryPickerProps<Multiple extends boolean = false> {
   /** Currently selected value */
@@ -52,11 +54,19 @@ export default function CategoryPicker<Multiple extends boolean = false>({
   );
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
 
-  const {
-    data: categoriesList,
-    isLoading,
-    error,
-  } = useCategories(debouncedSearchTerm ?? undefined);
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      "categories",
+      "list",
+      { name: debouncedSearchTerm ?? undefined },
+    ],
+    queryFn: () =>
+      getUserCategoriesWithTransactions({
+        name: debouncedSearchTerm ?? undefined,
+      }),
+  });
+
+  const categoriesList = data?.data ?? [];
 
   useEffect(() => {
     if (multiple) {
@@ -85,7 +95,13 @@ export default function CategoryPicker<Multiple extends boolean = false>({
     }
   };
 
-  console.log("selectedCategory: ", selectedCategory);
+  const getIcon = (icon: string | null, name: string) => {
+    if (icon && icon.includes("https")) {
+      return <Image src={icon} alt={name} width={16} height={16} />;
+    } else {
+      return <span>{icon}</span>;
+    }
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -107,7 +123,7 @@ export default function CategoryPicker<Multiple extends boolean = false>({
             </div>
           ) : selectedCategory ? (
             <div className="flex items-center gap-2">
-              <span>{selectedCategory.icon}</span>
+              {getIcon(selectedCategory.icon, selectedCategory.name)}
               <span>{selectedCategory.name}</span>
             </div>
           ) : (
@@ -167,7 +183,7 @@ export default function CategoryPicker<Multiple extends boolean = false>({
                     })}
                   >
                     <div className="flex items-center gap-2">
-                      {category.icon && <span>{category.icon}</span>}
+                      {getIcon(category.icon, category.name)}
                       <span>{category.name}</span>
                       <span className="text-muted-foreground">
                         ({category.transactionsCount})

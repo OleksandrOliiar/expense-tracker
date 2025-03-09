@@ -9,18 +9,29 @@ import Search from "@/components/Search";
 import CreateCategoryDialog from "./CreateCategoryDialog";
 import NoSearchResults from "./NoSearchResult";
 import NoCategoriesMessage from "./NoCategoriesMessage";
+import Pagination from "@/components/Pagination";
 
 const CategoriesClient = () => {
   const searchParams = useSearchParams();
 
-  const {
-    data: categories,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["categories", "list", searchParams.get("name") ?? undefined],
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      "categories",
+      "list",
+      {
+        name: searchParams.get("name") ?? undefined,
+        page: Number(searchParams.get("page"))
+          ? Number(searchParams.get("page"))
+          : undefined,
+      },
+    ],
     queryFn: () =>
-      getUserCategoriesWithTransactions(searchParams.get("name") ?? undefined),
+      getUserCategoriesWithTransactions({
+        name: searchParams.get("name") ?? undefined,
+        page: Number(searchParams.get("page"))
+          ? Number(searchParams.get("page"))
+          : undefined,
+      }),
   });
 
   if (isLoading) {
@@ -35,7 +46,10 @@ const CategoriesClient = () => {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  if (!categories?.length && !searchParams.get("name"))
+  const categories = data?.data ?? [];
+  const totalPages = data?.totalPages ?? 1;
+
+  if (!categories.length && !searchParams.get("name"))
     return <NoCategoriesMessage />;
 
   return (
@@ -58,6 +72,11 @@ const CategoriesClient = () => {
         </div>
       ) : (
         <NoSearchResults searchQuery={searchParams.get("name") ?? ""} />
+      )}
+      {totalPages > 1 && (
+        <div className="mt-12">
+          <Pagination totalPages={totalPages} />
+        </div>
       )}
     </>
   );
