@@ -14,7 +14,9 @@ const PlaidLink = () => {
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(async (publicToken) => {
     try {
+      toast.info("Wait for a moment, we are syncing your data...");
       await exchangePublicToken(publicToken);
+      toast.success("Data synced successfully");
 
       queryClient.invalidateQueries({ queryKey: ["banks", "list"] });
     } catch (error) {

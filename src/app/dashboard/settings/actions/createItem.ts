@@ -33,8 +33,12 @@ export const createItem = async ({
         url,
         bankName: institutionName,
       })
-      .onConflictDoNothing({
+      .onConflictDoUpdate({
         target: [plaidItems.institutionId],
+        set: {
+          itemId,
+          accessToken,
+        },
       });
   } catch (error) {
     console.log("Error creating item", error);

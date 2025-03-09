@@ -6,7 +6,6 @@ import { qstashClient } from "@/lib/qstash";
 export const addTransactions = async (
   transactionsValues: CreateTransactionProps[]
 ) => {
-  console.log("transactionsValues: ", transactionsValues);
   try {
     const result = await db
       .insert(transactions)
