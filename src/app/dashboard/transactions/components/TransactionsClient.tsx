@@ -9,11 +9,7 @@ import { useSearchParams } from "next/navigation";
 const TransactionsClient = () => {
   const searchParams = useSearchParams();
 
-  const {
-    data: transactions,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: [
       "transactions",
       "list",
@@ -24,6 +20,12 @@ const TransactionsClient = () => {
         categories: searchParams.get("categories") ?? null,
         type: searchParams.get("type") ?? null,
         date: searchParams.get("date") ?? null,
+        page: searchParams.get("page")
+          ? parseInt(searchParams.get("page")!)
+          : undefined,
+        perPage: searchParams.get("perPage")
+          ? parseInt(searchParams.get("perPage")!)
+          : undefined,
       },
     ],
     queryFn: () =>
@@ -35,6 +37,12 @@ const TransactionsClient = () => {
         type:
           (searchParams.get("type") as "all" | "income" | "expense") ?? null,
         date: searchParams.get("date") ?? null,
+        page: searchParams.get("page")
+          ? parseInt(searchParams.get("page")!)
+          : undefined,
+        perPage: searchParams.get("perPage")
+          ? parseInt(searchParams.get("perPage")!)
+          : undefined,
       }),
   });
 
@@ -43,8 +51,9 @@ const TransactionsClient = () => {
   return (
     <TransactionsTable
       columns={columns}
-      data={transactions ?? []}
+      data={data?.data ?? []}
       isLoading={isLoading}
+      totalPages={data?.totalPages ?? 0}
     />
   );
 };

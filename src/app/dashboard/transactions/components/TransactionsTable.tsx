@@ -13,7 +13,6 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 
-import Search from "@/components/Search";
 import {
   Table,
   TableBody,
@@ -22,7 +21,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useQueryParams } from "@/hooks/useQueryParams";
+import { useEffect, useState } from "react";
 import CategoriesFilter from "./CategoriesFilter";
 import { Transaction } from "./Columns";
 import ColumnsDropdown from "./ColumnsDropdown";
@@ -37,17 +37,34 @@ interface TransactionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isLoading: boolean;
+  totalPages: number;
 }
 
 export function TransactionsTable<TData, TValue>({
   columns,
   data,
   isLoading,
+  totalPages,
 }: TransactionsTableProps<TData, TValue>) {
+  const { setQueryParams, queryParams } = useQueryParams<{
+    page: string;
+    perPage: string;
+  }>();
+
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [pagination, setPagination] = useState(() => {
+    return {
+      pageIndex: queryParams.get("page")
+        ? parseInt(queryParams.get("page")!)
+        : 0,
+      pageSize: queryParams.get("perPage")
+        ? parseInt(queryParams.get("perPage")!)
+        : 10,
+    };
+  });
 
   const table = useReactTable({
     data,
@@ -60,12 +77,16 @@ export function TransactionsTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination,
     },
+    manualPagination: true,
+    pageCount: totalPages,
   });
 
   const selectedRows = table.getFilteredSelectedRowModel().rows;
@@ -73,6 +94,13 @@ export function TransactionsTable<TData, TValue>({
   const handleDelete = () => {
     table.toggleAllRowsSelected(false);
   };
+
+  useEffect(() => {
+    setQueryParams({
+      page: pagination.pageIndex.toString(),
+      perPage: pagination.pageSize.toString(),
+    });
+  }, [pagination]);
 
   return (
     <div>

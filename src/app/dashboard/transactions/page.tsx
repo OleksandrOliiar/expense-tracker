@@ -10,6 +10,8 @@ type TransactionsProps = {
     categories?: string;
     type?: "income" | "expense" | "all";
     date?: string;
+    page?: string;
+    perPage?: string;
   };
 };
 
@@ -30,6 +32,8 @@ const Transactions = ({ searchParams }: TransactionsProps) => {
         categories={searchParams.categories}
         type={searchParams.type}
         date={searchParams.date}
+        page={searchParams.page}
+        perPage={searchParams.perPage}
       />
     </div>
   );

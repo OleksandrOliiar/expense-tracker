@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { categories, transactions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { eq, gte, ilike, inArray, lte } from "drizzle-orm";
+import { asc, count, desc, eq, gte, ilike, inArray, lte } from "drizzle-orm";
 
 type GetUserTransactionsProps = {
   name: string | null;
@@ -12,6 +12,10 @@ type GetUserTransactionsProps = {
   categories: string | null;
   type: "all" | "income" | "expense" | null;
   date: string | null;
+  page?: number;
+  perPage?: number;
+  sortField?: "date" | "amount" | "name";
+  sortOrder?: "asc" | "desc";
 };
 
 export const getUserTransactions = async ({
@@ -21,6 +25,10 @@ export const getUserTransactions = async ({
   categories: categoriesString,
   type,
   date,
+  page = 0,
+  perPage = 10,
+  sortField,
+  sortOrder,
 }: GetUserTransactionsProps) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
@@ -77,9 +85,21 @@ export const getUserTransactions = async ({
       query.where(eq(transactions.date, new Date(date)));
     }
 
-    const result = await query;
+    if (sortField && sortOrder) {
+      const orderFn = sortOrder === "asc" ? asc : desc;
+      query.orderBy(orderFn(transactions[sortField]));
+    }
 
-    return result;
+    query.limit(perPage).offset((page) * perPage);
+
+    const transactionsCount = db.select({ count: count() }).from(transactions);
+
+    const [data, total] = await Promise.all([query, transactionsCount]);
+
+    return {
+      data,
+      totalPages: Math.ceil(total[0].count / perPage),
+    };
   } catch (error) {
     console.error(error);
     throw new Error("Failed to get user transactions");

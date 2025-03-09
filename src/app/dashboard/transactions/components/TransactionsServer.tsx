@@ -13,6 +13,8 @@ type TransactionsServerProps = {
   categories?: string;
   type?: "income" | "expense" | "all";
   date?: string;
+  page?: string;
+  perPage?: string;
 };
 
 const TransactionsServer = async ({
@@ -22,6 +24,8 @@ const TransactionsServer = async ({
   categories,
   type,
   date,
+  page,
+  perPage,
 }: TransactionsServerProps) => {
   const queryClient = new QueryClient();
 
@@ -36,6 +40,8 @@ const TransactionsServer = async ({
         categories: categories ?? null,
         type: type ?? null,
         date: date ?? null,
+        page: page ? parseInt(page) : undefined,
+        perPage: perPage ? parseInt(perPage) : undefined,
       },
     ],
     queryFn: () =>
@@ -46,6 +52,8 @@ const TransactionsServer = async ({
         categories: categories ?? null,
         type: type ?? null,
         date: date ?? null,
+        page: page ? parseInt(page) : undefined,
+        perPage: perPage ? parseInt(perPage) : undefined,
       }),
   });
 
