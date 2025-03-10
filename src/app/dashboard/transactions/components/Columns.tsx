@@ -94,7 +94,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
       if (category.icon && category.icon.includes("https")) {
         return (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Image
               src={category.icon}
               alt={category.name}

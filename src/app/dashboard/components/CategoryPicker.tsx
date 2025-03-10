@@ -20,6 +20,7 @@ import AddCategoryDialog from "../transactions/components/AddCategoryDialog";
 import { useQuery } from "@tanstack/react-query";
 import { getUserCategoriesWithTransactions } from "../actions/getUserCategories";
 import Image from "next/image";
+import { getPickerCategories } from "../actions/getPickerCategories";
 
 export interface CategoryPickerProps<Multiple extends boolean = false> {
   /** Currently selected value */
@@ -56,17 +57,17 @@ export default function CategoryPicker<Multiple extends boolean = false>({
 
   const { data, isLoading, error } = useQuery({
     queryKey: [
-      "categories",
-      "list",
-      { name: debouncedSearchTerm ?? undefined },
+      "categories-picker",
+      debouncedSearchTerm ? debouncedSearchTerm : undefined,
     ],
     queryFn: () =>
-      getUserCategoriesWithTransactions({
-        name: debouncedSearchTerm ?? undefined,
-      }),
-  });
+      getPickerCategories(
+        debouncedSearchTerm ? debouncedSearchTerm : undefined
+      ),
+    enabled: open,
+    });
 
-  const categoriesList = data?.data ?? [];
+  const categoriesList = data ?? [];
 
   useEffect(() => {
     if (multiple) {
