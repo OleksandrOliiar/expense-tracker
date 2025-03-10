@@ -8,11 +8,13 @@ import PricingItem from "./PricingItem";
 type PricingClientProps = {
   products: Product[];
   currentSubscriptionId: string | null;
+  stripeCustomerId: string | null;
 };
 
 const PricingClient = ({
   products,
   currentSubscriptionId,
+  stripeCustomerId,
 }: PricingClientProps) => {
   const [isYearly, setIsYearly] = useState(false);
 
@@ -75,6 +77,7 @@ const PricingClient = ({
                 isCurrent={plan.priceId === currentSubscriptionId}
                 plan={plan}
                 hasPlan={!!currentSubscriptionId}
+                stripeCustomerId={stripeCustomerId}
               />
             ))}
           </div>

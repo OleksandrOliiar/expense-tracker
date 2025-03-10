@@ -6,11 +6,6 @@ import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-const subscriptionsMap = {
-  [process.env.STRIPE_PRO_SUBSCRIPTION_ID!]: "PRO",
-  [process.env.STRIPE_PLUS_SUBSCRIPTION_ID!]: "PLUS",
-};
-
 export const getUserSubscription = async () => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
@@ -46,6 +41,7 @@ export const getUserSubscription = async () => {
     return {
       stripePriceId: subscription.stripePriceId,
       stripeProductId: subscription.stripeProductId,
+      stripeCustomerId: subscription.stripeCustomerId,
     };
   } catch (error) {
     console.error(error);

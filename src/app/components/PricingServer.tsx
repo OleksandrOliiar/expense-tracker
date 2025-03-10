@@ -8,12 +8,14 @@ const PricingServer = async () => {
   const { isAuthenticated } = getKindeServerSession();
 
   let currentSubscriptionId = null;
+  let stripeCustomerId = null;
 
   if (await isAuthenticated()) {
     const subscription = await getUserSubscription();
 
     if (subscription) {
       currentSubscriptionId = subscription.stripePriceId;
+      stripeCustomerId = subscription.stripeCustomerId;
     }
   }
 
@@ -21,6 +23,7 @@ const PricingServer = async () => {
     <PricingClient
       products={products}
       currentSubscriptionId={currentSubscriptionId}
+      stripeCustomerId={stripeCustomerId}
     />
   );
 };

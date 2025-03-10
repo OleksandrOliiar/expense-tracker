@@ -1,4 +1,5 @@
 import { createCheckoutUrl } from "@/actions/createCheckoutUrl";
+import { createPortalUrl } from "@/actions/createPortalUrl";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,9 +21,15 @@ interface PricingItemProps {
   plan: Product;
   isCurrent: boolean;
   hasPlan: boolean;
+  stripeCustomerId: string | null;
 }
 
-const PricingItem = ({ plan, isCurrent, hasPlan }: PricingItemProps) => {
+const PricingItem = ({
+  plan,
+  isCurrent,
+  hasPlan,
+  stripeCustomerId,
+}: PricingItemProps) => {
   const router = useRouter();
   const { isAuthenticated } = useKindeAuth();
   const [isPending, startTransition] = useTransition();
@@ -33,6 +40,22 @@ const PricingItem = ({ plan, isCurrent, hasPlan }: PricingItemProps) => {
     startTransition(async () => {
       if (!isAuthenticated) {
         router.push("/api/auth/login");
+        return;
+      }
+
+      if (isFree) {
+        return;
+      }
+
+      if (hasPlan && stripeCustomerId) {
+        const { success, data } = await createPortalUrl(stripeCustomerId);
+
+        if (!success || !data) {
+          toast.error("Failed to create portal url");
+          return;
+        }
+
+        window.location.assign(data);
         return;
       }
 
@@ -55,7 +78,7 @@ const PricingItem = ({ plan, isCurrent, hasPlan }: PricingItemProps) => {
         <ArrowRight className="ml-2 size-4" />
       </Button>
     );
-  } 
+  }
 
   return (
     <Card
@@ -68,9 +91,11 @@ const PricingItem = ({ plan, isCurrent, hasPlan }: PricingItemProps) => {
           Current Plan
         </div>
       )}
-      <CardHeader className={cn({
-        "pt-6": isCurrent,
-      })}>
+      <CardHeader
+        className={cn({
+          "pt-6": isCurrent,
+        })}
+      >
         <CardTitle className="mb-1">
           <p>{plan.name}</p>
         </CardTitle>
