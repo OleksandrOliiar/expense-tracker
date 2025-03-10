@@ -1,10 +1,28 @@
 import { getProducts } from "@/actions/getProducts";
 import PricingClient from "./PricingClient";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { getUserSubscription } from "@/lib/stripe";
 
 const PricingServer = async () => {
   const products = await getProducts();
+  const { isAuthenticated } = getKindeServerSession();
 
-  return <PricingClient products={products} />;
-}
+  let currentSubscriptionId = null;
 
-export default PricingServer
+  if (await isAuthenticated()) {
+    const subscription = await getUserSubscription();
+
+    if (subscription) {
+      currentSubscriptionId = subscription.stripePriceId;
+    }
+  }
+
+  return (
+    <PricingClient
+      products={products}
+      currentSubscriptionId={currentSubscriptionId}
+    />
+  );
+};
+
+export default PricingServer;

@@ -17,7 +17,7 @@ export const getProducts = async () => {
     let products: Product[] = [];
 
     for (const price of data) {
-      if (isStripeProduct(price.product)) {
+      if (isStripeProduct(price.product) && price.product.active) {
         products.push({
           priceId: price.id,
           name: price.product.name,

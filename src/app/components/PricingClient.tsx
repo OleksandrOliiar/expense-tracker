@@ -7,24 +7,48 @@ import PricingItem from "./PricingItem";
 
 type PricingClientProps = {
   products: Product[];
+  currentSubscriptionId: string | null;
 };
 
-const PricingClient = ({ products }: PricingClientProps) => {
+const PricingClient = ({
+  products,
+  currentSubscriptionId,
+}: PricingClientProps) => {
   const [isYearly, setIsYearly] = useState(false);
 
-  const filteredProducts = useMemo(
-    () =>
-      products
-        .filter((product) => {
-          if (isYearly) {
-            return product.interval === "year";
-          }
+  const filteredProducts = useMemo(() => {
+    const result = products
+      .filter((product) => {
+        if (isYearly) {
+          return product.interval === "year";
+        }
 
-          return product.interval === "month";
-        })
-        .sort((a, b) => (a.unitAmount ?? 0) - (b.unitAmount ?? 0)),
-    [isYearly, products]
-  );
+        return product.interval === "month";
+      })
+      .sort((a, b) => (a.unitAmount ?? 0) - (b.unitAmount ?? 0));
+
+    result.unshift({
+      currency: "usd",
+      description: "Ideal for casual users to track basic finances at no cost",
+      interval: isYearly ? "year" : "month",
+      name: "Free Tier",
+      priceId: "free",
+      unitAmount: 0,
+      marketingFeatures: [
+        {
+          name: "Limited number of budgets",
+        },
+        {
+          name: "Limited number of goals",
+        },
+        {
+          name: "Manual transaction entry only",
+        },
+      ],
+    });
+
+    return result;
+  }, [isYearly, products]);
 
   return (
     <section className="py-32">
@@ -46,7 +70,12 @@ const PricingClient = ({ products }: PricingClientProps) => {
           </div>
           <div className="flex flex-col items-stretch gap-6 md:flex-row">
             {filteredProducts.map((plan, index) => (
-              <PricingItem key={index} plan={plan} />
+              <PricingItem
+                key={index}
+                isCurrent={plan.priceId === currentSubscriptionId}
+                plan={plan}
+                hasPlan={!!currentSubscriptionId}
+              />
             ))}
           </div>
         </div>

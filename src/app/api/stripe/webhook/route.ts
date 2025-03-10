@@ -48,9 +48,11 @@ export const POST = async (request: NextRequest) => {
 
         await createSubscription({
           stripeSubscriptionId: createdSubscription.id,
+          // @ts-ignore
           stripeProductId: createdSubscription.plan.product as string,
           stripeCustomerId: createdSubscription.customer as string,
           status: createdSubscription.status,
+          stripePriceId: createdSubscription.items.data[0].price.id,
         });
 
         break;
@@ -59,9 +61,11 @@ export const POST = async (request: NextRequest) => {
 
         await updateSubscription({
           stripeSubscriptionId: updatedSubscription.id,
+          // @ts-ignore
           stripeProductId: updatedSubscription.plan.product as string,
           stripeCustomerId: updatedSubscription.customer as string,
           status: updatedSubscription.status,
+          stripePriceId: updatedSubscription.items.data[0].price.id,
         });
 
         break;

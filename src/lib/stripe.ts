@@ -39,11 +39,14 @@ export const getUserSubscription = async () => {
       where: eq(subscriptions.stripeCustomerId, stripeCustomerId),
     });
 
-    if (!subscription || subscription.status !== "active") {
+    if (!subscription) {
       return null;
     }
 
-    return subscriptionsMap[subscription.stripeProductId];
+    return {
+      stripePriceId: subscription.stripePriceId,
+      stripeProductId: subscription.stripeProductId,
+    };
   } catch (error) {
     console.error(error);
     throw new Error("Failed to get user subscription");

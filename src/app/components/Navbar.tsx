@@ -27,6 +27,7 @@ import {
 import Image from "next/image";
 import Authentication from "./Authentication";
 import ModeToggler from "./ModeToggler";
+import Link from "next/link";
 
 const subMenuItemsOne = [
   {
@@ -82,7 +83,9 @@ const Navbar1 = () => {
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <span className="text-lg font-semibold">Finance Tracker</span>
+              <Link href="/" className="text-lg font-semibold">
+                Finance Tracker
+              </Link>
             </div>
             <div className="flex items-center">
               <a

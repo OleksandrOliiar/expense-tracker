@@ -39,6 +39,7 @@ export const subscriptions = pgTable("subscriptions", {
   stripeSubscriptionId: text("stripe_subscription_id").notNull().unique(),
   stripeProductId: text("stripe_product_id").notNull(),
   stripeCustomerId: text("stripe_customer_id").notNull().unique(),
+  stripePriceId: text("stripe_price_id").notNull(),
   status: subscriptionStatus("status").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
