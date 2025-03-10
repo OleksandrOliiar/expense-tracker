@@ -1,5 +1,4 @@
-import { syncTransactions } from "@/app/dashboard/settings/actions/syncTransactions";
-import { qstashClient } from "@/lib/qstash";
+import { syncData } from "@/app/dashboard/settings/actions/syncData";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -14,7 +13,7 @@ export async function POST(request: NextRequest) {
       case "TRANSACTIONS":
         switch (code) {
           case "SYNC_UPDATES_AVAILABLE":
-            await syncTransactions(item_id);
+            await syncData(item_id);
             break;
           default:
             break;

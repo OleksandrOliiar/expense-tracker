@@ -18,7 +18,6 @@ import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddCategoryDialog from "../transactions/components/AddCategoryDialog";
 import { useQuery } from "@tanstack/react-query";
-import { getUserCategoriesWithTransactions } from "../actions/getUserCategories";
 import Image from "next/image";
 import { getPickerCategories } from "../actions/getPickerCategories";
 
@@ -133,7 +132,7 @@ export default function CategoryPicker<Multiple extends boolean = false>({
           <ChevronsUpDown className="opacity-50" size={10} />
         </Button>
       </PopoverTrigger>
-      <PopoverContentModal className="p-0 max-w-[250px]">
+      <PopoverContentModal className="p-0 max-w-[275px]">
         <Command shouldFilter={false}>
           <div className="relative border-b w-full">
             <CommandInput

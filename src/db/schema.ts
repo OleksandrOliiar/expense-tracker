@@ -94,6 +94,8 @@ export const plaidAccounts = pgTable("plaid_accounts", {
     onDelete: "cascade",
   }),
   name: text("name").notNull(),
+  type: text("type").notNull(),
+  plaidId: text("plaid_id").unique().notNull(),
 });
 
 export const plaidAccountsRelations = relations(plaidAccounts, ({ one }) => ({

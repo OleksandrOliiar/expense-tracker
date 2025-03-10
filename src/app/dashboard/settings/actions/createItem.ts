@@ -21,7 +21,7 @@ export const createItem = async ({
   institutionName,
 }: CreateItemProps) => {
   try {
-    await db
+    const result =await db
       .insert(plaidItems)
       .values({
         id: crypto.randomUUID(),
@@ -39,7 +39,9 @@ export const createItem = async ({
           itemId,
           accessToken,
         },
-      });
+      }).returning();
+
+    return result[0].id;
   } catch (error) {
     console.log("Error creating item", error);
     throw error;

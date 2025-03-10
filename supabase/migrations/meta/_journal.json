@@ -183,6 +183,13 @@
       "when": 1741463256279,
       "tag": "0025_closed_arachne",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1741607570790,
+      "tag": "0026_glossy_ares",
+      "breakpoints": true
     }
   ]
 }

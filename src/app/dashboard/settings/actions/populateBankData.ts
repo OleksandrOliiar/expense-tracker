@@ -37,7 +37,7 @@ export const populateBankData = async ({
     const logo = institutionResponse.data.institution.logo;
     const url = institutionResponse.data.institution.url;
 
-    await createItem({
+    const resultItemId = await createItem({
       itemId,
       institutionName,
       logo,
@@ -46,6 +46,8 @@ export const populateBankData = async ({
       accessToken,
       userId,
     });
+
+    return resultItemId;
   } catch (error) {
     console.log("Error populating bank data", error);
     throw error;
