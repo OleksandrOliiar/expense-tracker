@@ -46,13 +46,30 @@ export const POST = async (request: NextRequest) => {
       case "customer.subscription.created":
         const createdSubscription = data.object as Stripe.Subscription;
 
+        const priceData = createdSubscription.items.data[0].price;
+        const productId = priceData.product as string;
+
+        const product = await stripe.products.retrieve(productId);
+
         await createSubscription({
           stripeSubscriptionId: createdSubscription.id,
-          // @ts-ignore
-          stripeProductId: createdSubscription.plan.product as string,
+          stripeProductId: productId,
           stripeCustomerId: createdSubscription.customer as string,
           status: createdSubscription.status,
-          stripePriceId: createdSubscription.items.data[0].price.id,
+          stripePriceId: priceData.id,
+          productName: product.name,
+          priceAmount: priceData.unit_amount
+            ? (priceData.unit_amount / 100).toString()
+            : null,
+          currency: priceData.currency,
+          interval: priceData.recurring?.interval || null,
+          currentPeriodStart: new Date(
+            createdSubscription.current_period_start * 1000
+          ),
+          currentPeriodEnd: new Date(
+            createdSubscription.current_period_end * 1000
+          ),
+          cancelAtPeriodEnd: createdSubscription.cancel_at_period_end,
         });
 
         break;
@@ -64,13 +81,30 @@ export const POST = async (request: NextRequest) => {
           break;
         }
 
+        const updatedPriceData = updatedSubscription.items.data[0].price;
+        const updatedProductId = updatedPriceData.product as string;
+
+        const updatedProduct = await stripe.products.retrieve(updatedProductId);
+
         await updateSubscription({
           stripeSubscriptionId: updatedSubscription.id,
-          // @ts-ignore
-          stripeProductId: updatedSubscription.plan.product as string,
+          stripeProductId: updatedProductId,
           stripeCustomerId: updatedSubscription.customer as string,
           status: updatedSubscription.status,
-          stripePriceId: updatedSubscription.items.data[0].price.id,
+          stripePriceId: updatedPriceData.id,
+          productName: updatedProduct.name,
+          priceAmount: updatedPriceData.unit_amount
+            ? (updatedPriceData.unit_amount / 100).toString()
+            : null,
+          currency: updatedPriceData.currency,
+          interval: updatedPriceData.recurring?.interval || null,
+          currentPeriodStart: new Date(
+            updatedSubscription.current_period_start * 1000
+          ),
+          currentPeriodEnd: new Date(
+            updatedSubscription.current_period_end * 1000
+          ),
+          cancelAtPeriodEnd: updatedSubscription.cancel_at_period_end,
         });
 
         break;
