@@ -3,19 +3,28 @@ import { toast } from "sonner";
 import { createGoal } from "../actions/createGoal";
 import { CreateGoalSchema } from "../validations/createGoalSchema";
 import GoalForm from "./GoalForm";
+import { useDialogs } from "../../store/dialogs";
 
 type CreateGoalFormProps = {
   onSheetClose: () => void;
 };
 
-const CreateGoalForm = ({
-  onSheetClose,
-}: CreateGoalFormProps) => {
+const CreateGoalForm = ({ onSheetClose }: CreateGoalFormProps) => {
   const queryClient = useQueryClient();
+  const { setSubscribeDialogOpen } = useDialogs();
 
   const { mutateAsync: createGoalMutation, isPending } = useMutation({
     mutationFn: createGoal,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if ("error" in result) {
+        if (result.error === "LIMIT_REACHED") {
+          setSubscribeDialogOpen(true);
+        } else {
+          toast.error(result.message || "Failed to add goal");
+        }
+        return;
+      }
+
       onSheetClose();
       toast.success("Goal added successfully");
     },
@@ -33,13 +42,7 @@ const CreateGoalForm = ({
     await createGoalMutation(data);
   };
 
-  return (
-    <GoalForm
-      onSubmit={handleSubmit}
-      isPending={isPending}
-      defaultValues={{}}
-    />
-  );
+  return <GoalForm onSubmit={handleSubmit} isPending={isPending} />;
 };
 
-export default CreateGoalForm; 
+export default CreateGoalForm;

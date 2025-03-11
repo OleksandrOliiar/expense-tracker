@@ -5,7 +5,11 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export const createCheckoutUrl = async (priceId: string) => {
+export const createCheckoutUrl = async (
+  priceId: string,
+  successUrl?: string,
+  cancelUrl?: string
+) => {
   try {
     const { isAuthenticated, getUser } = getKindeServerSession();
 
@@ -29,8 +33,8 @@ export const createCheckoutUrl = async (priceId: string) => {
       metadata: {
         userId: user.id,
       },
-      success_url: `${origin}/`,
-      cancel_url: `${origin}/`,
+      success_url: successUrl ?? `${origin}/`,
+      cancel_url: cancelUrl ?? `${origin}/`,
       line_items: [
         {
           price: priceId,

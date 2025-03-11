@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { CreateBudgetSchema } from "../validations/createBudgetSchema";
 import BudgetForm from "./BudgetForm";
 import { createBudget } from "../actions/createBudget";
+import { useDialogs } from "../../store/dialogs";
 
 type CreateBudgetFormProps = {
   onSheetClose: () => void;
@@ -10,14 +11,25 @@ type CreateBudgetFormProps = {
 
 const CreateBudgetForm = ({ onSheetClose }: CreateBudgetFormProps) => {
   const queryClient = useQueryClient();
+  const { setSubscribeDialogOpen } = useDialogs();
 
   const { mutateAsync: createBudgetMutation, isPending } = useMutation({
     mutationFn: createBudget,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if ("error" in result) {
+        if (result.error === "LIMIT_REACHED") {
+          setSubscribeDialogOpen(true);
+        } else {
+          toast.error(result.message || "Failed to add budget");
+        }
+        return;
+      }
+
       onSheetClose();
       toast.success("Budget added successfully");
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Budget creation error:", error);
       toast.error("Failed to add budget");
     },
     onSettled: () => {

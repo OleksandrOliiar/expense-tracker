@@ -12,6 +12,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const sidebarItems = [
   {
@@ -41,6 +43,7 @@ const sidebarItems = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent className="pt-[76px]">
@@ -48,7 +51,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             {sidebarItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    pathname.endsWith(item.url) && "bg-muted"
+                  )}
+                >
                   <Link href={item.url}>{item.title}</Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

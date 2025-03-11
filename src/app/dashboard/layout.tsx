@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/sidebar";
 import PusherMessages from "./components/PusherMessages";
 import BeamsNotifications from "./components/BeamsNotifications";
+import Dialogs from "./components/Dialogs";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -23,6 +24,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       </SidebarProvider>
       <PusherMessages />
       <BeamsNotifications />
+      <Dialogs />
     </>
   );
 };

@@ -71,10 +71,14 @@ const PricingItem = ({
   };
 
   let button = null;
-  if (!isFree && !isCurrent) {
+  if (!isFree) {
     button = (
       <Button className="w-full" onClick={handleClick} disabled={isPending}>
-        {isAuthenticated ? (hasPlan ? "Change plan" : "Manage") : "Continue"}
+        {isAuthenticated
+          ? hasPlan
+            ? "Manage subscription"
+            : "Continue"
+          : "Continue"}
         <ArrowRight className="ml-2 size-4" />
       </Button>
     );
@@ -122,15 +126,7 @@ const PricingItem = ({
           ))}
         </ul>
       </CardContent>
-      <CardFooter className="mt-auto">
-        {isCurrent ? (
-          <div className="w-full rounded-md bg-primary/10 p-2 text-center text-sm font-medium text-primary">
-            Active Subscription
-          </div>
-        ) : (
-          button
-        )}
-      </CardFooter>
+      <CardFooter className="mt-auto">{button}</CardFooter>
     </Card>
   );
 };

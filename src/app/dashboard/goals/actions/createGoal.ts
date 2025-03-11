@@ -9,6 +9,8 @@ import {
 import { goals } from "@/db/schema";
 import { db } from "@/db";
 import { calculateCurrentAmount } from "./calculateCurrentAmount";
+import { getUserSubscription } from "@/lib/stripe";
+import { count, eq } from "drizzle-orm";
 
 export const createGoal = async (data: CreateGoalSchema) => {
   const result = createGoalSchema.safeParse(data);
@@ -25,6 +27,20 @@ export const createGoal = async (data: CreateGoalSchema) => {
     }
 
     const user = await getUser();
+
+    const subscription = await getUserSubscription();
+
+    const goalsCount = await db
+      .select({ count: count() })
+      .from(goals)
+      .where(eq(goals.userId, user.id));
+
+    if (goalsCount[0].count >= 3 && !subscription) {
+      return {
+        error: "LIMIT_REACHED",
+        message: "You have reached the limit of 3 goals",
+      };
+    }
 
     const currentAmount = await calculateCurrentAmount({
       startDate: result.data.startDate,
@@ -49,6 +65,6 @@ export const createGoal = async (data: CreateGoalSchema) => {
     return goal;
   } catch (error) {
     console.log("Error creating goal", error);
-    throw error;
+    return { error: "UNKNOWN_ERROR", message: "Failed to create goal" };
   }
 };

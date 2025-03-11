@@ -1,10 +1,15 @@
 import { db } from "@/db";
 import { accounts, subscriptions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+const subscriptionsMap = {
+  [process.env.STRIPE_PRO_SUBSCRIPTION_ID!]: "PRO",
+  [process.env.STRIPE_PLUS_SUBSCRIPTION_ID!]: "PLUS",
+};
 
 export const getUserSubscription = async () => {
   try {
@@ -26,12 +31,11 @@ export const getUserSubscription = async () => {
 
     const { stripeCustomerId } = user;
 
-    if (!stripeCustomerId) {
-      throw new Error("Stripe customer ID not found");
-    }
-
     const subscription = await db.query.subscriptions.findFirst({
-      where: eq(subscriptions.stripeCustomerId, stripeCustomerId),
+      where: and(
+        eq(subscriptions.stripeCustomerId, stripeCustomerId ?? ""),
+        eq(subscriptions.status, "active")
+      ),
     });
 
     if (!subscription) {
@@ -42,6 +46,7 @@ export const getUserSubscription = async () => {
       stripePriceId: subscription.stripePriceId,
       stripeProductId: subscription.stripeProductId,
       stripeCustomerId: subscription.stripeCustomerId,
+      subscriptionType: subscriptionsMap[subscription.stripePriceId],
     };
   } catch (error) {
     console.error(error);

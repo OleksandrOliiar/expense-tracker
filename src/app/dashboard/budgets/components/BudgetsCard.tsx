@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { PieChart } from "lucide-react";
 import { UserBudget } from "../actions/getUserBudgets";
 import BudgetMenu from "./BudgetMenu";
+import Image from "next/image";
 
 type BudgetsCardProps = {
   budget: UserBudget;
@@ -31,6 +32,22 @@ const BudgetsCard = ({ budget }: BudgetsCardProps) => {
   const startDate = budget.startDate ? new Date(budget.startDate) : null;
   const endDate = budget.endDate ? new Date(budget.endDate) : null;
 
+  let icon;
+  if (budget.category?.icon) {
+    if (budget.category.icon.includes("https")) {
+      icon = (
+        <Image
+          src={budget.category.icon}
+          alt={budget.category.name}
+          height={16}
+          width={16}
+        />
+      );
+    } else {
+      icon = <span>{budget.category.icon}</span>;
+    }
+  }
+
   return (
     <Card className="w-full overflow-hidden ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -46,7 +63,7 @@ const BudgetsCard = ({ budget }: BudgetsCardProps) => {
         {/* Display category if it exists */}
         {budget.category?.name && (
           <div className="inline-flex gap-2 items-center rounded-full bg-muted px-3 py-1 text-xs font-medium">
-            <span>{budget.category.icon}</span>
+            <span>{icon}</span>
             <span> {budget.category.name}</span>
           </div>
         )}

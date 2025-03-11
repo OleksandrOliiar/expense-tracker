@@ -1,16 +1,25 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { generateLinkToken } from "../actions/generateLinkToken";
 import { toast } from "sonner";
 import { usePlaidLink, PlaidLinkOnSuccess } from "react-plaid-link";
 import { Button } from "@/components/ui/button";
 import { exchangePublicToken } from "../actions/exchangePublicToken";
 import { useQueryClient } from "@tanstack/react-query";
+import { checkSubscription } from "../actions/checkSubscription";
+import {
+  selectSetChangePlanDialogOpen,
+  selectSetSubscribeDialogOpen,
+  useDialogs,
+} from "../../store/dialogs";
 
 const PlaidLink = () => {
   const queryClient = useQueryClient();
   const [token, setToken] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const setChangePlanDialogOpen = useDialogs(selectSetChangePlanDialogOpen);
+  const setSubscribeDialogOpen = useDialogs(selectSetSubscribeDialogOpen);
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(async (publicToken) => {
     try {
@@ -29,6 +38,28 @@ const PlaidLink = () => {
     onSuccess,
   });
 
+  const handleOpen = () => {
+    startTransition(async () => {
+      try {
+        const { data, error } = await checkSubscription();
+
+        if (error === "LIMIT_REACHED") {
+          setChangePlanDialogOpen(true);
+          return;
+        } else if (error === "SUBSCRIPTION_REQUIRED") {
+          setSubscribeDialogOpen(true);
+          return;
+        }
+
+        if (data) {
+          open();
+        }
+      } catch (error) {
+        toast.error("Error opening Plaid link");
+      }
+    });
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -41,8 +72,8 @@ const PlaidLink = () => {
   }, []);
 
   return (
-    <Button onClick={() => open()} disabled={!ready}>
-      {ready ? "Connect Bank" : "Loading..."}
+    <Button onClick={handleOpen} disabled={!ready || isPending}>
+      {ready && !isPending ? "Connect Bank" : "Loading..."}
     </Button>
   );
 };

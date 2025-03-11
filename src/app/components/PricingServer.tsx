@@ -2,9 +2,16 @@ import { getProducts } from "@/actions/getProducts";
 import PricingClient from "./PricingClient";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { getUserSubscription } from "@/lib/stripe";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
 const PricingServer = async () => {
-  const products = await getProducts();
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["products", "list"],
+    queryFn: () => getProducts(),
+  });
+
   const { isAuthenticated } = getKindeServerSession();
 
   let currentSubscriptionId = null;
@@ -20,11 +27,12 @@ const PricingServer = async () => {
   }
 
   return (
-    <PricingClient
-      products={products}
-      currentSubscriptionId={currentSubscriptionId}
-      stripeCustomerId={stripeCustomerId}
-    />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PricingClient
+        currentSubscriptionId={currentSubscriptionId}
+        stripeCustomerId={stripeCustomerId}
+      />
+    </HydrationBoundary>
   );
 };
 

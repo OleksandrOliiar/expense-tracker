@@ -20,6 +20,7 @@ export const getProducts = async () => {
       if (isStripeProduct(price.product) && price.product.active) {
         products.push({
           priceId: price.id,
+          productId: price.product.id,
           name: price.product.name,
           description: price.product.description,
           unitAmount: price.unit_amount,

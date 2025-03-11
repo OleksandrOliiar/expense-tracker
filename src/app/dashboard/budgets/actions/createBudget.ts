@@ -1,13 +1,15 @@
 "use server";
 
+import { db } from "@/db";
+import { budgets } from "@/db/schema";
+import { getUserSubscription } from "@/lib/stripe";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import {
   createBudgetSchema,
   CreateBudgetSchema,
 } from "../validations/createBudgetSchema";
-import { db } from "@/db";
-import { budgets } from "@/db/schema";
 import { calculateCurrentAmount } from "./calculateCurrentAmount";
+import { count, eq } from "drizzle-orm";
 
 export const createBudget = async (data: CreateBudgetSchema) => {
   const result = createBudgetSchema.safeParse(data);
@@ -24,6 +26,20 @@ export const createBudget = async (data: CreateBudgetSchema) => {
     }
 
     const user = await getUser();
+
+    const subscription = await getUserSubscription();
+
+    const budgetsCount = await db
+      .select({ count: count() })
+      .from(budgets)
+      .where(eq(budgets.userId, user.id));
+
+    if (budgetsCount[0].count >= 3 && !subscription) {
+      return {
+        error: "LIMIT_REACHED",
+        message: "You have reached the limit of 3 budgets",
+      };
+    }
 
     const currentAmount = await calculateCurrentAmount({
       startDate: result.data.startDate,
@@ -47,9 +63,10 @@ export const createBudget = async (data: CreateBudgetSchema) => {
       })
       .returning();
 
-    return budget;
+    return { data: budget };
   } catch (error) {
     console.log("Error creating budget", error);
-    throw error;
+
+    return { error: "UNKNOWN_ERROR", message: "Failed to create budget" };
   }
 };
