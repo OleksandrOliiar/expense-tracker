@@ -20,7 +20,7 @@ export const checkSubscription = async () => {
 
     if (
       subscription.stripeProductId ===
-      process.env.NEXT_PUBLIC_STRIPE_PLUS_SUBSCRIPTION_ID
+      process.env.STRIPE_PLUS_SUBSCRIPTION_ID
     ) {
       const { getUser } = getKindeServerSession();
 

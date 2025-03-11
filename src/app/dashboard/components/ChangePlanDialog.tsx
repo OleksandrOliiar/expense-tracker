@@ -1,23 +1,21 @@
 "use client";
 
-import { getPortalUrl } from "@/actions/getPortalUrl";
+import { Button } from "@/components/ui/button";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
-import { CheckCircle2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/actions/getProducts";
+import { CheckCircle2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Skeleton } from "@/components/ui/skeleton";
+import { getProPlans } from "../actions/getProPlans";
+import { upgradeSubscription } from "../actions/upgradeSubscription";
 
 type Props = {
   open: boolean;
@@ -29,17 +27,14 @@ const ChangePlanDialog = ({ open, onClose }: Props) => {
   const [isYearly, setIsYearly] = useState(false);
 
   const { data: proPlan, isLoading } = useQuery({
-    queryKey: ["products", "list"],
+    queryKey: ["products", "pro"],
     enabled: open,
-    queryFn: () => getProducts(),
+    queryFn: () => getProPlans(),
     select(data) {
       if (!data) return null;
 
       return data.find(
-        (product) =>
-          product.productId ===
-            process.env.NEXT_PUBLIC_STRIPE_PRO_SUBSCRIPTION_ID &&
-          product.interval === (isYearly ? "year" : "month")
+        (product) => product.interval === (isYearly ? "year" : "month")
       );
     },
   });
@@ -48,24 +43,27 @@ const ChangePlanDialog = ({ open, onClose }: Props) => {
     e.preventDefault();
 
     startTransition(async () => {
+      if (!proPlan) return;
+
       try {
-        const result = await getPortalUrl();
-        window.location.assign(result);
+        await upgradeSubscription(proPlan?.priceId);
+        toast.success("Subscription upgraded successfully");
+        onClose();
       } catch (error) {
-        console.log("Failed to get portal url: ", error);
-        toast.error("Failed to get portal url");
+        console.log("Failed to upgrade subscription: ", error);
+        toast.error("Failed to upgrade subscription");
       }
     });
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={onClose}>
-      <AlertDialogContent className="max-w-[400px] max-h-[85vh] overflow-y-auto">
-        <AlertDialogHeader className="space-y-2">
-          <AlertDialogTitle>Upgrade to Pro</AlertDialogTitle>
-          <AlertDialogDescription>
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-[400px] max-h-[85vh] overflow-y-auto">
+        <DialogHeader className="space-y-2">
+          <DialogTitle>Upgrade to Pro</DialogTitle>
+          <DialogDescription>
             You've reached the limit of your current plan
-          </AlertDialogDescription>
+          </DialogDescription>
           <div className="flex items-center justify-center gap-2 text-sm pt-2">
             Monthly
             <Switch
@@ -74,7 +72,7 @@ const ChangePlanDialog = ({ open, onClose }: Props) => {
             />
             Yearly
           </div>
-        </AlertDialogHeader>
+        </DialogHeader>
 
         {isLoading ? (
           <Skeleton className="h-[168px] rounded-lg" />
@@ -105,18 +103,20 @@ const ChangePlanDialog = ({ open, onClose }: Props) => {
           </div>
         )}
 
-        <AlertDialogFooter className="flex justify-end gap-2">
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
             onClick={handleUpgrade}
             disabled={isPending}
             className="bg-primary hover:bg-primary/90"
           >
             {isPending ? "Loading..." : "Upgrade"}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
