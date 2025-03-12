@@ -14,31 +14,45 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {
+  Banknote,
+  Calculator,
+  Goal,
+  LayoutDashboard,
+  Settings,
+  Tag,
+} from "lucide-react";
 
 const sidebarItems = [
   {
     title: "Overview",
     url: "/dashboard",
+    icon: LayoutDashboard,
   },
   {
     title: "Transactions",
     url: "/dashboard/transactions",
+    icon: Banknote,
   },
   {
     title: "Categories",
     url: "/dashboard/categories",
+    icon: Tag,
   },
   {
     title: "Goals",
     url: "/dashboard/goals",
+    icon: Goal,
   },
   {
     title: "Budgets",
     url: "/dashboard/budgets",
+    icon: Calculator,
   },
   {
     title: "Settings",
     url: "/dashboard/settings",
+    icon: Settings,
   },
 ];
 
@@ -51,14 +65,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             {sidebarItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  className={cn(
-                    pathname.endsWith(item.url) && "bg-muted"
-                  )}
-                >
-                  <Link href={item.url}>{item.title}</Link>
-                </SidebarMenuButton>
+                <Link href={item.url}>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    className={cn(pathname.endsWith(item.url) && "bg-muted")}
+                  >
+                    <item.icon />
+                    <span className="ml-2">{item.title}</span>
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>

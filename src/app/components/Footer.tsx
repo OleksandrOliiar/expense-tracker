@@ -43,8 +43,8 @@ const sections = [
 
 const Footer2 = () => {
   return (
-    <section className="py-32">
-      <div className="container">
+    <section className="py-32 px-4">
+      <div className="container mx-auto">
         <footer>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             <div className="col-span-2 mb-8 lg:mb-0">

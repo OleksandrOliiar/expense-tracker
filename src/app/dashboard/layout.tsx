@@ -19,7 +19,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <SidebarTrigger className="-ml-1" />
           </div>
         </header> */}
-          <div className="py-4">{children}</div>
+          <div className="pt-4 pb-4">{children}</div>
         </SidebarInset>
       </SidebarProvider>
       <PusherMessages />

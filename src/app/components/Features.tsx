@@ -6,9 +6,9 @@ import Image from "next/image";
 
 const Feature108 = () => {
   return (
-    <section className="py-32">
+    <section className="py-32 px-4" id="features">
       <div>
-        <div className="container flex flex-col items-center gap-4 text-center">
+        <div className="container mx-auto flex flex-col items-center gap-4 text-center">
           <Badge variant="outline">Top-notch Craft</Badge>
           <h2 className="text-3xl font-semibold md:text-4xl">
             Discover hundreds of blocks for shadcn/ui
@@ -19,7 +19,7 @@ const Feature108 = () => {
         </div>
         <div>
           <Tabs defaultValue="tab-1" className="mt-8">
-            <TabsList className="container flex flex-col items-center justify-center gap-4 sm:flex-row md:gap-10">
+            <TabsList className="container mx-auto flex flex-col items-center justify-center gap-4 sm:flex-row md:gap-10">
               <TabsTrigger
                 value="tab-1"
                 className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-primary"
@@ -41,7 +41,7 @@ const Feature108 = () => {
                 Stunning Layouts
               </TabsTrigger>
             </TabsList>
-            <div className="container mt-8 max-w-screen-xl rounded-2xl bg-muted/70 p-6 lg:p-16">
+            <div className="container mx-auto mt-8 max-w-screen-xl rounded-2xl bg-muted/70 p-6 lg:p-16">
               <TabsContent
                 value="tab-1"
                 className="grid place-items-center gap-20 lg:grid-cols-2 lg:gap-10"

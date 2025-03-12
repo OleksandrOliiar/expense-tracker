@@ -2,8 +2,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Testimonial10 = () => {
   return (
-    <section className="py-32">
-      <div className="container">
+    <section className="py-32 px-4" id="testimonials">
+      <div className="container mx-auto">
         <div className="flex flex-col items-center text-center">
           <p className="mb-16 max-w-4xl px-8 font-medium lg:text-3xl">
             &ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Elig

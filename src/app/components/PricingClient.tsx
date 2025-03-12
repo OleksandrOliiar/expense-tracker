@@ -16,8 +16,8 @@ const PricingClient = ({
   const [isYearly, setIsYearly] = useState(false);
 
   return (
-    <section className="py-32" id="pricing">
-      <div className="container">
+    <section className="py-32 px-4" id="pricing">
+      <div className="container mx-auto">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">
           <h2 className="text-pretty text-4xl font-bold lg:text-6xl">
             Pricing

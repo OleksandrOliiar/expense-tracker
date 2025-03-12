@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
 import {
   LoginLink,
   LogoutLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 
-const Authentication = async () => {
-  const { isAuthenticated } = getKindeServerSession();
+const Authentication = () => {
+  const { isAuthenticated } = useKindeAuth();
 
-  if (await isAuthenticated()) {
+  if (isAuthenticated) {
     return (
       <div className="flex items-center gap-2">
         <Link href="/dashboard">

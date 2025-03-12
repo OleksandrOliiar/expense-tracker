@@ -2,7 +2,6 @@ import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Providers from "@/components/providers";
-import Script from "next/script";
 
 import "./globals.css";
 import Navbar1 from "./components/Navbar";
@@ -30,10 +29,6 @@ export default function RootLayout({
           </Providers>
         </body>
       </html>
-      <Script
-        src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
-        defer
-      />
     </>
   );
 }

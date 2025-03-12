@@ -30,8 +30,8 @@ const Faq1 = () => {
   ];
 
   return (
-    <section className="py-32 px-4">
-      <div className="container">
+    <section className="py-32 px-4" id="faq">
+      <div className="container mx-auto">
         <h1 className="mb-4 text-3xl font-semibold md:mb-11 md:text-5xl">
           Frequently asked questions
         </h1>
