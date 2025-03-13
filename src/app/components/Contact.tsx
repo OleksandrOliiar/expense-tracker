@@ -1,6 +1,6 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 
-const Contact7 = () => {
+const Contact = () => {
   return (
     <section className="py-32 px-4" id="contact">
       <div className="container mx-auto">
@@ -56,4 +56,4 @@ const Contact7 = () => {
   );
 };
 
-export default Contact7;
+export default Contact;

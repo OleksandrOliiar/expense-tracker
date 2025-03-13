@@ -1,55 +1,56 @@
 import { Star } from "lucide-react";
 import React from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import StartTrackingButton from "./StartTrackingButton";
+import RedirectButton from "./RedirectButton";
 
-const Hero7 = () => {
+const Hero = () => {
   return (
     <section className="py-32">
       <div className="container mx-auto text-center">
         <div className="mx-auto flex max-w-screen-lg flex-col gap-6">
           <h1 className="text-3xl font-extrabold lg:text-6xl">
-            A Collection of Components Built With Shadcn & Tailwind
+            Take Control of Your Financial Future Now
           </h1>
           <p className="text-balance text-muted-foreground lg:text-lg">
-            Finely crafted components built with React, Tailwind and Shadcn UI.
-            Developers can copy and paste these blocks directly into their
-            project.
+            Track expenses, set budgets, and achieve your financial goals with
+            our intuitive finance tracking platform. Get a clear picture of your
+            money in one place.
           </p>
         </div>
-        <Button size="lg" className="mt-10">
-          Discover all components
-        </Button>
+        <div className="mt-10">
+          <RedirectButton href="/dashboard" title="Start Tracking for Free" />
+        </div>
         <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
           <span className="mx-4 inline-flex items-center -space-x-4">
             <Avatar className="size-14 border">
               <AvatarImage
                 src="https://shadcnblocks.com/images/block/avatar-1.webp"
-                alt="placeholder"
+                alt="satisfied user"
               />
             </Avatar>
             <Avatar className="size-14 border">
               <AvatarImage
                 src="https://shadcnblocks.com/images/block/avatar-2.webp"
-                alt="placeholder"
+                alt="satisfied user"
               />
             </Avatar>
             <Avatar className="size-14 border">
               <AvatarImage
                 src="https://shadcnblocks.com/images/block/avatar-3.webp"
-                alt="placeholder"
+                alt="satisfied user"
               />
             </Avatar>
             <Avatar className="size-14 border">
               <AvatarImage
                 src="https://shadcnblocks.com/images/block/avatar-4.webp"
-                alt="placeholder"
+                alt="satisfied user"
               />
             </Avatar>
             <Avatar className="size-14 border">
               <AvatarImage
                 src="https://shadcnblocks.com/images/block/avatar-5.webp"
-                alt="placeholder"
+                alt="satisfied user"
               />
             </Avatar>
           </span>
@@ -63,7 +64,7 @@ const Hero7 = () => {
               <span className="font-semibold">5.0</span>
             </div>
             <p className="text-left font-medium text-muted-foreground">
-              from 200+ reviews
+              from 200+ happy users
             </p>
           </div>
         </div>
@@ -72,4 +73,4 @@ const Hero7 = () => {
   );
 };
 
-export default Hero7;
+export default Hero;

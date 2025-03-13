@@ -5,32 +5,32 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const Faq1 = () => {
+const Faq = () => {
   const faqs = [
     {
-      question: "What is a FAQ?",
+      question: "How secure is my financial data?",
       answer:
-        "A FAQ is a list of frequently asked questions and answers on a particular topic.",
+        "Your financial data is protected with bank-level 256-bit encryption. We use secure connections and never store your banking credentials. Your privacy and security are our top priorities.",
     },
     {
-      question: "What is the purpose of a FAQ?",
+      question: "Can I connect multiple bank accounts?",
       answer:
-        "The purpose of a FAQ is to provide answers to common questions and help users find the information they need quickly and easily.",
+        "Yes! You can connect multiple bank accounts, credit cards, and investment accounts to get a complete picture of your finances in one place. Premium plans allow for unlimited account connections.",
     },
     {
-      question: "How do I create a FAQ?",
+      question: "Is there a mobile app available?",
       answer:
-        "To create a FAQ, you need to compile a list of common questions and answers on a particular topic and organize them in a clear and easy-to-navigate format.",
+        "Yes, we offer mobile apps for both iOS and Android devices, allowing you to track your finances on the go. The apps sync seamlessly with the web version so your data is always up to date.",
     },
     {
-      question: "What are the benefits of a FAQ?",
+      question: "What if I need help setting up my account?",
       answer:
-        "The benefits of a FAQ include providing quick and easy access to information, reducing the number of support requests, and improving the overall user experience.",
+        "Our support team is available 7 days a week to help you set up your account, connect your banks, or answer any questions. You can reach us via email, chat, or schedule a call with our financial experts.",
     },
   ];
 
   return (
-    <section className="py-32 px-4" id="faq">
+    <section className="py-32 max-w-[1000px] mx-auto px-4" id="faq">
       <div className="container mx-auto">
         <h1 className="mb-4 text-3xl font-semibold md:mb-11 md:text-5xl">
           Frequently asked questions
@@ -50,4 +50,4 @@ const Faq1 = () => {
   );
 };
 
-export default Faq1;
+export default Faq;

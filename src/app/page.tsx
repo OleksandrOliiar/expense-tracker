@@ -1,23 +1,23 @@
-import Contact7 from "./components/Contact";
-import CTA10 from "./components/Cta";
-import Faq1 from "./components/Faq";
+import Contact from "./components/Contact";
+import CTA from "./components/Cta";
+import Faq from "./components/Faq";
 import Features from "./components/Features";
-import Footer2 from "./components/Footer";
-import Hero7 from "./components/Hero";
+import Footer from "./components/Footer";
+import Hero from "./components/Hero";
 import PricingServer from "./components/PricingServer";
-import Testimonial10 from "./components/Testimonials";
+import Testimonial from "./components/Testimonials";
 
 const Home = async () => {
   return (
     <>
-      <Hero7 />
+      <Hero />
       <Features />
-      <Testimonial10 />
+      <Testimonial />
       <PricingServer />
-      <Faq1 />
-      <CTA10 />
-      <Contact7 />
-      <Footer2 />
+      <Faq />
+      <CTA />
+      <Contact />
+      <Footer />
     </>
   );
 };

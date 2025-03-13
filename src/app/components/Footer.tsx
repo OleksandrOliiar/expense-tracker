@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 const sections = [
   {
     title: "Product",
@@ -41,25 +39,17 @@ const sections = [
   },
 ];
 
-const Footer2 = () => {
+const Footer = () => {
   return (
-    <section className="py-32 px-4">
+    <section className="pt-32 pb-8 px-4">
       <div className="container mx-auto">
         <footer>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             <div className="col-span-2 mb-8 lg:mb-0">
               <div className="flex items-center gap-2 lg:justify-start">
-                <a href="https://shadcnblocks.com">
-                  <Image
-                    src="https://shadcnblocks.com/images/block/block-1.svg"
-                    alt="blocks for shadcn/ui"
-                    width={32}
-                    height={32}
-                  />
-                </a>
-                <p className="text-xl font-semibold">Shadcnblocks.com</p>
+                <p className="text-xl font-semibold">Finance Tracker</p>
               </div>
-              <p className="mt-4 font-bold">Components made easy.</p>
+              <p className="mt-4 font-medium">Track your finances with ease.</p>
             </div>
             {sections.map((section, sectionIdx) => (
               <div key={sectionIdx}>
@@ -78,7 +68,7 @@ const Footer2 = () => {
             ))}
           </div>
           <div className="mt-24 flex flex-col justify-between gap-4 border-t pt-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
-            <p>© 2024 Copyright. All rights reserved.</p>
+            <p>© 2025 Copyright. All rights reserved.</p>
             <ul className="flex gap-4">
               <li className="underline hover:text-primary">
                 <a href="#"> Terms and Conditions</a>
@@ -94,4 +84,4 @@ const Footer2 = () => {
   );
 };
 
-export default Footer2;
+export default Footer;

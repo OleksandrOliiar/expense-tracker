@@ -1,6 +1,5 @@
 import DashboardNavigation from "../components/DashboardNavigation";
 import BanksServer from "./components/BanksServer";
-import PortalLink from "./components/PortalLink";
 import SubscriptionServer from "./components/SubscriptionServer";
 
 type SettingsProps = {
