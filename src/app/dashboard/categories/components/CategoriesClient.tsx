@@ -65,7 +65,7 @@ const CategoriesClient = () => {
         <CreateCategoryDialog />
       </div>
       {categories && categories?.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-stretch gap-4">
           {categories.map((category) => (
             <CategoryCard key={category.id} {...category} />
           ))}

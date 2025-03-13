@@ -1,5 +1,5 @@
 import GoalsServer from "./components/GoalsServer";
-
+import DashboardNavigation from "../components/DashboardNavigation";
 type GoalsProps = {
   searchParams: {
     name?: string;
@@ -8,9 +8,14 @@ type GoalsProps = {
 
 const Goals = ({ searchParams }: GoalsProps) => {
   return (
-    <div className="px-4">
-      <GoalsServer name={searchParams.name} />
-    </div>
+    <>
+      <header className="px-4 mb-8">
+        <DashboardNavigation title="Goals" />
+      </header>
+      <div className="px-4">
+        <GoalsServer name={searchParams.name} />
+      </div>
+    </>
   );
 };
 

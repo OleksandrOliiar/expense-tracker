@@ -1,3 +1,4 @@
+import DashboardNavigation from "../components/DashboardNavigation";
 import CategoriesServer from "./components/CategoriesServer";
 
 type CategoriesProps = {
@@ -9,9 +10,14 @@ type CategoriesProps = {
 
 const Categories = ({ searchParams }: CategoriesProps) => {
   return (
-    <div className="px-4">
-      <CategoriesServer name={searchParams.name} page={searchParams.page} />
-    </div>
+    <>
+      <header className="px-4 mb-8">
+        <DashboardNavigation title="Categories" />
+      </header>
+      <div className="px-4">
+        <CategoriesServer name={searchParams.name} page={searchParams.page} />
+      </div>
+    </>
   );
 };
 

@@ -16,8 +16,8 @@ const NavbarActions = () => {
     return (
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-2">
         <ModeToggler />
-        <Skeleton className="w-full h-8 lg:w-[106px]" />
-        <Skeleton className="w-full h-8 lg:w-[106px]" />
+        <Skeleton className="w-full h-8 lg:w-[100px]" />
+        <Skeleton className="w-full h-8 lg:w-[100px]" />
       </div>
     );
   }

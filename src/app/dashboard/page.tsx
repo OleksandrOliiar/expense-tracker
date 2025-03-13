@@ -1,3 +1,11 @@
+import DashboardNavigation from "./components/DashboardNavigation";
+
 export default async function Page() {
-  return <div>Content Dashboard</div>;
+  return (
+    <>
+      <header className="px-4 mb-8">
+        <DashboardNavigation title="Overview" />
+      </header>
+    </>
+  );
 }

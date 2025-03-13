@@ -56,11 +56,11 @@ const sidebarItems = [
   },
 ];
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarContent className="pt-[76px]">
+      <SidebarContent className="pt-4 md:pt-[76px]">
         <SidebarGroup>
           <SidebarMenu>
             {sidebarItems.map((item) => (

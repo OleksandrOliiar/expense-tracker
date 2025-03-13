@@ -1,3 +1,4 @@
+import DashboardNavigation from "../components/DashboardNavigation";
 import BudgetsServer from "./components/BudgetsServer";
 
 type BudgetsProps = {
@@ -8,9 +9,14 @@ type BudgetsProps = {
 
 const Budgets = ({ searchParams }: BudgetsProps) => {
   return (
-    <div className="px-4">
-      <BudgetsServer name={searchParams.name} />
-    </div>
+    <>
+      <header className="px-4 mb-8">
+        <DashboardNavigation title="Budgets" />
+      </header>
+      <div className="px-4">
+        <BudgetsServer name={searchParams.name} />
+      </div>
+    </>
   );
 };
 
