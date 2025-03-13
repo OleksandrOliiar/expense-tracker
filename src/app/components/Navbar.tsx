@@ -13,9 +13,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Link from "next/link";
-import Authentication from "./Authentication";
-import ModeToggler from "./ModeToggler";
 import { useState } from "react";
+import NavbarActions from "./NavbarActions";
 
 const links = [
   {
@@ -75,10 +74,7 @@ const Navbar1 = () => {
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <ModeToggler />
-            <Authentication />
-          </div>
+          <NavbarActions />
         </nav>
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
@@ -113,10 +109,7 @@ const Navbar1 = () => {
                     </Link>
                   ))}
                 </div>
-                <div className="flex flex-col gap-3">
-                  <Button variant="outline">Log in</Button>
-                  <Button>Sign up</Button>
-                </div>
+                <NavbarActions />
               </SheetContent>
             </Sheet>
           </div>

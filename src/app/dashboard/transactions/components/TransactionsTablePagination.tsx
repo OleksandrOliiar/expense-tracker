@@ -8,10 +8,12 @@ import { useEffect, useState } from "react";
 
 type TransactionsTablePaginationProps<T> = {
   table: Table<T>;
+  dataLength: number;
 };
 
 const TransactionsTablePagination = <T,>({
   table,
+  dataLength,
 }: TransactionsTablePaginationProps<T>) => {
   const [pageSize, setPageSize] = useState(
     table.getState().pagination.pageSize
@@ -20,7 +22,7 @@ const TransactionsTablePagination = <T,>({
 
   useEffect(() => {
     table.setPageSize(debouncedPageSize);
-  }, [debouncedPageSize]);
+  }, [debouncedPageSize, table]);
 
   return (
     <div className="flex items-center justify-end gap-6">
@@ -50,7 +52,7 @@ const TransactionsTablePagination = <T,>({
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
+          disabled={!table.getCanNextPage() || dataLength < pageSize}
         >
           Next
           <ChevronRight className="h-4 w-4" />

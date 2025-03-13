@@ -103,7 +103,7 @@ export function TransactionsTable<TData, TValue>({
       page: debouncedPagination.pageIndex.toString(),
       perPage: debouncedPagination.pageSize.toString(),
     });
-  }, [debouncedPagination]);
+  }, [debouncedPagination, setQueryParams]);
 
   const debouncedSorting = useDebouncedValue(sorting, 300);
 
@@ -118,7 +118,7 @@ export function TransactionsTable<TData, TValue>({
     } else {
       setQueryParams({ sort: undefined });
     }
-  }, [debouncedSorting]);
+  }, [debouncedSorting, setQueryParams]);
 
   return (
     <div>
@@ -197,7 +197,7 @@ export function TransactionsTable<TData, TValue>({
           )}
         </Table>
       </div>
-      <TransactionsTablePagination table={table} />
+      <TransactionsTablePagination table={table} dataLength={data.length} />
     </div>
   );
 }
