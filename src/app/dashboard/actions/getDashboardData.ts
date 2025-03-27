@@ -1,129 +1,31 @@
 "use server";
 
 import { db } from "@/db";
-import { transactions, categories, budgets, goals } from "@/db/schema";
+import { budgets, categories, goals, transactions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { and, eq, gte, lte, sql, desc, sum, lt, gt } from "drizzle-orm";
-import {
-  startOfMonth,
-  endOfMonth,
-  subMonths,
-  format,
-  subDays,
-  parseISO,
-} from "date-fns";
+import { format } from "date-fns";
+import { and, desc, eq, gt, gte, lt, lte, sql } from "drizzle-orm";
 
-type Period = {
+export type Period = {
   startDate: Date;
   endDate: Date;
 };
 
-export const getDashboardSummary = async (
-  startDateParam?: string,
-  endDateParam?: string,
-  dateParam?: string
-) => {
-  try {
-    const { isAuthenticated, getUser } = getKindeServerSession();
+const getUserId = async () => {
+  const { isAuthenticated, getUser } = getKindeServerSession();
 
-    if (!(await isAuthenticated())) {
-      throw new Error("Unauthorized");
-    }
-
-    const user = await getUser();
-
-    // Determine the date range to use (custom or default)
-    let currentPeriod: Period;
-    let previousPeriod: Period;
-
-    if (dateParam) {
-      // Single date mode
-      const selectedDate = parseISO(dateParam);
-      const prevDate = subDays(selectedDate, 30); // Compare with 30 days before
-
-      currentPeriod = {
-        startDate: prevDate,
-        endDate: selectedDate,
-      };
-
-      previousPeriod = {
-        startDate: subDays(prevDate, 30),
-        endDate: prevDate,
-      };
-    } else if (startDateParam && endDateParam) {
-      // Date range mode
-      const startDate = parseISO(startDateParam);
-      const endDate = parseISO(endDateParam);
-
-      // Calculate the duration in days
-      const durationInDays = Math.round(
-        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-      );
-
-      currentPeriod = {
-        startDate,
-        endDate,
-      };
-
-      previousPeriod = {
-        startDate: subDays(startDate, durationInDays),
-        endDate: subDays(endDate, durationInDays),
-      };
-    } else {
-      // Default: current month and previous month
-      const currentMonth = new Date();
-      currentPeriod = {
-        startDate: startOfMonth(currentMonth),
-        endDate: endOfMonth(currentMonth),
-      };
-
-      const previousMonth = subMonths(currentMonth, 1);
-      previousPeriod = {
-        startDate: startOfMonth(previousMonth),
-        endDate: endOfMonth(previousMonth),
-      };
-    }
-
-    // Get summary data
-    const [
-      recentTransactions,
-      monthlyBalance,
-      categorySpending,
-      activeBudgets,
-      activeGoals,
-    ] = await Promise.all([
-      getRecentTransactions(user.id),
-      getMonthlyBalance(user.id, currentPeriod, previousPeriod),
-      getCategorySpending(user.id, currentPeriod),
-      getActiveBudgets(user.id),
-      getActiveGoals(user.id),
-    ]);
-
-    return {
-      recentTransactions,
-      monthlyBalance,
-      categorySpending,
-      activeBudgets,
-      activeGoals,
-      period: {
-        current: {
-          startDate: format(currentPeriod.startDate, "LLL dd, y"),
-          endDate: format(currentPeriod.endDate, "LLL dd, y"),
-        },
-        previous: {
-          startDate: format(previousPeriod.startDate, "LLL dd, y"),
-          endDate: format(previousPeriod.endDate, "LLL dd, y"),
-        },
-      },
-    };
-  } catch (error) {
-    console.error("Failed to get dashboard summary", error);
-    throw new Error("Failed to get dashboard summary");
+  if (!(await isAuthenticated())) {
+    throw new Error("Unauthorized");
   }
+
+  const user = await getUser();
+  return user.id;
 };
 
 // Get 5 most recent transactions
-const getRecentTransactions = async (userId: string) => {
+export const getRecentTransactions = async () => {
+  const userId = await getUserId();
+
   return db
     .select({
       id: transactions.id,
@@ -144,11 +46,12 @@ const getRecentTransactions = async (userId: string) => {
 };
 
 // Get income, expenses and balance for current and previous months
-const getMonthlyBalance = async (
-  userId: string,
+export const getMonthlyBalance = async (
   currentPeriod: Period,
   previousPeriod: Period
 ) => {
+  const userId = await getUserId();
+
   // Current month data
   const currentMonthIncome = await getTotalAmount(
     userId,
@@ -256,7 +159,9 @@ const getTotalAmount = async (
 };
 
 // Get spending by category for the current month
-const getCategorySpending = async (userId: string, period: Period) => {
+export const getCategorySpending = async (period: Period) => {
+  const userId = await getUserId();
+
   const result = await db
     .select({
       categoryId: categories.id,
@@ -282,7 +187,9 @@ const getCategorySpending = async (userId: string, period: Period) => {
 };
 
 // Get active budgets with their progress
-const getActiveBudgets = async (userId: string) => {
+export const getActiveBudgets = async () => {
+  const userId = await getUserId();
+
   const currentDate = new Date();
 
   return db
@@ -312,8 +219,9 @@ const getActiveBudgets = async (userId: string) => {
     .limit(3);
 };
 
-// Get active goals with their progress
-const getActiveGoals = async (userId: string) => {
+export const getActiveGoals = async () => {
+  const userId = await getUserId();
+
   const currentDate = new Date();
 
   return db
