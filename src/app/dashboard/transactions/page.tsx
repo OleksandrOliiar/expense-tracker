@@ -24,7 +24,7 @@ const Transactions = ({ searchParams }: TransactionsProps) => {
         <DashboardNavigation title="Transactions" />
       </header>
       <div className="px-4">
-        <div className="flex items-center gap-2 justify-between">
+        <div className="flex flex-wrap items-center gap-2 justify-between">
           <Search queryKey="name" label="Search names..." id="name" />
           <div className="flex items-center gap-2">
             <CreateTransactionSheet type="income" />

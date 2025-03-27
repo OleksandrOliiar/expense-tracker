@@ -32,6 +32,7 @@ import TableBodySkeleton from "./TableBodySkeleton";
 import TransactionsTablePagination from "./TransactionsTablePagination";
 import TypeFilter from "./TypeFilter";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface TransactionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -139,64 +140,66 @@ export function TransactionsTable<TData, TValue>({
         <TypeFilter />
         <ColumnsDropdown table={table as unknown as TTable<Transaction>} />
       </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          {isLoading ? (
-            <TableBodySkeleton />
-          ) : (
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    onClick={() => {
-                      row.toggleSelected();
-                    }}
-                    className="cursor-pointer"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
+      <ScrollArea className="w-full">
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              )}
-            </TableBody>
-          )}
-        </Table>
-      </div>
+              ))}
+            </TableHeader>
+            {isLoading ? (
+              <TableBodySkeleton />
+            ) : (
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      onClick={() => {
+                        row.toggleSelected();
+                      }}
+                      className="cursor-pointer"
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            )}
+          </Table>
+        </div>
+      </ScrollArea>
       <TransactionsTablePagination table={table} dataLength={data.length} />
     </div>
   );
