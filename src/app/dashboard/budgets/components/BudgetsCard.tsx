@@ -110,8 +110,8 @@ const BudgetsCard = ({ budget }: BudgetsCardProps) => {
 
         {/* Completion status */}
         {budget.isCompleted && (
-          <div className="inline-block w-full rounded-full bg-emerald-100 text-emerald-800 px-3 py-1 text-xs font-medium text-center">
-            Completed
+          <div className="inline-block w-full rounded-full border text-red-500 px-3 py-1 text-xs font-medium text-center">
+            Exceeded
           </div>
         )}
 

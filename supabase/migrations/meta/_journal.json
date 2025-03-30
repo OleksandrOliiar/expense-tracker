@@ -204,6 +204,20 @@
       "when": 1741718222884,
       "tag": "0028_breezy_tigra",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1743365788700,
+      "tag": "0029_freezing_dark_phoenix",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1743366003359,
+      "tag": "0030_great_grim_reaper",
+      "breakpoints": true
     }
   ]
 }

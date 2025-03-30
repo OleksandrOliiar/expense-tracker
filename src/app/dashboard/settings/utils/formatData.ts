@@ -38,6 +38,7 @@ export const formatData = ({
       userId: accountId,
       categoryId: detailed,
       plaidId: transaction.transaction_id,
+      accountId,
     };
 
     formattedTransactions.push(newTransaction);

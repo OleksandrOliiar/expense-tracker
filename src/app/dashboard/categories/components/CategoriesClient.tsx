@@ -1,14 +1,12 @@
 "use client";
 
+import Pagination from "@/components/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { getUserCategoriesWithTransactions } from "../../actions/getUserCategories";
 import CategoryCard from "./CategoryCard";
-import Search from "@/components/Search";
-import CreateCategoryDialog from "./CreateCategoryDialog";
-import NoSearchResults from "./NoSearchResult";
 import NoCategoriesMessage from "./NoCategoriesMessage";
-import Pagination from "@/components/Pagination";
+import NoSearchResults from "./NoSearchResult";
 
 const CategoriesClient = () => {
   const searchParams = useSearchParams();
@@ -41,16 +39,6 @@ const CategoriesClient = () => {
 
   return (
     <>
-      <div className="flex justify-between flex-wrap items-center mb-6 gap-4">
-        <div className="max-w-[350px]">
-          <Search
-            queryKey="name"
-            id="category-name"
-            label="Search by name..."
-          />
-        </div>
-        <CreateCategoryDialog />
-      </div>
       {categories && categories?.length > 0 ? (
         <div className="flex flex-wrap items-stretch gap-4">
           {categories.map((category) => (

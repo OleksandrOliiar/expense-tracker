@@ -94,6 +94,7 @@ export const plaidItemsRelations = relations(plaidItems, ({ one, many }) => ({
     references: [accounts.id],
   }),
   accounts: many(plaidAccounts),
+  transactions: many(transactions),
 }));
 
 export const plaidAccounts = pgTable("plaid_accounts", {
@@ -106,11 +107,12 @@ export const plaidAccounts = pgTable("plaid_accounts", {
   plaidId: text("plaid_id").unique().notNull(),
 });
 
-export const plaidAccountsRelations = relations(plaidAccounts, ({ one }) => ({
+export const plaidAccountsRelations = relations(plaidAccounts, ({ one, many }) => ({
   item: one(plaidItems, {
     fields: [plaidAccounts.itemId],
     references: [plaidItems.id],
   }),
+  transactions: many(transactions),
 }));
 
 export const transactions = pgTable("transactions", {
@@ -123,6 +125,9 @@ export const transactions = pgTable("transactions", {
   categoryId: text("category_id").references(() => categories.id, {
     onDelete: "set null",
   }),
+  accountId: text("account_id").references(() => plaidItems.id, {
+    onDelete: "cascade",
+  }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -134,6 +139,10 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   category: one(categories, {
     fields: [transactions.categoryId],
     references: [categories.id],
+  }),
+  account: one(plaidAccounts, {
+    fields: [transactions.accountId],
+    references: [plaidAccounts.id],
   }),
 }));
 
