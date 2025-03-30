@@ -1,33 +1,44 @@
 "use client";
 
 import { beamsClient } from "@/lib/pusherClient";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 const BeamsNotifications = () => {
-  const [loading, setLoading] = useState(true);
+  const { user, isLoading } = useKindeAuth();
 
-  const initBeams = useCallback(() => {
-    if (!loading) return;
-    setLoading(false);
-    console.log("Starting Beams client...");
+  useEffect(() => {
+    if (!("Notification" in window)) {
+      console.error("This browser does not support notifications");
+      return;
+    }
+
+    if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        console.log("Notification permission:", permission);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isLoading || !user?.id) return;
+    
     beamsClient
-      .start()
-      .then(() => beamsClient.addDeviceInterest("hello"))
-      .then(() => beamsClient.getDeviceId().then((i) => console.log(i)))
-      .then(() => beamsClient.getDeviceInterests().then((i) => console.log(i)))
-      .then(() => console.log("Successfully registered and subscribed!"));
-  }, [loading]);
-
-  initBeams();
-
-  useLayoutEffect(() => {
-    console.log(Notification.permission);
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        console.log("Notification permission granted");
-      }
-    });
-  });
+      .getUserId()
+      .then((userId) => {
+        if (userId !== user.id) {
+          beamsClient.stop();
+        }
+      })
+      .catch(() => {
+        toast.error("Failed to initialize notifications");
+      });
+      
+    return () => {
+      beamsClient.stop()
+    };
+  }, [user?.id, isLoading]);
 
   return null;
 };

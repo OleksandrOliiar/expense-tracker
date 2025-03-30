@@ -70,16 +70,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log("updatedBudgets", updatedBudgets);
-    console.log("updatedGoals", updatedGoals);
-
     if (updatedBudgets > 0) {
-      console.log("triggering budgets-updated");
       pusherServer.trigger(userId, "budgets-updated", {});
     }
 
     if (updatedGoals > 0) {
-      console.log("triggering goals-updated");
       pusherServer.trigger(userId, "goals-updated", {});
     }
 

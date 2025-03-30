@@ -1,4 +1,4 @@
-import { pusherServer } from "@/lib/pusher";
+import { pusherServer } from "@/lib/pusherServer";
 import { NextResponse } from "next/server";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 

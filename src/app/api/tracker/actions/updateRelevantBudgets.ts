@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { budgets } from "@/db/schema";
 import { and, eq, gte, isNull, lte } from "drizzle-orm";
 import { calculateBudgetAmount } from "./calculateBudgetAmount";
+import { beamsServer } from "@/lib/pusherServer";
 
 export async function updateRelevantBudgets(
   userId: string,
@@ -37,6 +38,17 @@ export async function updateRelevantBudgets(
         isCompleted: Number(newAmount) >= Number(budget.targetAmount),
       })
       .where(eq(budgets.id, budget.id));
+
+    if (Number(newAmount) > Number(budget.targetAmount)) {
+      await beamsServer.publishToUsers([budget.userId], {
+        web: {
+          notification: {
+            title: "Attention!",
+            body: `You have exceeded ${budget.title} budget!`,
+          },
+        },
+      });
+    }
   }
 
   return relevantBudgets.length;
