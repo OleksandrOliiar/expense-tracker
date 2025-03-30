@@ -11,7 +11,7 @@ const NoSearchResults = () => {
         <div className="space-y-2">
           <h3 className="text-2xl font-bold tracking-tight">No banks found</h3>
           <p className="text-muted-foreground max-w-sm">
-            We couldn't find any banks matching your search.
+            We couldn&apos;t find any banks matching your search.
           </p>
         </div>
       </div>

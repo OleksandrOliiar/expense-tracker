@@ -17,8 +17,8 @@ const NoSearchResults = ({ searchQuery }: NoSearchResultsProps) => {
             No budgets found
           </h3>
           <p className="text-muted-foreground max-w-sm">
-            We couldn't find any budgets matching{" "}
-            <span className="font-medium">"{searchQuery}"</span>
+            We couldn&apos;t find any budgets matching{" "}
+            <span className="font-medium">&apos;{searchQuery}&apos;</span>
           </p>
         </div>
       </div>

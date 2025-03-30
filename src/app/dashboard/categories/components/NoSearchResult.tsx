@@ -15,8 +15,8 @@ const NoSearchResults = ({ searchQuery }: NoSearchResultsProps) => {
         <div className="space-y-2">
           <h3 className="text-2xl font-bold tracking-tight">No categories found</h3>
           <p className="text-muted-foreground max-w-sm">
-            We couldn't find any categories matching{" "}
-            <span className="font-medium">"{searchQuery}"</span>
+            We couldn&apos;t find any categories matching{" "}
+            <span className="font-medium">&apos;{searchQuery}&apos;</span>
           </p>
         </div>
       </div>
