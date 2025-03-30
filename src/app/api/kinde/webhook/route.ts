@@ -1,7 +1,21 @@
 import { NextResponse } from "next/server";
 import jwksClient from "jwks-rsa";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { createAccount } from "./actions/createAccount";
+
+// Define interfaces for the Kinde webhook event
+interface KindeEventData {
+  user: {
+    id: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
+interface KindeEvent extends JwtPayload {
+  type: string;
+  data: KindeEventData;
+}
 
 const client = jwksClient({
   jwksUri: `${process.env.KINDE_ISSUER_URL}/.well-known/jwks.json`,
@@ -11,12 +25,16 @@ export async function POST(req: Request) {
   try {
     const token = await req.text();
 
-    const { header } = jwt.decode(token, { complete: true });
-    const { kid } = header;
+    const decoded = jwt.decode(token, { complete: true });
+    if (!decoded || !decoded.header) {
+      throw new Error("Invalid token");
+    }
+    
+    const { kid } = decoded.header;
 
     const key = await client.getSigningKey(kid);
     const signingKey = key.getPublicKey();
-    const event = await jwt.verify(token, signingKey);
+    const event = await jwt.verify(token, signingKey) as KindeEvent;
 
     switch (event?.type) {
       case "user.created":
