@@ -15,7 +15,7 @@ import {
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AddCategoryDialog from "../transactions/components/AddCategoryDialog";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -64,9 +64,9 @@ export default function CategoryPicker<Multiple extends boolean = false>({
         debouncedSearchTerm ? debouncedSearchTerm : undefined
       ),
     enabled: open,
-    });
+  });
 
-  const categoriesList = data ?? [];
+  const categoriesList = useMemo(() => data ?? [], [data]);
 
   useEffect(() => {
     if (multiple) {

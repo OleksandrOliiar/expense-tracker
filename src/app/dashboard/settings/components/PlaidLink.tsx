@@ -31,7 +31,7 @@ const PlaidLink = () => {
     } catch (error) {
       toast.error("Error exchanging public token");
     }
-  }, []);
+  }, [queryClient]);
 
   const { open, ready } = usePlaidLink({
     token,

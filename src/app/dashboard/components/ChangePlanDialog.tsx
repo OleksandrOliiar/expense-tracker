@@ -62,7 +62,7 @@ const ChangePlanDialog = ({ open, onClose }: Props) => {
         <DialogHeader className="space-y-2">
           <DialogTitle>Upgrade to Pro</DialogTitle>
           <DialogDescription>
-            You've reached the limit of your current plan
+            You&apos;ve reached the limit of your current plan
           </DialogDescription>
           <div className="flex items-center justify-center gap-2 text-sm pt-2">
             Monthly
