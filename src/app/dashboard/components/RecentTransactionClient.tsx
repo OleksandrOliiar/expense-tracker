@@ -3,6 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { getRecentTransactions } from "../actions/getDashboardData";
 import RecentTransactionsCard from "./RecentTransactionsCard";
+import RecentTransactionsSkeleton from "./RecentTransactionsSkeleton";
+import NoRecentTransactions from "./NoRecentTransactions";
 
 const RecentTransactionClient = () => {
   const {
@@ -13,18 +15,6 @@ const RecentTransactionClient = () => {
     queryKey: ["dashboard", "recentTransactions"],
     queryFn: () => getRecentTransactions(),
   });
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!recentTransactions || recentTransactions.length === 0) {
-    return <div>No recent transactions</div>;
-  }
 
   return <RecentTransactionsCard transactions={recentTransactions} />;
 };

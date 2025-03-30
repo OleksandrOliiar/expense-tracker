@@ -19,7 +19,7 @@ type Budget = {
   } | null;
 };
 
-const BudgetsOverviewCard = ({ budgets }: { budgets: Budget[] }) => {
+const BudgetsOverviewCard = ({ budgets }: { budgets?: Budget[] }) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -33,7 +33,7 @@ const BudgetsOverviewCard = ({ budgets }: { budgets: Budget[] }) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {budgets.length > 0 ? (
+          {budgets && budgets.length > 0 ? (
             budgets.map((budget) => {
               const currentAmount = Number(budget.currentAmount);
               const targetAmount = Number(budget.targetAmount);

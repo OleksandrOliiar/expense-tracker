@@ -13,7 +13,7 @@ type Goal = {
   description: string | null;
 };
 
-const GoalsOverviewCard = ({ goals }: { goals: Goal[] }) => {
+const GoalsOverviewCard = ({ goals }: { goals?: Goal[] }) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -27,7 +27,7 @@ const GoalsOverviewCard = ({ goals }: { goals: Goal[] }) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {goals.length > 0 ? (
+          {goals && goals.length > 0 ? (
             goals.map((goal) => {
               const currentAmount = Number(goal.currentAmount);
               const targetAmount = Number(goal.targetAmount);

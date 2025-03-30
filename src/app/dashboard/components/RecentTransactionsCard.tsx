@@ -16,7 +16,7 @@ type Transaction = {
   } | null;
 };
 
-const RecentTransactionsCard = ({ transactions }: { transactions: Transaction[] }) => {
+const RecentTransactionsCard = ({ transactions }: { transactions?: Transaction[] }) => {
   return (
     <Card>
       <CardHeader>
@@ -24,7 +24,7 @@ const RecentTransactionsCard = ({ transactions }: { transactions: Transaction[] 
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {transactions.length > 0 ? (
+          {transactions && transactions.length > 0 ? (
             transactions.map((transaction) => (
               <div 
                 key={transaction.id} 

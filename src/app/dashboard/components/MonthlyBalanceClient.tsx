@@ -9,18 +9,10 @@ import MonthlyBalanceChart from "./MonthlyBalanceChart";
 const MonthlyBalanceClient = () => {
   const { currentPeriod, previousPeriod } = usePeriod();
 
-  const {
-    data: monthlyBalance,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data: monthlyBalance } = useQuery({
     queryKey: ["dashboard", "monthlyBalance"],
     queryFn: () => getMonthlyBalance(currentPeriod, previousPeriod),
   });
-
-  if (error) return <div>Error: {error.message}</div>;
-  if (isLoading) return <div>Loading...</div>;
-  if (!monthlyBalance) return <div>No data available</div>;
 
   return (
     <Card>
@@ -28,7 +20,15 @@ const MonthlyBalanceClient = () => {
         <CardTitle className="text-base">Period Comparison</CardTitle>
       </CardHeader>
       <CardContent>
-        <MonthlyBalanceChart data={monthlyBalance} />
+        {monthlyBalance ? (
+          <MonthlyBalanceChart data={monthlyBalance} />
+        ) : (
+          <div className="h-[300px] w-full flex items-center justify-center">
+            <p className="text-center py-4 text-muted-foreground">
+              No data available
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

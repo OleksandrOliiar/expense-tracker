@@ -6,6 +6,13 @@ import DateFilterSection from "./components/DateFilterSection";
 import GoalsOverviewServer from "./components/GoalsOverviewServer";
 import MonthlyBalanceServer from "./components/MonthlyBalanceServer";
 import RecentTransactionsServer from "./components/RecentTransactionsServer";
+import BudgetsOverviewSkeleton from "./components/BudgetsOverviewSkeleton";
+import { Suspense } from "react";
+import CategoryBreakdownSkeleton from "./components/CategoryBreakdownSkeleton";
+import DashboardSummarySkeleton from "./components/DashboardSummarySkeleton";
+import GoalsOverviewSkeleton from "./components/GoalsOverviewSkeleton";
+import MonthlyBalanceSkeleton from "./components/MonthlyBalanceSkeleton";
+import RecentTransactionsSkeleton from "./components/RecentTransactionsSkeleton";
 
 export type DashboardSearchParams = {
   startDate?: string;
@@ -26,16 +33,28 @@ export default async function Page({ searchParams }: DashboardProps) {
       <div className="px-4">
         <div className="space-y-6">
           <DateFilterSection />
-          <DashboardSummaryServer searchParams={searchParams} />
+          <Suspense fallback={<DashboardSummarySkeleton />}>
+            <DashboardSummaryServer searchParams={searchParams} />
+          </Suspense>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <MonthlyBalanceServer searchParams={searchParams} />
-            <CategoryBreakdownServer searchParams={searchParams} />
+            <Suspense fallback={<MonthlyBalanceSkeleton />}>
+              <MonthlyBalanceServer searchParams={searchParams} />
+            </Suspense>
+            <Suspense fallback={<CategoryBreakdownSkeleton />}>
+              <CategoryBreakdownServer searchParams={searchParams} />
+            </Suspense>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <RecentTransactionsServer />
+            <Suspense fallback={<RecentTransactionsSkeleton />}>
+              <RecentTransactionsServer />
+            </Suspense>
             <div className="space-y-4">
-              <BudgetsOverviewServer />
-              <GoalsOverviewServer />
+              <Suspense fallback={<BudgetsOverviewSkeleton />}>
+                <BudgetsOverviewServer />
+              </Suspense>
+              <Suspense fallback={<GoalsOverviewSkeleton />}>
+                <GoalsOverviewServer />
+              </Suspense>
             </div>
           </div>
         </div>

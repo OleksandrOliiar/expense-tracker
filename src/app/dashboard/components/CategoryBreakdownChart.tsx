@@ -19,9 +19,9 @@ type CategoryData = {
   amount: string;
 }[];
 
-const CategoryBreakdownChart = ({ data }: { data: CategoryData }) => {
+const CategoryBreakdownChart = ({ data }: { data?: CategoryData }) => {
   // Transform data for chart and handle nulls
-  const chartData = data.map((category) => ({
+  const chartData = data?.map((category) => ({
     name: category.categoryName || "Uncategorized",
     value: Number(category.amount),
     icon: category.categoryIcon,
@@ -63,7 +63,7 @@ const CategoryBreakdownChart = ({ data }: { data: CategoryData }) => {
 
   return (
     <>
-      {data.length > 0 ? (
+      {data && data?.length > 0 ? (
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart margin={{ top: 0, right: 0, bottom: 30, left: 0 }}>
@@ -80,7 +80,7 @@ const CategoryBreakdownChart = ({ data }: { data: CategoryData }) => {
                   percent > 0.05 ? `${name} ${(percent * 100).toFixed(0)}%` : ''
                 }
               >
-                {chartData.map((entry, index) => (
+                {chartData && chartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
