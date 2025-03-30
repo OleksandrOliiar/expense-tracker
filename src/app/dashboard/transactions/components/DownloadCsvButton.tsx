@@ -10,7 +10,7 @@ type DownloadCsvButtonProps = {
 };
 
 const DownloadCsvButton = ({ selectedRows }: DownloadCsvButtonProps) => {
-  const ref = useRef<HTMLAnchorElement>(null);
+  const ref = useRef<CSVLink>(null);
 
   const data = useMemo(
     () => selectedRows.map((row) => row.original),
@@ -18,6 +18,7 @@ const DownloadCsvButton = ({ selectedRows }: DownloadCsvButtonProps) => {
   );
 
   const handleClick = () => {
+    // @ts-ignore
     ref.current?.link.click();
   };
 
@@ -33,6 +34,7 @@ const DownloadCsvButton = ({ selectedRows }: DownloadCsvButtonProps) => {
         className="hidden"
         target="_blank"
         ref={(value: any) => {
+          // @ts-ignore
           ref.current = value;
         }}
       />

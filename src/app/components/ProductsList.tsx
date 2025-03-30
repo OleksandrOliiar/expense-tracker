@@ -52,6 +52,7 @@ const ProductsList = ({
             name: "Manual transaction entry only",
           },
         ],
+        productId: "",
       });
 
       return result;
