@@ -25,6 +25,9 @@ const DeleteCategoryButton = ({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["categories", "list"] });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "categorySpending"],
+      });
     },
   });
 

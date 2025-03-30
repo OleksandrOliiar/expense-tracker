@@ -19,12 +19,18 @@ const PusherMessages = () => {
       toast.success("Budgets updated");
 
       queryClient.invalidateQueries({ queryKey: ["budgets", "list"] });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "budgets"],
+      });
     };
 
     const handleGoalsUpdated = () => {
       toast.success("Goals updated");
 
       queryClient.invalidateQueries({ queryKey: ["goals", "list"] });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "goals"],
+      });
     };
 
     pusherClient.bind("budgets-updated", handleBudgetsUpdated);

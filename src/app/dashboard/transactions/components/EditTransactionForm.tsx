@@ -29,6 +29,18 @@ const EditTransactionForm = ({
       queryClient.invalidateQueries({
         queryKey: ["transactions", "list"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "recentTransactions"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "monthlyBalance"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "categorySpending"],
+      });
     },
   });
 

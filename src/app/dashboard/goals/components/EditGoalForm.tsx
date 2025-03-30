@@ -34,6 +34,10 @@ const EditGoalForm = ({ goal, onSheetClose }: EditGoalFormProps) => {
       queryClient.invalidateQueries({
         queryKey: ["goals", "list"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "goals"],
+      });
     },
   });
 

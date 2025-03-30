@@ -8,10 +8,7 @@ type DeleteGoalButtonProps = {
   onClose: () => void;
 };
 
-const DeleteGoalButton = ({
-  goalId,
-  onClose,
-}: DeleteGoalButtonProps) => {
+const DeleteGoalButton = ({ goalId, onClose }: DeleteGoalButtonProps) => {
   const queryClient = useQueryClient();
 
   const { mutate: deleteGoalMutation, isPending } = useMutation({
@@ -27,6 +24,10 @@ const DeleteGoalButton = ({
       queryClient.refetchQueries({
         queryKey: ["goals", "list"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "goals"],
+      });
     },
   });
 
@@ -41,4 +42,4 @@ const DeleteGoalButton = ({
   );
 };
 
-export default DeleteGoalButton; 
+export default DeleteGoalButton;

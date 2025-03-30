@@ -8,17 +8,11 @@ import SummaryCard from "./SummaryCard";
 const DashboardSummaryClient = () => {
   const { currentPeriod, previousPeriod } = usePeriod();
 
-  const {
-    data: monthlyBalance,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data: monthlyBalance } = useQuery({
     queryKey: ["dashboard", "monthlyBalance"],
     queryFn: () => getMonthlyBalance(currentPeriod, previousPeriod),
   });
 
-  if (error) return <div>Error: {error.message}</div>;
-  if (isLoading) return <div>Loading...</div>;
   if (!monthlyBalance) return <div>No data available</div>;
 
   return (

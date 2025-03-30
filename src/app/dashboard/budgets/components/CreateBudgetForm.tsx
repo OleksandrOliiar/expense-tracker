@@ -36,6 +36,10 @@ const CreateBudgetForm = ({ onSheetClose }: CreateBudgetFormProps) => {
       queryClient.invalidateQueries({
         queryKey: ["budgets", "list"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "budgets"],
+      })
     },
   });
 

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 type DeleteTransactionButtonProps = {
-  transactionIds: string[]  ;
+  transactionIds: string[];
   onClose: () => void;
 };
 
@@ -26,6 +26,18 @@ const DeleteTransactionButton = ({
     onSettled: () => {
       queryClient.refetchQueries({
         queryKey: ["transactions", "list"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "recentTransactions"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "monthlyBalance"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "categorySpending"],
       });
     },
   });

@@ -24,6 +24,10 @@ const DeleteBudgetButton = ({ budgetId, onClose }: DeleteBudgetButtonProps) => {
       queryClient.refetchQueries({
         queryKey: ["budgets", "list"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "budgets"],
+      });
     },
   });
 
