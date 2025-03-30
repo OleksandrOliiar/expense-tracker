@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 import CategoriesFilter from "./CategoriesFilter";
 import { Transaction } from "./Columns";
 import ColumnsDropdown from "./ColumnsDropdown";
-import DateFilter from "./DateFilter";
+import DateFilter from "../../components/DateFilter";
 import DeleteTransactionsDialog from "./DeleteTransactionsDialog";
 import DownloadCsvButton from "./DownloadCsvButton";
 import TableBodySkeleton from "./TableBodySkeleton";

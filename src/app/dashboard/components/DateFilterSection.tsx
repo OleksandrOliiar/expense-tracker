@@ -1,6 +1,6 @@
 "use client";
 
-import DateFilter from "@/app/dashboard/transactions/components/DateFilter";
+import DateFilter from "./DateFilter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 import { usePeriod } from "../hooks/usePeriod";

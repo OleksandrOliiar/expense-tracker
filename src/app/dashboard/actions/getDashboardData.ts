@@ -158,8 +158,10 @@ const getTotalAmount = async (
     : result[0]?.total || "0";
 };
 
-// Get spending by category for the current month
-export const getCategorySpending = async (period: Period) => {
+export const getCategorySpending = async (
+  period: Period,
+  type: "incomes" | "expenses"
+) => {
   const userId = await getUserId();
 
   const result = await db
@@ -176,7 +178,9 @@ export const getCategorySpending = async (period: Period) => {
         eq(transactions.userId, userId),
         gte(transactions.date, period.startDate),
         lte(transactions.date, period.endDate),
-        lt(transactions.amount, "0") // Only expenses
+        type === "expenses"
+          ? lt(transactions.amount, "0")
+          : gt(transactions.amount, "0")
       )
     )
     .groupBy(categories.id)

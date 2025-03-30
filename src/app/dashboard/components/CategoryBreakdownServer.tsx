@@ -18,8 +18,9 @@ const CategoryBreakdownServer = async ({
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["dashboard", "categorySpending"],
-    queryFn: () => getCategorySpending(getPeriod(searchParams).currentPeriod),
+    queryKey: ["dashboard", "categorySpending", "incomes"],
+    queryFn: () =>
+      getCategorySpending(getPeriod(searchParams).currentPeriod, "incomes"),
   });
 
   return (

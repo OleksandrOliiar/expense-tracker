@@ -18,7 +18,7 @@ const TypeFilter = () => {
 
   useEffect(() => {
     setQueryParams({ type: value });
-  }, [value]);
+  }, [value, setQueryParams]);
 
   return (
     <Select value={value} onValueChange={setValue} defaultValue="all">

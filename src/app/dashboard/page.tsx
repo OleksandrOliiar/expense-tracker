@@ -18,6 +18,7 @@ export type DashboardSearchParams = {
   startDate?: string;
   endDate?: string;
   date?: string;
+  type?: "incomes" | "expenses";
 };
 
 type DashboardProps = {
