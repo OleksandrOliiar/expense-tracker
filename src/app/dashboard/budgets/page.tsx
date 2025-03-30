@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import DashboardNavigation from "../components/DashboardNavigation";
 import BudgetsServer from "./components/BudgetsServer";
+import BudgetsSkeleton from "./components/BudgetsSkeleton";
 
 type BudgetsProps = {
   searchParams: {
@@ -14,7 +16,9 @@ const Budgets = ({ searchParams }: BudgetsProps) => {
         <DashboardNavigation title="Budgets" />
       </header>
       <div className="px-4">
-        <BudgetsServer name={searchParams.name} />
+        <Suspense fallback={<BudgetsSkeleton />}>
+          <BudgetsServer name={searchParams.name} />
+        </Suspense>
       </div>
     </>
   );

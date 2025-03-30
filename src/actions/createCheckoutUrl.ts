@@ -33,8 +33,8 @@ export const createCheckoutUrl = async (
       metadata: {
         userId: user.id,
       },
-      success_url: successUrl ?? `${origin}/`,
-      cancel_url: cancelUrl ?? `${origin}/`,
+      success_url: successUrl ?? `${origin}/dashboard/settings`,
+      cancel_url: cancelUrl ?? `${origin}/dashboard/settings`,
       line_items: [
         {
           price: priceId,

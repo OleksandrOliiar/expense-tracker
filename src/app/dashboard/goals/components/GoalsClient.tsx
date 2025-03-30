@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserGoals } from "../actions/getUserGoals";
 import GoalCard from "./GoalCard";
 import { useSearchParams } from "next/navigation";
-import GoalCardSkeleton from "./GoalCardSkeleton";
 import NoGoalsMessage from "./NoGoalsMessage";
 import CreateGoalSheet from "./CreateGoalSheet";
 import Search from "@/components/Search";
@@ -22,20 +21,6 @@ const GoalsClient = () => {
     queryKey: ["goals", "list", name],
     queryFn: () => getUserGoals(name),
   });
-
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
-        {Array(3)
-          .fill(0)
-          .map((_, i) => (
-            <GoalCardSkeleton key={i} />
-          ))}
-      </div>
-    );
-  }
-
-  if (error) return <div>Error: {error.message}</div>;
 
   if (!goals?.length && !name) return <NoGoalsMessage />;
 

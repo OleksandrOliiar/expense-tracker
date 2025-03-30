@@ -1,5 +1,8 @@
 import GoalsServer from "./components/GoalsServer";
 import DashboardNavigation from "../components/DashboardNavigation";
+import GoalsSkeleton from "./components/GoalsSkeleton";
+import { Suspense } from "react";
+
 type GoalsProps = {
   searchParams: {
     name?: string;
@@ -13,7 +16,9 @@ const Goals = ({ searchParams }: GoalsProps) => {
         <DashboardNavigation title="Goals" />
       </header>
       <div className="px-4">
-        <GoalsServer name={searchParams.name} />
+        <Suspense fallback={<GoalsSkeleton />}>
+          <GoalsServer name={searchParams.name} />
+        </Suspense>
       </div>
     </>
   );
