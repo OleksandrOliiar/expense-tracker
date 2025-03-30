@@ -53,7 +53,8 @@ const CategoryBreakdownChart = ({ data }: { data?: CategoryData }) => {
         <div className="bg-card border border-border rounded-md p-2 shadow-md">
           <p className="text-sm font-medium mb-1">{payload[0].name}</p>
           <p className="text-sm text-foreground">
-            <span className="font-medium">Amount:</span> {formatCurrency(payload[0].value)}
+            <span className="font-medium">Amount:</span>{" "}
+            {formatCurrency(payload[0].value)}
           </p>
         </div>
       );
@@ -77,35 +78,42 @@ const CategoryBreakdownChart = ({ data }: { data?: CategoryData }) => {
                 dataKey="value"
                 labelLine={false}
                 label={({ name, percent }) =>
-                  percent > 0.05 ? `${name} ${(percent * 100).toFixed(0)}%` : ''
+                  percent > 0.05 ? `${name} ${(percent * 100).toFixed(0)}%` : ""
                 }
               >
-                {chartData && chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
+                {chartData &&
+                  chartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              <Legend 
+              <Legend
                 layout="horizontal"
                 verticalAlign="bottom"
                 align="center"
-                wrapperStyle={{ 
+                wrapperStyle={{
                   fontSize: "12px",
                   paddingTop: "20px",
                   marginBottom: "10px",
                 }}
                 iconSize={10}
-                formatter={(value) => <span style={{ color: 'var(--foreground)', margin: '0 10px' }}>{value}</span>}
+                formatter={(value) => (
+                  <span
+                    style={{ color: "var(--foreground)", margin: "0 10px" }}
+                  >
+                    {value}
+                  </span>
+                )}
               />
             </PieChart>
           </ResponsiveContainer>
         </ChartContainer>
       ) : (
         <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-          No category data available for this period
+          <p className="-mt-12"> No category data available for this period</p>
         </div>
       )}
     </>

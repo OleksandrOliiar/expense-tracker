@@ -23,7 +23,7 @@ const BudgetsOverviewCard = ({ budgets }: { budgets?: Budget[] }) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Active Budgets</CardTitle>
+        <CardTitle className="text-base">Active Budgets</CardTitle>
         <Link
           href="/dashboard/budgets"
           className="text-sm text-primary underline-offset-4 hover:underline"

@@ -48,6 +48,11 @@ const MonthlyBalanceChart = ({ data }: { data: MonthlyBalanceData }) => {
     },
   ];
 
+  // Check if all values are zero
+  const hasNoData = chartData.every(item => 
+    item.Income === 0 && item.Expenses === 0
+  );
+
   // Chart configuration
   const chartConfig = {
     Income: {
@@ -60,55 +65,61 @@ const MonthlyBalanceChart = ({ data }: { data: MonthlyBalanceData }) => {
 
   return (
     <ChartContainer config={chartConfig} className="h-[300px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart 
-          data={chartData}
-          margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <XAxis 
-            dataKey="name"
-            tick={{ fontSize: 12 }}
-            tickLine={false}
-            axisLine={false}
-          />
-          <YAxis 
-            width={60}
-            tickFormatter={(value) => `$${value}`}
-            tick={{ fontSize: 12 }}
-            tickLine={false}
-            axisLine={false}
-          />
-          <Tooltip 
-            formatter={(value: number) => [formatCurrency(value), ""]}
-            labelStyle={{ color: "var(--foreground)" }}
-            contentStyle={{ 
-              backgroundColor: "hsl(var(--card))",
-              borderColor: "hsl(var(--border))",
-              borderRadius: "var(--radius)",
-              fontSize: "12px"
-            }}
-          />
-          <Legend 
-            verticalAlign="bottom" 
-            height={30}
-            iconSize={10}
-            wrapperStyle={{ fontSize: "12px" }}
-          />
-          <Bar 
-            dataKey="Income" 
-            fill={chartConfig.Income.color} 
-            radius={[4, 4, 0, 0]}
-            maxBarSize={60}
-          />
-          <Bar 
-            dataKey="Expenses" 
-            fill={chartConfig.Expenses.color} 
-            radius={[4, 4, 0, 0]}
-            maxBarSize={60}
-          />
-        </BarChart>
-      </ResponsiveContainer>
+      {hasNoData ? (
+        <div className="flex h-full w-full text-base items-center justify-center flex-col text-muted-foreground">
+          <p>No transaction data available</p>
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart 
+            data={chartData}
+            margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis 
+              dataKey="name"
+              tick={{ fontSize: 12 }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis 
+              width={60}
+              tickFormatter={(value) => `$${value}`}
+              tick={{ fontSize: 12 }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <Tooltip 
+              formatter={(value: number) => [formatCurrency(value), ""]}
+              labelStyle={{ color: "var(--foreground)" }}
+              contentStyle={{ 
+                backgroundColor: "hsl(var(--card))",
+                borderColor: "hsl(var(--border))",
+                borderRadius: "var(--radius)",
+                fontSize: "12px"
+              }}
+            />
+            <Legend 
+              verticalAlign="bottom" 
+              height={30}
+              iconSize={10}
+              wrapperStyle={{ fontSize: "12px" }}
+            />
+            <Bar 
+              dataKey="Income" 
+              fill={chartConfig.Income.color} 
+              radius={[4, 4, 0, 0]}
+              maxBarSize={60}
+            />
+            <Bar 
+              dataKey="Expenses" 
+              fill={chartConfig.Expenses.color} 
+              radius={[4, 4, 0, 0]}
+              maxBarSize={60}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      )}
     </ChartContainer>
   );
 };

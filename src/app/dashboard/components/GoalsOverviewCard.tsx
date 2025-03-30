@@ -17,7 +17,7 @@ const GoalsOverviewCard = ({ goals }: { goals?: Goal[] }) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Savings Goals</CardTitle>
+        <CardTitle className="text-base">Savings Goals</CardTitle>
         <Link
           href="/dashboard/goals"
           className="text-sm text-primary underline-offset-4 hover:underline"

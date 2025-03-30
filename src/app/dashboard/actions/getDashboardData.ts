@@ -63,6 +63,7 @@ export const getMonthlyBalance = async (
     currentPeriod,
     "expense"
   );
+
   const currentMonthBalance =
     Number(currentMonthIncome) - Number(currentMonthExpenses);
 

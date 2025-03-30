@@ -18,9 +18,9 @@ type Transaction = {
 
 const RecentTransactionsCard = ({ transactions }: { transactions?: Transaction[] }) => {
   return (
-    <Card>
+    <Card className="min-h-[325px]">
       <CardHeader>
-        <CardTitle>Recent Transactions</CardTitle>
+        <CardTitle className="text-base">Recent Transactions</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -60,7 +60,7 @@ const RecentTransactionsCard = ({ transactions }: { transactions?: Transaction[]
               </div>
             ))
           ) : (
-            <div className="text-center py-4 text-muted-foreground">
+            <div className="text-center mt-[72px] py-4 text-muted-foreground">
               No recent transactions
             </div>
           )}
