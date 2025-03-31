@@ -25,7 +25,7 @@ const CategoryBreakdownServer = async ({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CategoryBreakdownClient />
+      <CategoryBreakdownClient  />
     </HydrationBoundary>
   );
 };

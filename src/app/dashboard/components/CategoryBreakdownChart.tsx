@@ -10,6 +10,7 @@ import {
   Legend,
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Fix the type definition to allow null values for categoryId and categoryName
 type CategoryData = {
@@ -19,7 +20,13 @@ type CategoryData = {
   amount: string;
 }[];
 
-const CategoryBreakdownChart = ({ data }: { data?: CategoryData }) => {
+const CategoryBreakdownChart = ({
+  data,
+  isLoading,
+}: {
+  data?: CategoryData;
+  isLoading: boolean;
+}) => {
   // Transform data for chart and handle nulls
   const chartData = data?.map((category) => ({
     name: category.categoryName || "Uncategorized",
@@ -61,6 +68,14 @@ const CategoryBreakdownChart = ({ data }: { data?: CategoryData }) => {
     }
     return null;
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center">
+        <Skeleton className="h-[200px] w-[200px] rounded-full" />
+      </div>
+    );
+  }
 
   return (
     <>

@@ -7,15 +7,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CategoryBreakdownChart from "./CategoryBreakdownChart";
 import TypeFilter from "./TypeFilter";
 import { useState } from "react";
+import CategoryBreakdownSkeleton from "./CategoryBreakdownSkeleton";
 
 const CategoryBreakdownClient = () => {
   const { currentPeriod } = usePeriod();
   const [type, setType] = useState<"incomes" | "expenses">("incomes");
 
-  const { data: categorySpending } = useQuery({
+  const { data: categorySpending, isLoading } = useQuery({
     queryKey: ["dashboard", "categorySpending", type],
     queryFn: () => getCategorySpending(currentPeriod, type),
   });
+
+  if (isLoading) {
+    return <CategoryBreakdownSkeleton/>
+  }
 
   return (
     <Card>
@@ -26,7 +31,7 @@ const CategoryBreakdownClient = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <CategoryBreakdownChart data={categorySpending} />
+        <CategoryBreakdownChart data={categorySpending} isLoading={isLoading} />
       </CardContent>
     </Card>
   );

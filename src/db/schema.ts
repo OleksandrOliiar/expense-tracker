@@ -125,7 +125,7 @@ export const transactions = pgTable("transactions", {
   categoryId: text("category_id").references(() => categories.id, {
     onDelete: "set null",
   }),
-  accountId: text("account_id").references(() => plaidItems.id, {
+  accountId: text("account_id").references(() => plaidAccounts.plaidId, {
     onDelete: "cascade",
   }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -142,7 +142,7 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   }),
   account: one(plaidAccounts, {
     fields: [transactions.accountId],
-    references: [plaidAccounts.id],
+    references: [plaidAccounts.plaidId],
   }),
 }));
 

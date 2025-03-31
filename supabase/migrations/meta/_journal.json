@@ -218,6 +218,20 @@
       "when": 1743366003359,
       "tag": "0030_great_grim_reaper",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1743450847576,
+      "tag": "0031_glamorous_stick",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1743451230606,
+      "tag": "0032_curvy_stryfe",
+      "breakpoints": true
     }
   ]
 }
