@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -23,6 +23,8 @@ type Props = {
 };
 
 const ChangePlanDialog = ({ open, onClose }: Props) => {
+  const queryClient = useQueryClient();
+
   const [isPending, startTransition] = useTransition();
   const [isYearly, setIsYearly] = useState(false);
 
@@ -48,6 +50,9 @@ const ChangePlanDialog = ({ open, onClose }: Props) => {
       try {
         await upgradeSubscription(proPlan?.priceId);
         toast.success("Subscription upgraded successfully");
+        queryClient.invalidateQueries({
+          queryKey: ["subscription", "details"],
+        });
         onClose();
       } catch (error) {
         console.log("Failed to upgrade subscription: ", error);

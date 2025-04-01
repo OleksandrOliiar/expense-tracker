@@ -31,6 +31,10 @@ export const getUserSubscription = async () => {
 
     const { stripeCustomerId } = user;
 
+    if (!stripeCustomerId) {
+      return null;
+    }
+
     const subscription = await db.query.subscriptions.findFirst({
       where: and(
         eq(subscriptions.stripeCustomerId, stripeCustomerId ?? ""),

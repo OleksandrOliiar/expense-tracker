@@ -18,10 +18,13 @@ export const checkSubscription = async () => {
       };
     }
 
+    console.log(subscription.stripeProductId);
+
     if (
       subscription.stripeProductId ===
       process.env.STRIPE_PLUS_SUBSCRIPTION_ID
     ) {
+      
       const { getUser } = getKindeServerSession();
 
       const user = await getUser();

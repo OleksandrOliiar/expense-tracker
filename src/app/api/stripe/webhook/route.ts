@@ -77,7 +77,10 @@ export const POST = async (request: NextRequest) => {
         const updatedSubscription = data.object as Stripe.Subscription;
 
         if (updatedSubscription.metadata.internalUpdate === "true") {
-          console.log("Internal update");
+          await stripe.subscriptions.update(updatedSubscription.id, {
+            metadata: { internalUpdate: "" }
+          });
+          
           break;
         }
 
