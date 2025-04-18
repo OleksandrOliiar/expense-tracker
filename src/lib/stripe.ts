@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { accounts, subscriptions } from "@/db/schema";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { and, eq, ne } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -26,7 +26,7 @@ export const getUserSubscription = async () => {
     });
 
     if (!user) {
-      throw new Error("User not found");
+      return null;
     }
 
     const { stripeCustomerId } = user;
