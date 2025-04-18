@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Personal Finance Management Application
 
-## Getting Started
+A comprehensive web application for personal finance management that helps users track their expenses, create budgets, set financial goals, and synchronize with bank accounts. The application offers a freemium model with different subscription levels and provides detailed analytics for better financial decision-making.
 
-First, run the development server:
+## View App
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+_https://expense-tracker-chi-livid.vercel.app/_
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Core Functionality
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Transaction Management**: View, filter, search, add, edit, and delete transactions with flexible categorization
+- **Budget Planning**: Create and track budgets for different expense categories with progress visualization
+- **Financial Goals**: Set, track, and analyze progress toward financial goals
+- **Dashboard**: Visualize key financial metrics including balance, income, expenses, and monthly trends
+- **Bank Account Synchronization**: Automatically import transactions from connected bank accounts
+- **Real-time Data Synchronization**: See up-to-date financial information across all devices
 
-## Learn More
+### User Experience
 
-To learn more about Next.js, take a look at the following resources:
+- **Intuitive Interface**: Clean and user-friendly design that adapts to different devices
+- **Custom Categories**: Create personalized transaction categories with emoji support
+- **Data Visualization**: Interactive charts and graphs for better financial insights
+- **Secure Authentication**: Robust user authentication and data protection
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Premium Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Unlimited Bank Connections**: Connect multiple bank accounts for comprehensive tracking
+- **Unlimited Budgets and Goals**: Create as many budgets and financial goals as needed
 
-## Deploy on Vercel
+## Technology Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Frontend**: React, TypeScript, TanStack Query
+- **Backend**: Next.js (App Router)
+- **Database**: Supabase + Drizzle ORM
+- **Styling**: Tailwind CSS + Shadcnui
+- **Payment Processing**: Stripe
+- **Bank Integration**: Plaid
+- **Real-time Updates**: Pusher
+- **Asynchronous Processing**: QStash
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
