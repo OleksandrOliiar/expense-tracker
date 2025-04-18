@@ -21,19 +21,22 @@ const PlaidLink = () => {
   const setChangePlanDialogOpen = useDialogs(selectSetChangePlanDialogOpen);
   const setSubscribeDialogOpen = useDialogs(selectSetSubscribeDialogOpen);
 
-  const onSuccess = useCallback<PlaidLinkOnSuccess>(async (publicToken) => {
-    try {
-      toast.info("Wait for a moment, we are syncing your data...");
-      await exchangePublicToken(publicToken);
-      toast.success("Data synced successfully");
+  const onSuccess = useCallback<PlaidLinkOnSuccess>(
+    async (publicToken) => {
+      try {
+        toast.info("Wait for a moment, we are syncing your data...");
+        await exchangePublicToken(publicToken);
+        toast.success("Data synced successfully");
 
-      queryClient.invalidateQueries({ queryKey: ["banks", "list"] });
-      queryClient.invalidateQueries({ queryKey: ["transactions", "list"] });
-      queryClient.invalidateQueries({ queryKey: ["categories", "list"] });
-    } catch (error) {
-      toast.error("Error exchanging public token");
-    }
-  }, [queryClient]);
+        queryClient.invalidateQueries({ queryKey: ["banks", "list"] });
+        queryClient.invalidateQueries({ queryKey: ["transactions", "list"] });
+        queryClient.invalidateQueries({ queryKey: ["categories", "list"] });
+      } catch (error) {
+        toast.error("Error exchanging public token");
+      }
+    },
+    [queryClient]
+  );
 
   const { open, ready } = usePlaidLink({
     token,
