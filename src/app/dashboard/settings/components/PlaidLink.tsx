@@ -28,6 +28,8 @@ const PlaidLink = () => {
       toast.success("Data synced successfully");
 
       queryClient.invalidateQueries({ queryKey: ["banks", "list"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions", "list"] });
+      queryClient.invalidateQueries({ queryKey: ["categories", "list"] });
     } catch (error) {
       toast.error("Error exchanging public token");
     }
