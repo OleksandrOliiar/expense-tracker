@@ -16,5 +16,5 @@ export const pusherClient = new PusherClient(
 );
 
 export const beamsClient = new PusherPushNotifications.Client({
-  instanceId: process.env.NEXT_PUBLIC_PUSHER_INSTANCE_ID!,
+  instanceId: "f199e784-472b-4bd6-a7fe-d908e3a48b04",
 });

@@ -10,6 +10,6 @@ export const pusherServer = new PusherServer({
 });
 
 export const beamsServer = new PushNotificationsServer({
-  instanceId: process.env.NEXT_PUBLIC_PUSHER_INSTANCE_ID!,
-  secretKey: "2661D9C98D9052D8A49D0091521CD8B8541962FB0806187F7B33DA84D8E96D57",
+  instanceId: "f199e784-472b-4bd6-a7fe-d908e3a48b04",
+  secretKey: "79933E6CA61C2A8941BC60962465B63D1ED4A63EE80E3D11E21065928EF46FEA",
 });
